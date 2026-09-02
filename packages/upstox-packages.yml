@@ -1,0 +1,125 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://upstox.com/developer/api-documentation/upstox-generated-sdk plus the registry metadata
+  endpoints pypi.org/pypi/upstox-python-sdk/json, registry.npmjs.org/upstox-js-sdk,
+  repo.packagist.org/p2/upstox/upstox-php-sdk.json, search.maven.org (com.upstox.api:upstox-java-sdk)
+  and api.nuget.org (upstox-dotnet-sdk), all read unauthenticated on 2026-09-02.
+name: Upstox client libraries
+description: >-
+  Upstox publishes five first-party SDKs, all generated from its OpenAPI definition and all listed on
+  the "Upstox Generated SDK's" documentation page with the exact install command and source repository.
+  Four of the five shipped a coordinated release on 2026-08-19. The Java SDK is the outlier: its GitHub
+  repository was pushed the same day, but Maven Central has published nothing since version 1.16 on
+  2025-06-09 — a 14-month gap during which the API added IPO application, payouts, fundamentals,
+  smartlists, kill switch, static IP and market-information endpoints.
+packages:
+- name: upstox-python-sdk
+  language: Python
+  registry: pypi
+  url: https://pypi.org/project/upstox-python-sdk/
+  install: pip install upstox-python-sdk
+  repository: https://github.com/upstox/upstox-python
+  official: true
+  version: 2.29.0
+  published: '2026-08-19'
+  note: >-
+    Official Python SDK. Field naming is snake_case. This is the SDK the Upstox Agent Skill is built on.
+- name: upstox-js-sdk
+  language: JavaScript
+  registry: npm
+  url: https://www.npmjs.com/package/upstox-js-sdk
+  install: npm install upstox-js-sdk
+  repository: https://github.com/upstox/upstox-nodejs
+  official: true
+  version: 2.30.0
+  published: '2026-08-19'
+  note: Official Node.js client. Field naming is camelCase.
+- name: upstox/upstox-php-sdk
+  language: PHP
+  registry: packagist
+  url: https://packagist.org/packages/upstox/upstox-php-sdk
+  install: composer require upstox/upstox-php-sdk
+  repository: https://github.com/upstox/upstox-php
+  official: true
+  version: v1.29.0
+  published: '2026-08-19'
+  note: Official PHP SDK. Field naming is snake_case.
+- name: com.upstox.api:upstox-java-sdk
+  language: Java
+  registry: maven
+  url: https://central.sonatype.com/artifact/com.upstox.api/upstox-java-sdk
+  install: 'Maven dependency: com.upstox.api:upstox-java-sdk'
+  repository: https://github.com/upstox/upstox-java
+  official: true
+  version: '1.16'
+  published: '2025-06-09'
+  note: >-
+    DECAY SIGNAL. Latest artifact on Maven Central is 1.16, published 2025-06-09, while the four sibling
+    SDKs all released on 2026-08-19 and the upstox-java GitHub repository was itself pushed on
+    2026-08-19. The documentation page still shows a 1.1.0 dependency snippet, which is older again.
+    A Java consumer installing from Maven Central today gets a client that predates roughly fourteen
+    months of API additions.
+- name: upstox-dotnet-sdk
+  language: C#
+  registry: nuget
+  url: https://www.nuget.org/packages/upstox-dotnet-sdk
+  install: nuget install upstox-dotnet-sdk
+  repository: https://github.com/upstox/upstox-dotnet
+  official: true
+  version: 2.5.0
+  published: '2026-08-19'
+  note: Official .NET SDK. Field naming is PascalCase.
+- name: upstox-plugin-marketplace
+  language: JSON
+  registry: github
+  url: https://github.com/upstox/upstox-plugin-marketplace
+  install: /plugin marketplace add upstox/upstox-plugin-marketplace
+  repository: https://github.com/upstox/upstox-plugin-marketplace
+  official: true
+  version: null
+  published: null
+  note: >-
+    Claude plugin marketplace shipping two plugins — upstox-mcp (the hosted read-only MCP connector) and
+    upstox-skill (the trading Agent Skill). Distributed by git repository reference rather than a package
+    registry, so there is no registry metadata endpoint and no published version to read; the repository
+    was last pushed 2026-07-27.
+- name: upstox-skills
+  language: Markdown/Python
+  registry: github
+  url: https://github.com/upstox/upstox-skills
+  install: /plugin install upstox-skill@upstox-plugins-official
+  repository: https://github.com/upstox/upstox-skills
+  official: true
+  version: null
+  published: null
+  note: >-
+    The official Upstox Agent Skill (MIT licensed, default branch master, last pushed 2026-06-09).
+    Ships skills/upstox/SKILL.md plus ten reference documents and three helper scripts. Distributed by
+    repository and through the Claude plugin marketplace, not a package registry, so there is no
+    version metadata to read.
+- name: mcp-server-upstox-api
+  language: TypeScript
+  registry: github
+  url: https://github.com/upstox/mcp-server-upstox-api
+  install: git clone https://github.com/upstox/mcp-server-upstox-api && npm install && npm start
+  repository: https://github.com/upstox/mcp-server-upstox-api
+  official: true
+  version: null
+  published: null
+  note: >-
+    Source for the Upstox MCP server, a Cloudflare Worker built on @modelcontextprotocol/sdk. package.json
+    declares "private": true and version 0.0.0, so it is deliberately not published to npm — there is no
+    registry entry to query. Most users consume the hosted deployment at https://mcp.upstox.com/mcp
+    instead; this repository is the local-development path. Last pushed 2026-08-19.
+summary:
+  official_count: 8
+  registry_published_count: 5
+  languages:
+  - Python
+  - JavaScript
+  - PHP
+  - Java
+  - C#
+  stale_packages:
+  - com.upstox.api:upstox-java-sdk

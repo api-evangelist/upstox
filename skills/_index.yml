@@ -1,0 +1,120 @@
+generated: '2026-09-02'
+method: searched
+source: https://github.com/upstox/upstox-skills
+name: Upstox Agent Skills
+description: >-
+  Upstox publishes its own Agent Skill — this is not a skill API Evangelist authored on the provider's
+  behalf. The upstox-skills repository (MIT, default branch master) ships skills/upstox/SKILL.md plus ten
+  reference documents and three helper scripts, and it is distributed through the Upstox Claude plugin
+  marketplace as upstox-skill alongside the read-only upstox-mcp connector. The skill drives the official
+  upstox-python-sdk directly rather than MCP, which is why it can place and manage live orders where the
+  MCP server cannot. Every file below is saved verbatim from the provider's repository.
+provider_published: true
+repository: https://github.com/upstox/upstox-skills
+license: MIT
+default_branch: master
+last_pushed: '2026-06-09'
+install:
+  marketplace: /plugin marketplace add upstox/upstox-plugin-marketplace
+  plugin: /plugin install upstox-skill@upstox-plugins-official
+  requires: A Python environment with upstox-python-sdk installed. Runs in Claude Code or Codex, not in plain Claude Desktop chat.
+  announcement: https://upstox.com/developer/api-documentation/announcements/agent-skills-launch
+  docs: https://upstox.com/developer/api-documentation/agent-skills
+skills:
+- name: upstox
+  file: skills/upstox-agent-skill.md
+  source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/SKILL.md
+  method: searched
+  api: upstox:upstox-developer-api
+  transport: upstox-python-sdk
+  writes: true
+  description: >-
+    Connects to a user's Upstox account through the official upstox-python-sdk to execute trades and pull
+    live data from NSE, BSE and MCX — resolving tradable instruments, running orders through safety
+    checks before they go live, inspecting holdings, positions, funds and margin, pulling LTP, OHLC, full
+    quotes, historical candles and option chains with greeks, calculating realised and unrealised P&L,
+    and opening WebSocket feeds for live market and portfolio updates.
+  operations:
+  - placeOrder
+  - modifyOrder
+  - cancelOrder
+  - placeGTTOrder
+  - modifyGTTOrder
+  - cancelGTTOrder
+  - getGttOrderDetails
+  - placeMultiOrder
+  - cancelMultiOrder
+  - exitPositions
+  - getOrderBook
+  - getOrderStatus
+  - getOrderDetails
+  - getTradeHistory
+  - getHoldings
+  - getPositions
+  - getMtfPositions
+  - convertPositions
+  - getUserFundMarginV3
+  - postMargin
+  - getBrokerage
+  - getLtp
+  - getMarketQuoteOHLCV3
+  - getFullMarketQuote
+  - getMarketQuoteOptionGreek
+  - getHistoricalCandleData
+  - getIntraDayCandleData
+  - getPutCallOptionChain
+  - getOptionContracts
+  - searchInstrument
+  - getKillSwitch
+  - updateKillSwitch
+  - getMarketDataFeedAuthorize
+  - getPortfolioStreamFeedAuthorize
+  operations_note: >-
+    The skill is written against SDK class methods (OrderApiV3.place_order, MarketQuoteV3Api.get_ltp,
+    HistoryV3Api.get_historical_candle_data, UserApi.update_kill_switch and so on). The operationIds above
+    are the matching OpenAPI operations in openapi/upstox-developer-api-openapi.yml, mapped by path and
+    method — the skill itself does not name operationIds.
+  guardrails:
+  - Explicit human confirmation and a full order preview before any place, modify, cancel, GTT, exit or multi-order call; validate_order.py runs first.
+  - Default order type is LIMIT — never MARKET unless the user explicitly asks.
+  - Default quantity is 1 share or 1 lot when unspecified; never guess larger.
+  - Reject F&O orders whose quantity is not a multiple of the instrument's lot_size.
+  - Use market_protection to bound MARKET order fills.
+  - Warn about the ~12-hour re-enable lock before disabling a segment with the kill switch.
+  - Rehearse in sandbox (Configuration(sandbox=True)) before going live.
+  - Read tokens from environment variables only; never hardcode secrets.
+  references:
+  - file: skills/upstox-reference-errors.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/errors.md
+  - file: skills/upstox-reference-gtt-orders.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/gtt-orders.md
+  - file: skills/upstox-reference-instruments.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/instruments.md
+  - file: skills/upstox-reference-kill-switch.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/kill-switch.md
+  - file: skills/upstox-reference-margins.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/margins.md
+  - file: skills/upstox-reference-market-data.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/market-data.md
+  - file: skills/upstox-reference-option-chain.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/option-chain.md
+  - file: skills/upstox-reference-orders.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/orders.md
+  - file: skills/upstox-reference-portfolio.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/portfolio.md
+  - file: skills/upstox-reference-websocket.md
+    source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/websocket.md
+  scripts_not_saved:
+  - instrument_search.py
+  - upstox_helpers.py
+  - validate_order.py
+  scripts_note: >-
+    The skill's three Python helper scripts live in the provider's repository and are not mirrored here —
+    this catalog records the skill contract, not executable code.
+summary:
+  skill_count: 1
+  provider_authored: 1
+  api_evangelist_authored: 0
+  note: >-
+    No skill was generated on Upstox's behalf. The provider ships a complete, safety-gated Agent Skill of
+    its own and it is captured verbatim; authoring a second one would only shadow it.

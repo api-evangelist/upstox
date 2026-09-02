@@ -1,0 +1,234 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://upstox.com/developer/api-documentation/request-structure,
+  https://upstox.com/developer/api-documentation/response-structure,
+  https://upstox.com/developer/api-documentation/authentication,
+  https://upstox.com/developer/api-documentation/rate-limiting and
+  openapi/upstox-developer-api-openapi.yml
+name: Upstox API conventions
+description: >-
+  Cross-cutting runtime semantics for the Upstox Developer API — how requests are shaped, how responses
+  and errors are enveloped, how pagination works, how versions are selected, and what an agent can and
+  cannot rely on at runtime. The two gaps that matter most for autonomous use are the total absence of
+  idempotency (no idempotency key on any write, including order placement) and the absence of any
+  rate-limit response header.
+auth:
+  style: OAuth 2.0 authorization code, bearer token
+  header: 'Authorization: Bearer <access_token>'
+  token_lifetime: >-
+    Standard access tokens expire daily and require re-authorization. A separate Analytics Token gives
+    read-only access with 1-year validity, but account-scoped APIs through it require a registered
+    static IP.
+  scopes:
+  - read
+  - write
+  docs: https://upstox.com/developer/api-documentation/authentication
+  detail: authentication/upstox-authentication.yml
+request:
+  base_url: https://api.upstox.com
+  version_in_path: true
+  accept: application/json
+  content_types:
+  - application/json
+  - application/x-www-form-urlencoded
+  url_encoding: Standard percent-encoding required on all requests, including non-ASCII characters.
+  high_frequency_host:
+    host: https://api-hft.upstox.com
+    note: >-
+      A dedicated low-latency host for place, modify and cancel order operations, announced 26 July 2024.
+      It is not declared in the OpenAPI servers[] block, so an agent reading only the contract will never
+      find it.
+    source: https://upstox.com/developer/api-documentation/announcements/enhanced-url
+response:
+  envelope: '{"status": "success", "data": <object|array>}'
+  status_values:
+  - success
+  - error
+  - partial_success
+  error_envelope: '{"status": "error", "errors": [ { "error_code", "message", "property_path", "invalid_value" } ]}'
+  error_detail: errors/upstox-error-codes.yml
+  field_casing: >-
+    snake_case is canonical. camelCase duplicates (errorCode, propertyPath, invalidValue, tradingsymbol)
+    are emitted for backward compatibility and are formally deprecated.
+pagination:
+  style: page-number
+  params:
+  - name: page_number
+    used_by_operations: 11
+  - name: page_size
+    used_by_operations: 6
+  - name: records
+    used_by_operations: 5
+    note: Mutual fund and IPO order listings use `records` rather than `page_size`; maximum 30 rows per page.
+  response_fields: null
+  cursor: false
+  note: >-
+    Pagination is not uniform. Three different page-size parameter names appear across the surface
+    (page_size, records, and endpoints with neither), and the documented response envelope defines no
+    pagination metadata block — no total, no next-page token, no has_more. A client cannot tell from a
+    response whether more pages exist; it must request the next page and observe an empty array.
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  supported: partial
+  note: >-
+    Order placement accepts an optional `tag` string, which is then usable as a filter on
+    cancelMultiOrder and exitPositions. This is the only user-supplied metadata channel in the API.
+request_tracing:
+  request_id_header: false
+  correlation_id: >-
+    A correlation_id field appears in multi-order responses and errors (MultiOrderError.correlation_id)
+    to tie an individual leg back to its request. There is no general-purpose request-id request or
+    response header.
+  note: An agent cannot attach its own trace identifier to a request, and there is no response header to quote back to support.
+versioning:
+  scheme: URL path major version
+  current: v3 for orders, candles, market quotes and the market data feed; v2 elsewhere
+  header: false
+  note: The Api-Version header requirement was removed in March 2024.
+  detail: lifecycle/upstox-lifecycle.yml
+rate_limit_signaling:
+  headers: false
+  status_on_exhaustion: 429
+  error_code: UDAPI10005
+  note: >-
+    No X-RateLimit-*, no RateLimit-* and no Retry-After. The only runtime signal is the 429 itself. An
+    agent cannot pace itself against remaining quota; it can only react after being throttled.
+  detail: rate-limits/upstox-rate-limits.yml
+idempotency:
+  supported: false
+  grade: absent
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    The word idempotency does not appear anywhere in the OpenAPI definition or the published
+    documentation, and no idempotency key header is defined on any operation. This includes
+    POST /v3/order/place, POST /v2/order/multi/place, POST /v2/user/payments/payout and
+    POST /v2/ipos/orders — every write path that moves money or takes market risk. A retried order
+    placement after a timeout will place a second order. The only mitigations Upstox offers are the
+    client-supplied `tag` field (useful for finding and cancelling duplicates after the fact, not for
+    preventing them) and the kill switch.
+dry_run_mode:
+  supported: partial
+  note: >-
+    There is no dry-run flag on any write operation, but two endpoints let an agent rehearse the
+    financial consequence of an order before placing it: POST /v2/charges/margin (postMargin) returns the
+    margin an order would require, and GET /v2/charges/brokerage (getBrokerage) returns the brokerage and
+    tax breakdown for a hypothetical order. Neither validates order legality or reserves anything.
+  operations:
+  - postMargin
+  - getBrokerage
+reversibility:
+  grade: verified
+  applicable: true
+  note: >-
+    The Upstox API is a write-heavy trading surface, and every state-changing family except position
+    conversion has a published reversal operation. Windows are stated for the payout and IPO families as
+    an order state rather than a clock; the trading families are bounded by execution — an order can be
+    cancelled only while it is still open, which is the natural window for a market order and is why an
+    unfilled-order cancel is not guaranteed to succeed.
+  surfaces:
+  - surface: Order placement (regular)
+    write_operations:
+    - placeOrder
+    - placeOrder_1
+    - placeMultiOrder
+    reversal_operation: cancelOrder
+    reversal_operation_ids:
+    - cancelOrder
+    - cancelOrder_1
+    - cancelMultiOrder
+    window: >-
+      Only while the order is still open or pending. Once the exchange fills the order it cannot be
+      cancelled — the only remaining reversal is an opposing trade, which is a new position with its own
+      market risk, not an undo.
+    window_stated: true
+    docs: https://upstox.com/developer/api-documentation/cancel-order
+    partial: true
+    partial_note: >-
+      A partially filled order can be cancelled for its unfilled remainder only; the filled quantity
+      stands.
+  - surface: GTT (Good Till Triggered) orders
+    write_operations:
+    - placeGTTOrder
+    - modifyGTTOrder
+    reversal_operation: cancelGTTOrder
+    reversal_operation_ids:
+    - cancelGTTOrder
+    window: While the GTT rule is pending and has not triggered. A triggered rule becomes a regular order and follows the order-cancellation window.
+    window_stated: true
+    docs: https://upstox.com/developer/api-documentation/cancel-gtt-order
+  - surface: Positions
+    write_operations:
+    - convertPositions
+    reversal_operation: exitPositions
+    reversal_operation_ids:
+    - exitPositions
+    window: >-
+      exitPositions closes open positions but is not an undo of convertPositions — a product-type
+      conversion (intraday to delivery to MTF) has no documented inverse operation. This is the one write
+      surface with no true reversal.
+    window_stated: false
+    docs: https://upstox.com/developer/api-documentation/convert-positions
+  - surface: Fund payouts (withdrawals)
+    write_operations:
+    - initiatePayout
+    - modifyPayout
+    reversal_operation: cancelPayout
+    reversal_operation_ids:
+    - cancelPayout
+    window: >-
+      Only requests that have not yet been processed can be cancelled; only requests in `received` status
+      can be modified. Once the payout is processed it is irreversible through the API.
+    window_stated: true
+    docs: https://upstox.com/developer/api-documentation/cancel-payout
+  - surface: IPO application
+    write_operations:
+    - applyForIpo
+    reversal_operation: cancelIpoOrder
+    reversal_operation_ids:
+    - cancelIpoOrder
+    window: >-
+      Before the bidding window closes. Cancelling withdraws the application and releases the UPI mandate
+      blocking the application amount in the bank account.
+    window_stated: true
+    docs: https://upstox.com/developer/api-documentation/cancel-ipo-order
+  - surface: Session
+    write_operations:
+    - token
+    reversal_operation: logout
+    reversal_operation_ids:
+    - logout
+    window: Any time while the token is valid; tokens expire daily regardless.
+    window_stated: true
+    docs: https://upstox.com/developer/api-documentation/logout
+  - surface: Kill switch
+    write_operations:
+    - updateKillSwitch
+    reversal_operation: updateKillSwitch
+    reversal_operation_ids:
+    - updateKillSwitch
+    window: >-
+      Approximately 12 hours. The kill switch is the safety brake — DISABLE cancels pending orders in a
+      segment and blocks new ones — and Upstox's own Agent Skill documents a roughly 12-hour re-enable
+      lock, so the action is not immediately reversible. An agent must warn before disabling.
+    window_stated: true
+    docs: https://upstox.com/developer/api-documentation/update-kill-switch
+    window_source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/references/kill-switch.md
+  agent_guidance: >-
+    An agent should treat order placement as effectively irreversible the moment it fills, because
+    Upstox provides no idempotency key and no post-fill undo. Rehearse with postMargin and getBrokerage,
+    place with an explicit `tag`, poll getOrderStatus, and use the kill switch as the circuit breaker.
+webhooks:
+  supported: true
+  detail: asyncapi/upstox-webhooks.yml
+cross_references:
+  errors: errors/upstox-error-codes.yml
+  lifecycle: lifecycle/upstox-lifecycle.yml
+  authentication: authentication/upstox-authentication.yml
+  rate_limits: rate-limits/upstox-rate-limits.yml
+  scopes: scopes/upstox-scopes.yml

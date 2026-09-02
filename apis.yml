@@ -1,18 +1,114 @@
 aid: upstox
 name: Upstox
-description: 'Upstox is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Upstox is a SEBI-registered Indian retail brokerage operated by Upstox Securities Private Limited, a
+  wholly owned subsidiary of RKSV Securities India Private Limited, serving over 1.3 crore customers
+  across equities, futures and options, commodities, currency, mutual funds, IPOs, NCDs, fixed deposits
+  and insurance on NSE, BSE and MCX. Its Upstox Developer API is a free, OAuth 2.0 protected REST and
+  WebSocket suite of 101 published operations covering order placement (including V3 slicing, multi-order
+  and GTT/trailing-stop-loss), portfolio holdings and positions, funds and margin, brokerage and charge
+  calculation, market quotes with option greeks, historical and intraday candles, expired-instrument
+  history, company fundamentals, IPO application, mutual funds, payouts, news and market-information
+  analytics. Upstox also runs a hosted, OAuth-protected Model Context Protocol server at mcp.upstox.com
+  giving AI agents read-only access to a user's holdings, orders, positions, mutual funds, funds and
+  profile, and publishes an official Agent Skill and Claude plugin marketplace alongside first-party
+  SDKs for Python, Node.js, Java, PHP and .NET.
+image: https://assets.upstox.com/website/images/upstox-new-logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/upstox/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
+x-enrichment:
+  date: '2026-09-02'
+  status: enriched
+  artifacts_added: 36
+  pass: local-v1
 created: '2026-09-02'
 modified: '2026-09-02'
 tags:
 - Company
-apis: []
+- Financial Services
+- Stock Trading
+- Brokerage
+- Market Data
+- Investing
+- Capital Markets
+- Mutual Funds
+- Algorithmic Trading
+- India
+apis:
+- aid: upstox:upstox-developer-api
+  name: Upstox Developer API
+  description: >-
+    The Upstox Developer API is a free OAuth 2.0 REST and WebSocket suite for building trading and
+    investment applications against a live SEBI-registered brokerage account. It covers order placement,
+    modification and cancellation (V2 and the newer V3 endpoints with order slicing), multi-order and
+    exit-all-positions batch operations, GTT and trailing-stop-loss conditional orders, portfolio
+    holdings, positions and MTF positions, funds and margin, brokerage and charge calculation,
+    trade-wise profit and loss reporting, market quotes with LTP/OHLC/full depth and option greeks,
+    historical and intraday candle data, expired instrument history for backtesting, option chains and
+    contracts, company fundamentals by ISIN, IPO listing and application, mutual fund orders, SIPs and
+    holdings, fund pay-in and payout management, market information analytics (FII/DII activity, OI,
+    change in OI, max pain, put-call ratio), a kill switch, static IP management for algo-trading
+    compliance, and streaming market-data and portfolio feeds over WebSocket.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Orders
+  - Portfolio
+  - Market Data
+  - Historical Data
+  - Options
+  - Mutual Funds
+  - IPO
+  - Fundamentals
+  - Payments
+  - WebSocket
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-developer-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Overlay
+    url: overlays/upstox-developer-api-overlay.yaml
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-mcp-server
+  name: Upstox MCP Server
+  description: >-
+    Upstox operates a hosted, OAuth-protected Model Context Protocol server at https://mcp.upstox.com/mcp
+    that gives AI assistants — Claude Desktop and the Claude web app, Claude Code, ChatGPT in Developer
+    mode, Cursor, and VS Code with GitHub Copilot — read-only access to a connected Upstox account:
+    holdings, orders, positions, mutual funds, funds and profile. Authorization uses OAuth 2.0 with
+    dynamic client registration and PKCE, advertised through RFC 8414 and RFC 9728 metadata documents
+    on the MCP host, and account connections expire daily. The same server can be run locally from the
+    open-source mcp-server-upstox-api Cloudflare Worker for development.
+  humanURL: https://upstox.com/developer/api-documentation/mcp-integration
+  baseURL: https://mcp.upstox.com/mcp
+  tags:
+  - MCP
+  - AI Agents
+  - Portfolio
+  - Read Only
+  properties:
+  - type: MCPServer
+    url: mcp/upstox-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/upstox-tool-crosswalk.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/mcp-integration
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/agent-quickstart
+  - type: SourceCode
+    url: https://github.com/upstox/mcp-server-upstox-api
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +116,84 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.hiive.com/securities/upstox-stock
+  url: https://upstox.com/
+- type: DeveloperPortal
+  url: https://upstox.com/trading-api/
+- type: Documentation
+  url: https://upstox.com/developer/api-documentation/open-api
+- type: APIReference
+  url: https://upstox.com/developer/api-documentation/api-overview
+- type: GettingStarted
+  url: https://upstox.com/developer/api-documentation/installing-sdk
+- type: Support
+  url: https://upstox.com/help-center/
+- type: Community
+  url: https://community.upstox.com/
+- type: Blog
+  url: https://upstox.com/market-talk/
+- type: GitHubOrganization
+  url: https://github.com/upstox
+- type: Pricing
+  url: https://upstox.com/brokerage-charges/
+- type: SignUp
+  url: https://upstox.com/open-demat-account/
+- type: Login
+  url: https://login.upstox.com/
+- type: TermsOfService
+  url: https://upstox.com/terms-of-use-and-privacy-policy/
+- type: PrivacyPolicy
+  url: https://upstox.com/terms-of-use-and-privacy-policy/
+- type: Postman
+  url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+- type: StatusPage
+  url: https://status.upstox.com/
+- type: ChangeLog
+  url: changelog/upstox-changelog.yml
+- type: Deprecation
+  url: lifecycle/upstox-lifecycle.yml
+- type: Lifecycle
+  url: lifecycle/upstox-lifecycle.yml
+- type: Security
+  url: https://upstox.com/bug-bounty/
+- type: VulnerabilityDisclosure
+  url: security/upstox-vulnerability-disclosure.yml
+- type: TrustCenter
+  url: security/upstox-trust-center.yml
+- type: Compliance
+  url: conformance/upstox-conformance.yml
+- type: Conformance
+  url: conformance/upstox-conformance.yml
+- type: DomainSecurity
+  url: security/upstox-domain-security.yml
+- type: Authentication
+  url: authentication/upstox-authentication.yml
+- type: OAuthScopes
+  url: scopes/upstox-scopes.yml
+- type: Packages
+  url: packages/upstox-packages.yml
+- type: SDKs
+  url: packages/upstox-packages.yml
+- type: WellKnown
+  url: well-known/upstox-well-known.yml
+- type: LLMsTxt
+  url: llms/upstox-llms.txt
+- type: MCPServer
+  url: mcp/upstox-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/upstox-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conventions
+  url: conventions/upstox-conventions.yml
+- type: ErrorCatalog
+  url: errors/upstox-error-codes.yml
+- type: RateLimits
+  url: rate-limits/upstox-rate-limits.yml
+- type: Plans
+  url: plans/upstox-plans-pricing.yml
+- type: Sandbox
+  url: sandbox/upstox-sandbox.yml
+- type: DataModel
+  url: data-model/upstox-data-model.yml
+- type: Webhooks
+  url: asyncapi/upstox-webhooks.yml

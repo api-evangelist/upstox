@@ -1,0 +1,152 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://upstox.com/developer/api-documentation/webhook,
+  https://upstox.com/developer/api-documentation/appendix/notifier-webhook-endpoint,
+  https://upstox.com/developer/api-documentation/websocket-implementation and
+  https://upstox.com/developer/api-documentation/announcements/webhook-url-security-policy
+name: Upstox event and streaming surface
+description: >-
+  Upstox runs a real event surface in three parts — an HTTP webhook (postback) channel for order and GTT
+  order updates, two authenticated WebSocket feeds (market data and portfolio), and a notifier webhook
+  for access-token requests. It publishes no AsyncAPI document for any of them: the webhook payloads are
+  documented as JSON examples on a prose page and the market data feed is Protobuf-framed with the
+  schema distributed through the SDKs. Recorded here as a Webhooks catalog, not an AsyncAPI spec —
+  nothing is fabricated to fill the AsyncAPI slot.
+asyncapi_published: false
+asyncapi_probe:
+  urls_probed:
+  - https://upstox.com/developer/api-documentation/
+  - https://api.upstox.com/openapi.json
+  - https://api.upstox.com/v3/api-docs
+  result: >-
+    No asyncapi.yaml, asyncapi.json or event-catalog document is linked from the documentation index,
+    the developer llms.txt, or the GitHub organization. The only machine-readable contract Upstox
+    publishes is the OpenAPI at https://api.upstox.com/v2/api-docs.
+webhooks:
+  supported: true
+  docs: https://upstox.com/developer/api-documentation/webhook
+  configuration: >-
+    A postback URL is registered per developer app at https://account.upstox.com/developer/apps. Order
+    updates are enabled by default; GTT order updates must be explicitly enabled by editing the app
+    configuration on the My Apps page.
+  endpoint_requirements:
+  - Must not require authentication.
+  - Must respond with a 2XX status.
+  - Must accept POST requests.
+  security:
+    signature: false
+    signature_note: >-
+      Upstox publishes no webhook signature, HMAC or shared-secret verification scheme. The endpoint must
+      be unauthenticated and open to POST, and the only guidance given is "provide a webhook URL which is
+      in your control rather than a public endpoint". A receiver cannot cryptographically verify that a
+      delivery came from Upstox.
+    url_validation: true
+    url_validation_note: >-
+      Since 17 April 2026 Upstox validates every registered webhook URL against a security filter before
+      an app can be created, rejecting dynamic DNS, phishing, malware, spam and proxy-bypass hosts. This
+      protects Upstox users from a malicious registrant; it does not authenticate deliveries to the
+      receiver.
+    source: https://upstox.com/developer/api-documentation/announcements/webhook-url-security-policy
+  parity_note: The payloads sent to the webhook URL are identical to the updates received over the portfolio WebSocket feed.
+  events:
+  - name: order
+    update_type: order
+    description: Order state transition — placement received, open, complete, cancelled, rejected.
+    payload_fields:
+    - update_type
+    - user_id
+    - exchange
+    - instrument_key
+    - trading_symbol
+    - product
+    - order_type
+    - average_price
+    - price
+    - trigger_price
+    - quantity
+    - disclosed_quantity
+    - pending_quantity
+    - transaction_type
+    - order_ref_id
+    - exchange_order_id
+    - parent_order_id
+    - validity
+    - status
+    - is_amo
+    - variety
+    - tag
+    - exchange_timestamp
+    - status_message
+    - order_id
+    - order_request_id
+    - order_timestamp
+    - filled_quantity
+    - guid
+    - placed_by
+    - status_message_raw
+    deprecated_fields:
+    - instrument_token
+    - tradingsymbol
+    - userId
+    deprecated_note: The lowercase and camelCase duplicates are deprecated; use the snake_case forms.
+    reference: https://upstox.com/developer/api-documentation/appendix/order-status
+  - name: gtt_order
+    update_type: gtt_order
+    description: >-
+      Good Till Triggered order rule update. Carries the rules[] array with per-rule strategy
+      (ENTRY / STOPLOSS / TARGET), status, trigger_type, trigger_price, transaction_type, message and the
+      resulting order_id when a rule fires.
+    payload_fields:
+    - update_type
+    - type
+    - exchange
+    - instrument_token
+    - quantity
+    - product
+    - gtt_order_id
+    - expires_at
+    - created_at
+    - rules
+    enablement: Opt-in — must be enabled on the app configuration from the My Apps page.
+  - name: access_token_request
+    description: >-
+      The notifier webhook endpoint receives automated callbacks for the beta access-token flow, where a
+      token initiator requests a token and the user approves it.
+    reference: https://upstox.com/developer/api-documentation/appendix/notifier-webhook-endpoint
+    docs: https://upstox.com/developer/api-documentation/access-token-request
+websocket_feeds:
+- name: Market Data Feed
+  version: v3
+  authorize_operation: getMarketDataFeedAuthorize
+  feed_operation: getMarketDataFeed
+  path: /v2/feed/market-data-feed
+  v3_path: /v3/feed/market-data-feed
+  encoding: Protobuf
+  flow: Call the authorize endpoint over REST to obtain a signed WebSocket URL, then connect.
+  modes: LTPC, full, D30 (full market depth, Upstox Plus)
+  limits: Up to 5 concurrent connections per user and 50 instruments per connection on D30, under Upstox Plus.
+  docs: https://upstox.com/developer/api-documentation/websocket-implementation
+  deprecation: V2 feed discontinued 22 August 2025; V3 only.
+- name: Portfolio Stream Feed
+  authorize_operation: getPortfolioStreamFeedAuthorize
+  feed_operation: getPortfolioStreamFeed
+  path: /v2/feed/portfolio-stream-feed
+  encoding: JSON
+  flow: Call the authorize endpoint over REST to obtain a signed WebSocket URL, then connect.
+  emits: Order updates, position updates, GTT order updates — selectable via the update_types parameter.
+  parity: Same payloads as the webhook channel.
+  docs: https://upstox.com/developer/api-documentation/get-portfolio-stream-feed
+sample_implementations:
+  languages:
+  - Python
+  - PHP
+  - Node.js
+  - Java
+  - React
+  url: https://upstox.com/developer/api-documentation/sample-implementation
+gaps:
+- No AsyncAPI document for either WebSocket feed or the webhook channel.
+- No webhook signature or replay-protection scheme.
+- No published retry or delivery-guarantee policy for webhook deliveries.
+- The Protobuf schema for the market data feed is distributed inside the SDKs rather than published as a standalone .proto in the documentation or the GitHub organization.

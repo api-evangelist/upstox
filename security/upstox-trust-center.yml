@@ -1,0 +1,60 @@
+generated: '2026-09-02'
+method: searched
+source: https://upstox.com/trust-security/
+name: Upstox Trust & Security
+trust_center:
+  url: https://upstox.com/trust-security/
+  hosted_on_own_domain: true
+  vendor: none
+  note: >-
+    Upstox publishes a first-party "Cyber Security Practices at Upstox" page rather than using a hosted
+    trust-center product (Vanta, Drata, SafeBase). It names certifications, describes controls and links
+    the bug bounty and privacy policy, but does not offer a document request portal or downloadable
+    audit reports.
+certifications:
+- name: ISO/IEC 27001:2022
+  scope: Information Security Management System (ISMS)
+  note: Risk assessment, security controls and continuous monitoring over confidentiality, integrity and availability of information assets.
+- name: ISO/IEC 27701:2019
+  scope: Privacy Information Management System (PIMS)
+  note: Extends ISO 27001 to privacy — privacy by design, consent management and data subject rights.
+- name: ISO 22301:2019
+  scope: Business Continuity Management System (BCMS)
+  note: Disaster recovery planning, redundancy and resilience for uninterrupted trading.
+audits:
+- type: VAPT
+  auditor: CERT-In empanelled auditors
+  cadence: periodic
+  note: External vulnerability assessment and penetration testing by CERT-In approved partners; SAST and DAST are embedded in the SDLC alongside API security checks and CI/CD pipeline scans.
+- type: Red Team / cyber crisis drills
+  auditor: internal
+  cadence: periodic
+  note: Simulated attacker exercises covering in-memory execution, lateral movement and privilege escalation, plus tabletop incident-response drills.
+- type: Third-party security review
+  auditor: internal
+  cadence: pre-onboarding
+  note: Every third-party service provider is security reviewed before onboarding.
+regulatory_frameworks:
+- SEBI
+- BSE
+- NSE
+- MCX
+- CDSL
+- IRDAI
+- PFRDA
+- Digital Personal Data Protection Act (India)
+controls:
+  infrastructure: Hybrid on-premises and cloud; network segmentation, DDoS protection, WAF with bot control enforcing OWASP Top 10.
+  identity: Least-privilege access management; Zero Trust Network Access (ZTNA) for remote access.
+  monitoring: 24/7 security operations centre with threat intelligence and automated alerting.
+  endpoint: Continuous monitoring, advanced threat detection, anti-malware.
+  data: Encryption at rest and in transit; data loss prevention controls.
+  customer_auth: Multi-factor authentication — 1FA PIN verification plus 2FA OTP verification.
+  privacy: Privacy by design, consent management, data subject access/correction/deletion, formal breach notification process.
+disclosure:
+  bug_bounty: https://upstox.com/bug-bounty/
+  privacy_policy: https://upstox.com/terms-of-use-and-privacy-policy/
+evidence:
+- source: https://upstox.com/trust-security/
+  http_status: 200
+  kind: trust and security page (live fetch)

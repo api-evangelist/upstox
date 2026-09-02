@@ -1,0 +1,64 @@
+generated: '2026-09-02'
+method: searched
+source: https://upstox.com/trading-api/
+name: Upstox API plans and pricing
+description: >-
+  Upstox does not meter or charge for API access. The Trading API page states plainly that all trading
+  and market-data APIs are free to use, and the FAQ on the same page repeats it ("Are all APIs free?
+  Yes! All trading + data APIs are free of cost."). What the developer pays is brokerage per executed
+  order, the same fee schedule as any other Upstox customer, with a promotional flat rate running until
+  30 September 2026. A separate paid subscription, Upstox Plus, gates a small set of premium API
+  capabilities — expired-instrument history and the enhanced WebSocket tier.
+docs: https://upstox.com/brokerage-charges/
+plans:
+- name: Developer API access
+  price: 0
+  currency: INR
+  billing_period: none
+  included: >-
+    Free access to the full trading and market-data API surface — orders (V2 and V3), portfolio, funds
+    and margin, market quotes, historical and intraday candles, option chains, fundamentals, mutual
+    funds, IPO, payments, news, market-information analytics and the WebSocket feeds.
+  overage: none
+  limits: >-
+    Per-user, per-API rate limits apply (see rate-limits/upstox-rate-limits.yml) — 10 or 50 order
+    requests/second depending on SEBI algo registration, 50/second for standard APIs.
+  requires: An active, non-dormant Upstox trading account and a developer app created at account.upstox.com/developer/apps.
+  source: https://upstox.com/trading-api/
+- name: API order brokerage (promotional)
+  price: 10
+  currency: INR
+  billing_period: per executed order
+  included: >-
+    "Build & execute setups at Rs.10/order" — the promotional per-order brokerage for API trading,
+    stated on the Trading API page as valid till 30 September 2026 and not applicable to GTT orders.
+  overage: n/a
+  limits: Excludes GTT orders.
+  expires: '2026-09-30'
+  source: https://upstox.com/trading-api/
+- name: Upstox Plus
+  price: null
+  currency: INR
+  billing_period: subscription
+  included: >-
+    Premium API capabilities gated behind the Upstox Plus subscription — the Expired Instruments API
+    suite (Get Expiries, Get Expired Option Contracts, Get Expired Future Contracts, Get Expired
+    Historical Candle Data) and WebSocket Plus (up to 5 concurrent connections per user, full D30
+    subscription mode supporting up to 50 instruments per connection).
+  overage: n/a
+  limits: null
+  note: >-
+    The Plus plan page (https://upstox.com/plus/) is a retail subscription landing page; the API-specific
+    entitlements are announced in the developer announcements rather than priced on a developer pricing
+    table, and no per-tier API price is published. Recorded as price null rather than guessed.
+  source: https://upstox.com/developer/api-documentation/announcements/websocket-plus
+plan_count: 3
+notes:
+  - >-
+    There is no API-specific pricing page, no usage metering, no request quota purchase and no enterprise
+    API tier. Businesses wanting to integrate are directed to email api@upstox.com from the Trading API
+    page — that is a partnership channel, not a paid plan.
+  - >-
+    Zero-brokerage API trading was discontinued on 31 August 2024; new Upstox API users from 1 September
+    2024 got 90 days of zero brokerage instead
+    (https://upstox.com/developer/api-documentation/announcements/update-zero-brokerage).

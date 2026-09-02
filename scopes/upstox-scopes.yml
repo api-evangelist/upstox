@@ -1,0 +1,60 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  openapi/upstox-developer-api-openapi.yml (derived baseline) upgraded with
+  https://upstox.com/developer/api-documentation/authentication and
+  https://upstox.com/developer/api-documentation/analytics-token
+docs: https://upstox.com/developer/api-documentation/authentication
+name: Upstox OAuth scopes
+description: >-
+  Upstox declares exactly two OAuth scopes — read and write — in its OpenAPI securityScheme, and it
+  publishes no scope reference page. There is no per-resource or per-operation scope vocabulary: an app
+  either reads or it can also trade. The practical permissioning happens elsewhere — token type
+  (standard vs extended vs Analytics Token), app configuration in the developer console, static-IP
+  registration for algo order flow, and the user-controlled kill switch. An agent cannot request a
+  narrow, least-privilege grant such as "portfolio read only" through the scope parameter.
+schemes:
+- name: OAUTH2
+  source: openapi/upstox-developer-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://api.upstox.com/v2/login/authorization/dialog
+    tokenUrl: https://api.upstox.com/v2/login/authorization/token
+scopes:
+- scope: read
+  description: Read access
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/upstox-developer-api-openapi.yml
+- scope: write
+  description: Write access
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/upstox-developer-api-openapi.yml
+scope_count: 2
+granularity: coarse
+alternative_permissioning:
+- mechanism: Analytics Token
+  effect: A read-only token with 1-year validity. Market data is unrestricted; account-scoped reads additionally require a registered static IP.
+  docs: https://upstox.com/developer/api-documentation/analytics-token
+- mechanism: extended_token
+  effect: A longer-lived token that is refused on some APIs, returning UDAPI100067.
+- mechanism: Sandbox token
+  effect: Scoped to sandbox orders only; cannot be used against live endpoints.
+- mechanism: Static IP allowlist
+  effect: Order and algo-trading flow is constrained to registered primary and optional secondary IPs per the 5 May 2025 exchange circular.
+  docs: https://upstox.com/developer/api-documentation/update-app-static-ips
+- mechanism: Kill switch
+  effect: The end user can disable trading per segment, blocking new orders and cancelling pending ones regardless of the token's scope.
+  docs: https://upstox.com/developer/api-documentation/update-kill-switch
+- mechanism: MCP server boundary
+  effect: >-
+    The hosted MCP server is read-only by construction — it exposes no write tool at all, which is a
+    stronger guarantee than the write scope being withheld.
+  docs: mcp/upstox-mcp.yml
+gaps:
+- No published scopes or permissions reference page — the two scopes are discoverable only from the OpenAPI securityScheme.
+- No per-resource scopes (no orders:read, portfolio:read, funds:write equivalents).
+- No incremental or step-up authorization documented.

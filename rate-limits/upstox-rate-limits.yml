@@ -1,0 +1,95 @@
+generated: '2026-09-02'
+method: searched
+source: https://upstox.com/developer/api-documentation/rate-limiting
+name: Upstox Developer API rate limits
+description: >-
+  Upstox publishes explicit per-API, per-user rate limits on a dedicated documentation page, split into
+  four bands and shaped by the exchange circular dated 5 May 2025 that classifies retail algo trading
+  into registered and unregistered categories. The provider does not document any RateLimit-* or
+  Retry-After response headers, so an agent cannot read remaining quota at runtime; the only runtime
+  signal is the application error code UDAPI10005 ("Too Many Request Sent") returned with HTTP 429.
+docs: https://upstox.com/developer/api-documentation/rate-limiting
+rate_limits:
+- scope: per-user, per-API — order placement (Place, Modify, Cancel, Multi Order, GTT Order), regular algos
+  tier: Regular Algos (no algo registration needed)
+  window: 1 second
+  limit: 10
+- scope: per-user, per-API — order placement, regular algos
+  tier: Regular Algos (no algo registration needed)
+  window: 1 minute
+  limit: 500
+- scope: per-user, per-API — order placement, regular algos
+  tier: Regular Algos (no algo registration needed)
+  window: 30 minutes
+  limit: 2000
+- scope: per-user, per-API — order placement, SEBI-registered algos
+  tier: SEBI-Registered Algos (algo registration needed)
+  window: 1 second
+  limit: 50
+- scope: per-user, per-API — order placement, SEBI-registered algos
+  tier: SEBI-Registered Algos (algo registration needed)
+  window: 1 minute
+  limit: 500
+- scope: per-user, per-API — order placement, SEBI-registered algos
+  tier: SEBI-Registered Algos (algo registration needed)
+  window: 30 minutes
+  limit: 2000
+- scope: per-user, per-API — other standard APIs (holdings, positions, funds, historical candles)
+  window: 1 second
+  limit: 50
+- scope: per-user, per-API — other standard APIs
+  window: 1 minute
+  limit: 500
+- scope: per-user, per-API — other standard APIs
+  window: 30 minutes
+  limit: 2000
+- scope: per-user, per-API — payout standard access (Get Payouts, Get Payout Modes, Get Payins)
+  window: 1 second
+  limit: 10
+- scope: per-user, per-API — payout standard access
+  window: 1 minute
+  limit: 500
+- scope: per-user, per-API — payout standard access
+  window: 30 minutes
+  limit: 2000
+- scope: per-user, per-API — payout restricted access (Payout Request, Modify Payout, Cancel Payout)
+  window: 1 minute
+  limit: 10
+- scope: per-user, per-API — payout restricted access
+  window: 30 minutes
+  limit: 300
+- scope: per-user, per-API — Apply IPO
+  window: 1 second
+  limit: 1
+- scope: per-user, per-API — Apply IPO
+  window: 1 minute
+  limit: 10
+- scope: per-user, per-API — Apply IPO
+  window: 30 minutes
+  limit: 300
+limit_count: 17
+exhaustion:
+  status_code: 429
+  error_code: UDAPI10005
+  error_message: Too Many Request Sent
+  consequence: >-
+    The documentation states that exceeding limits "might result in temporary suspension of access" —
+    it does not state a cooldown duration.
+headers:
+  documented: false
+  note: >-
+    Upstox documents no rate-limit response headers. No X-RateLimit-*, no RateLimit-* (RFC 9331 style),
+    no Retry-After appears on the rate-limiting page, in the request/response structure pages, or in the
+    OpenAPI definition's response headers. An agent has no way to read remaining quota or a retry
+    interval before it is throttled — it can only detect exhaustion after the fact from HTTP 429 with
+    error code UDAPI10005.
+websocket_limits:
+  note: >-
+    Streaming limits are published separately under the Upstox Plus plan — up to 5 concurrent WebSocket
+    connections per user and D30 subscription mode supporting up to 50 instruments per connection.
+  source: https://upstox.com/developer/api-documentation/announcements/websocket-plus
+regulatory_basis:
+  circular_date: '2025-05-05'
+  note: >-
+    Rate limiting for retail investors participating in algo trading is classified into two categories by
+    an exchange circular dated 5 May 2025; SEBI-registered algos get 5x the per-second order throughput.

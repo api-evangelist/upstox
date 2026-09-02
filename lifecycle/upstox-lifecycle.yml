@@ -1,0 +1,123 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2,
+  https://upstox.com/developer/api-documentation/announcements, https://status.upstox.com/ and
+  openapi/upstox-developer-api-openapi.yml
+name: Upstox API lifecycle
+description: >-
+  Upstox versions by URL path major (/v2/, /v3/) and migrates endpoint by endpoint rather than cutting
+  the whole API over at once, so v2 and v3 operations coexist in a single OpenAPI definition. It
+  publishes deprecation notices as dated announcements with named v3 replacements, and it has actually
+  executed shutdowns (Market Data Feeder V2 stopped 22 August 2025). What it does not publish is a
+  formal deprecation policy document, a stated minimum notice period, an SLA, or RFC 8594 Sunset and
+  Deprecation response headers — the notice lives in prose on an announcements page, not in the
+  contract or in the response.
+versioning:
+  scheme: URL path major version
+  current: 'v3 for orders, historical/intraday candles, market quotes and the market data feed; v2 for everything else'
+  header_version: false
+  note: >-
+    The March 2024 "New URL and Simplified Headers" announcement removed the previously required
+    Api-Version header. The OpenAPI definition declares a single server (https://api-v2.upstox.com) and
+    carries both /v2/ and /v3/ paths.
+  policy_url: null
+deprecation:
+  policy_published: false
+  policy_url: null
+  notices_published: true
+  notices_url: https://upstox.com/developer/api-documentation/announcements
+  headers:
+    sunset: false
+    deprecation: false
+    note: >-
+      No RFC 8594 Sunset header and no Deprecation header appears in the OpenAPI response definitions or
+      in the request/response documentation. Deprecation is communicated only by announcement page.
+  spec_marked_deprecated_operations: 0
+  spec_note: >-
+    Zero operations in the published OpenAPI carry deprecated: true, even though nine v2 endpoints are
+    formally deprecated on the announcements page. The contract does not reflect the deprecation state
+    the docs assert — an agent reading only the spec cannot tell which operations are on the way out.
+  deprecated_operations:
+  - operationId: placeOrder_1
+    path: /v2/order/place
+    replacement: placeOrder (/v3/order/place)
+    announced: '2025-06-30'
+  - operationId: modifyOrder_1
+    path: /v2/order/modify
+    replacement: modifyOrder (/v3/order/modify)
+    announced: '2025-06-30'
+  - operationId: cancelOrder_1
+    path: /v2/order/cancel
+    replacement: cancelOrder (/v3/order/cancel)
+    announced: '2025-06-30'
+  - operationId: getHistoricalCandleData_2
+    path: /v2/historical-candle/{instrumentKey}/{interval}/{to_date}
+    replacement: getHistoricalCandleData (/v3/historical-candle/...)
+    announced: '2025-06-30'
+  - operationId: getIntraDayCandleData_1
+    path: /v2/historical-candle/intraday/{instrumentKey}/{interval}
+    replacement: getIntraDayCandleData (/v3/historical-candle/intraday/...)
+    announced: '2025-06-30'
+  - operationId: getMarketQuoteOHLC
+    path: /v2/market-quote/ohlc
+    replacement: getMarketQuoteOHLCV3 (/v3/market-quote/ohlc)
+    announced: '2025-06-30'
+  - operationId: ltp
+    path: /v2/market-quote/ltp
+    replacement: getLtp (/v3/market-quote/ltp)
+    announced: '2025-06-30'
+  - operationId: getMarketDataFeed
+    path: /v2/feed/market-data-feed
+    replacement: Market Data Feed V3
+    announced: '2025-06-30'
+  - operationId: getMarketDataFeedAuthorize
+    path: /v2/feed/market-data-feed/authorize
+    replacement: Market Data Feed Authorize V3
+    announced: '2025-06-30'
+  executed_shutdowns:
+  - what: Market Data Feeder V2 WebSocket
+    date: '2025-08-22'
+    url: https://upstox.com/developer/api-documentation/announcements/v2-websocket-discontinued
+  - what: Selected fields in the Market Data Feed
+    date: '2024-10-10'
+    url: https://upstox.com/developer/api-documentation/announcements/market-proto-changes-notice
+  - what: CSV instruments file (replaced by JSON)
+    date: null
+    url: https://upstox.com/developer/api-documentation/announcements/instruments-csv-deprecation-notice
+  - what: Zero-brokerage API trading
+    date: '2024-08-31'
+    url: https://upstox.com/developer/api-documentation/announcements/update-zero-brokerage
+  sdk_field_deprecations:
+    note: >-
+      The SDK page publishes a field-level transition table — the lowercase tradingsymbol field is being
+      replaced by trading_symbol (Python, PHP), tradingSymbol (Node.js, Java) or TradingSymbol (.NET).
+      Both old and new fields are available during the transition, with no stated removal date.
+    url: https://upstox.com/developer/api-documentation/upstox-generated-sdk
+status_page:
+  present: true
+  url: https://status.upstox.com/
+  vendor: Atlassian Statuspage
+  components:
+  - Login
+  - Order Placement
+  - Payment
+  uptime_window: 90 days
+  historical_uptime: true
+  probed: '2026-09-02'
+  http_status: 200
+  observed_state: All Systems Operational
+  note: >-
+    The Trading API page cites this status page as the source of its published "<45 ms order execution
+    speed" and "99.9% uptime" figures.
+sla:
+  published: false
+  note: >-
+    No developer SLA document is published. The Trading API marketing page states 99.9% uptime and sub-45ms
+    order execution as measured figures, and the rate-limit page targets <100ms API response latency for
+    non-order APIs, but none of these is presented as a contractual commitment.
+support:
+  primary: https://community.upstox.com/
+  help_center: https://upstox.com/help-center/
+  partner_email: api@upstox.com
+  note: The Trading API FAQ directs API questions to the Upstox Community and business integrations to api@upstox.com.

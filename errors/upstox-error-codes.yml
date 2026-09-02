@@ -1,0 +1,147 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://upstox.com/developer/api-documentation/error-codes and
+  https://upstox.com/developer/api-documentation/response-structure, cross-checked against
+  openapi/upstox-developer-api-openapi.yml
+name: Upstox API error catalog
+description: >-
+  Upstox uses a bespoke JSON error envelope, not RFC 9457 problem+json. Every failure returns
+  {"status":"error","errors":[{...}]} where each entry carries a UDAPI-prefixed application error code, a
+  human message, and optional property_path and invalid_value fields naming the offending input. The
+  camelCase spelling of those three fields (errorCode, propertyPath, invalidValue) is deprecated in
+  favour of snake_case and both are currently emitted. The published error-code reference lists the HTTP
+  status set and the ten common application codes; per-endpoint codes are documented in the 4XX section
+  of each endpoint's own reference page.
+format: bespoke-json
+rfc9457: false
+docs: https://upstox.com/developer/api-documentation/error-codes
+envelope:
+  media_type: application/json
+  shape: '{"status": "error", "errors": [ { "error_code": "...", "message": "...", "property_path": null, "invalid_value": null } ]}'
+  fields:
+  - name: status
+    description: Outcome of the request. One of success, error, partial_success.
+  - name: errors
+    description: Array of error objects. An error response can carry more than one.
+  - name: error_code
+    description: The specific Upstox application error code (UDAPI-prefixed).
+  - name: message
+    description: Verbose human-readable message for the error state.
+  - name: property_path
+    description: Path to the property failing validation. May be null.
+  - name: invalid_value
+    description: The value that caused the error. May be null.
+  deprecated_fields:
+  - errorCode
+  - propertyPath
+  - invalidValue
+  deprecated_note: The camelCase variants are deprecated and will be removed; both are currently returned alongside their snake_case equivalents.
+  schemas:
+  - ApiGatewayErrorResponse
+  - Problem
+  - CancelOrExitOrderErrorData
+  - MultiOrderError
+http_statuses:
+- status: 400
+  title: Bad Request
+  description: Your request parameters are incorrect.
+- status: 401
+  title: Unauthorized
+  description: Your API key is wrong or missing.
+- status: 403
+  title: Forbidden
+  description: The requested resource is hidden for administrators only.
+- status: 404
+  title: Not Found
+  description: The specified resource could not be found.
+- status: 405
+  title: Method Not Allowed
+  description: You tried to access a resource with an invalid method.
+- status: 406
+  title: Not Acceptable
+  description: You requested a format that isn't json.
+- status: 410
+  title: Gone
+  description: The resource requested has been removed from our servers.
+- status: 429
+  title: Too Many Requests
+  description: You're requesting too many resources. Slow down.
+- status: 500
+  title: Internal Server Error
+  description: We had a problem with our server. Please try again later.
+- status: 503
+  title: Service Unavailable
+  description: We're temporarily offline for maintenance. Please try again later.
+problem_types:
+- code: UDAPI10000
+  title: This request is not supported by Upstox API
+  description: The API call is not recognized or valid, possibly due to incorrect URL formatting or unexpected characters in the URL.
+  remediation: Check the request path and version segment against the endpoint reference; ensure the URL is standard percent-encoded.
+- code: UDAPI100016
+  title: Invalid Credentials
+  description: One of the credentials passed to this API is invalid.
+  remediation: Re-check client_id/client_secret or the access token used in the Authorization bearer header.
+- code: UDAPI10005
+  title: Too Many Request Sent
+  description: The rate limit for the API has been exceeded.
+  status: 429
+  remediation: Back off and retry. See rate-limits/upstox-rate-limits.yml — 10 or 50 order requests/second depending on SEBI algo registration, 50/second for standard APIs.
+- code: UDAPI100015
+  title: API Version does not exist
+  description: The API version is not part of the header attributes.
+  remediation: Use the versioned URL path (/v2/ or /v3/) documented for the endpoint.
+- code: UDAPI100050
+  title: Invalid token used to access API
+  description: An invalid token was used to access the API.
+  remediation: Re-run the OAuth authorization flow; access tokens expire daily.
+- code: UDAPI100067
+  title: API not permitted with an extended_token
+  description: The API being accessed is not allowed with an extended_token.
+  remediation: Use a standard access token, or check the Analytics Token documentation for which surfaces a long-lived read-only token can reach.
+- code: UDAPI100036
+  title: Invalid Input
+  description: An invalid input was passed to the API.
+  remediation: Read property_path and invalid_value in the error entry to identify the offending field.
+- code: UDAPI100038
+  title: Invalid input passed to the API
+  description: An invalid input was passed to the API.
+  remediation: Read property_path and invalid_value in the error entry to identify the offending field.
+- code: UDAPI100073
+  title: Your 'client_id' is inactive
+  description: The client_id is not active.
+  remediation: Contact Upstox support to reactivate the developer app.
+- code: UDAPI100500
+  title: Something went wrong... please contact us
+  description: An unexpected error occurred.
+  status: 500
+  remediation: Retry; if it persists contact support.
+- code: UDAPI100060
+  title: Resource not Found
+  description: >-
+    Returned by the API gateway for any unrouted path. Observed directly on 2026-09-02 across probes of
+    api.upstox.com, api-v2.upstox.com and api-hft.upstox.com. Not listed on the error-codes page but it
+    is the gateway's standard 404 body.
+  status: 404
+  method: probed
+  source: https://api.upstox.com/openapi.json
+spec_coverage:
+  operations: 101
+  status_codes_declared:
+    '200': 98
+    '302': 3
+    '400': 101
+    '401': 32
+    '403': 101
+    '404': 3
+    '405': 101
+    '422': 101
+    '423': 101
+    '429': 101
+    '500': 101
+  note: >-
+    Every operation in the OpenAPI declares 400/403/405/422/423/429/500. 423 Locked is declared on every
+    operation but appears nowhere in the published error-code reference — an agent has no documented
+    meaning for it. Only 32 of 101 operations declare 401, despite the whole API being OAuth protected.
+    None of the declared error responses carry a schema for the 405/422/423/429/500 cases (content is
+    */* with no schema), so the error envelope is only machine-readable on 400, 401 and 404.

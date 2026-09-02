@@ -1,0 +1,161 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  openapi/upstox-developer-api-openapi.yml, well-known/upstox-well-known.yml,
+  https://upstox.com/trust-security/, https://upstox.com/developer/api-documentation/authentication and
+  https://upstox.com/developer/api-documentation/response-structure
+name: Upstox standards conformance
+description: >-
+  What the Upstox contract and its supporting surfaces actually assert conformance to. The strong
+  results are OAuth 2.0 (authorization code with the full RFC 8414 / RFC 9728 discovery pair on the MCP
+  host, dynamic client registration and PKCE S256) and MCP itself. The notable absence for a capital
+  markets provider is any domain protocol conformance: no FIX, no ISO 20022, no MiFID reporting shape —
+  Upstox is an India-domestic retail brokerage governed by SEBI circulars rather than by the
+  cross-border protocols the capital-markets regime shortlists.
+conformance:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    OpenAPI components.securitySchemes.OAUTH2 declares type oauth2 with an authorizationCode flow —
+    authorizationUrl https://api-v2.upstox.com/v2/login/authorization/dialog, tokenUrl
+    https://api-v2.upstox.com/v2/login/authorization/token, scopes read and write. Confirmed by the
+    Authentication documentation page.
+  source: openapi/upstox-developer-api-openapi.yml
+- id: rfc8414
+  conforms: true
+  evidence: >-
+    https://mcp.upstox.com/.well-known/oauth-authorization-server returns HTTP 200 with a complete
+    OAuth 2.0 Authorization Server Metadata document — issuer, authorization_endpoint, token_endpoint,
+    registration_endpoint, revocation_endpoint, grant types authorization_code and refresh_token,
+    token endpoint auth methods client_secret_basic/client_secret_post/none.
+  source: well-known/upstox-mcp-oauth-authorization-server.json
+- id: rfc9728
+  conforms: true
+  evidence: >-
+    https://mcp.upstox.com/.well-known/oauth-protected-resource and
+    /.well-known/oauth-protected-resource/mcp both return HTTP 200 with OAuth 2.0 Protected Resource
+    Metadata naming resource https://mcp.upstox.com/mcp, authorization_servers
+    [https://mcp.upstox.com], bearer_methods_supported [header].
+  source: well-known/upstox-mcp-oauth-protected-resource-mcp.json
+- id: rfc7591
+  conforms: true
+  evidence: The MCP authorization server metadata advertises registration_endpoint https://mcp.upstox.com/register — OAuth 2.0 Dynamic Client Registration.
+  source: well-known/upstox-mcp-oauth-authorization-server.json
+- id: rfc7636
+  conforms: true
+  evidence: code_challenge_methods_supported declares both plain and S256 (PKCE).
+  source: well-known/upstox-mcp-oauth-authorization-server.json
+- id: oidc
+  conforms: false
+  evidence: >-
+    No /.well-known/openid-configuration on any Upstox host (404 on upstox.com, api.upstox.com,
+    api-v2.upstox.com, api-hft.upstox.com, mcp.upstox.com) and no openIdConnect securityScheme in the
+    OpenAPI. Upstox is an OAuth 2.0 authorization provider, not an OpenID Connect identity provider.
+  source: well-known/upstox-well-known.yml
+- id: openapi
+  conforms: true
+  evidence: >-
+    OpenAPI 3.1.0 served live at https://api.upstox.com/v2/api-docs — 95 paths, 101 operations, 211
+    component schemas, unique operationIds throughout, one declared securityScheme applied across the
+    surface.
+  source: openapi/upstox-developer-api-openapi.yml
+- id: mcp
+  conforms: true
+  evidence: >-
+    Hosted Model Context Protocol server at https://mcp.upstox.com/mcp. A tools/list JSON-RPC POST
+    returned HTTP 401 {"error":"invalid_token"} on 2026-09-02, which is the correct MCP authorization
+    behaviour — the endpoint exists and is OAuth protected. Client setup is documented for Claude
+    Desktop, Claude Code, ChatGPT, Cursor and VS Code with GitHub Copilot.
+  source: https://upstox.com/developer/api-documentation/mcp-integration
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors use a bespoke {"status":"error","errors":[...]} envelope with error_code/message/property_path/
+    invalid_value, not application/problem+json. No type/title/status/detail/instance members.
+  source: errors/upstox-error-codes.yml
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No idempotency key header on any operation, including order placement, multi-order placement, payout
+    initiation and IPO application. The term does not appear in the OpenAPI or the documentation.
+  source: conventions/upstox-conventions.yml
+- id: pagination
+  conforms: partial
+  evidence: >-
+    Page-number pagination is present on 11 operations via page_number, with page_size on 6 and `records`
+    on 5 others, but the response envelope defines no pagination metadata (no total, next cursor or
+    has_more). No RFC 8288 Link header.
+  source: conventions/upstox-conventions.yml
+- id: rfc8594
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation response headers, and zero operations carry deprecated:true in the OpenAPI
+    despite nine v2 endpoints being formally deprecated on the announcements page.
+  source: lifecycle/upstox-lifecycle.yml
+- id: rfc9116
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returned HTTP 403 on upstox.com (an object-store AccessDenied XML body) and
+    404 on every other host. Upstox runs a real bug bounty program but does not advertise it via
+    security.txt.
+  source: well-known/upstox-well-known.yml
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    Upstox operates two WebSocket feeds and a webhook surface but publishes no AsyncAPI document. The
+    market data feed is Protobuf-framed and documented in prose only.
+  source: asyncapi/upstox-webhooks.yml
+- id: rate-limit-headers
+  conforms: false
+  evidence: No X-RateLimit-*, RateLimit-* or Retry-After headers are documented or declared. Exhaustion is signalled only by HTTP 429 with error code UDAPI10005.
+  source: rate-limits/upstox-rate-limits.yml
+domain_standards:
+- id: fix-protocol
+  conforms: false
+  evidence: >-
+    The string "FIX" appears nowhere in the OpenAPI definition or the developer documentation. Upstox
+    exposes a JSON/REST plus Protobuf-over-WebSocket surface for retail algo traders, not a FIX session
+    for institutional order routing.
+  source: openapi/upstox-developer-api-openapi.yml
+- id: iso-20022
+  conforms: false
+  evidence: >-
+    No ISO 20022 message types anywhere in the contract. Fund movement is modelled as Upstox-native
+    payin/payout objects with NEFT and IMPS as Indian domestic rails, not as pain/pacs messages.
+  source: openapi/upstox-developer-api-openapi.yml
+- id: mifid-ii
+  conforms: false
+  evidence: >-
+    Not applicable and not claimed. Upstox Securities Private Limited is SEBI-registered
+    (INZ000315837) and operates on NSE, BSE and MCX under Indian securities regulation; MiFID II is an
+    EU regime.
+  source: https://upstox.com/trust-security/
+- id: iso-6166-isin
+  conforms: true
+  on_regime_shortlist: false
+  evidence: >-
+    The whole Company Fundamentals suite is keyed on ISIN as a first-class path parameter — seven
+    operations at /v2/fundamentals/{isin}/... (profile, balance-sheet, cash-flow, income-statement,
+    share-holdings, key-ratios, corporate-actions), and instrument keys embed the ISIN
+    (e.g. NSE_EQ|INE002A01018). ISIN is ISO 6166, a genuine cross-border securities identifier scheme, so
+    a caller who already speaks ISIN can address Upstox fundamentals with no mapping table. It is not on
+    the capital-markets regime's declared standards shortlist (fix-protocol, mifid-ii, iso-20022), so it
+    is recorded here as an honest observation rather than as a shortlist match.
+  source: openapi/upstox-developer-api-openapi.yml
+compliance:
+  certifications:
+  - ISO/IEC 27001:2022
+  - ISO/IEC 27701:2019
+  - ISO 22301:2019
+  audits:
+  - CERT-In empanelled VAPT
+  regulatory:
+  - SEBI (Securities and Exchange Board of India) — Upstox Securities Pvt. Ltd. registration INZ000315837
+  - NSE (TM Code 13942), BSE (TM Code 6155), MCX (TM Code 46510)
+  - CDSL depository participant IN-DP-761-2024
+  - IRDAI composite corporate agent CA0918 (RKSV Securities India Pvt. Ltd.)
+  - PFRDA POP registration POP399082025
+  - IFSCA broker-dealer CMI2026BDK1028 (GIFT City IFSC branch)
+  - Digital Personal Data Protection Act (India)
+  source: https://upstox.com/trust-security/
+  detail: security/upstox-trust-center.yml

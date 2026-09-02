@@ -1,0 +1,243 @@
+generated: '2026-09-02'
+method: searched
+source: https://upstox.com/developer/api-documentation/announcements
+name: Upstox Developer API announcements
+description: >-
+  Upstox maintains a dated, newest-first announcements page that functions as a full API changelog —
+  new API launches, breaking changes and deprecation notices, each with its own detail page. Entries run
+  continuously from March 2024 to August 2026. Individual entries are tagged Beta, Deprecated,
+  Discontinued, Important or Upstox Plus.
+docs: https://upstox.com/developer/api-documentation/announcements
+scheme:
+  versioning: URL path major version (/v2/, /v3/) with per-endpoint migration rather than a global cut-over
+  current_version: v3 for orders, historical candles, market quotes and the market data feed; v2 remains the path for everything else
+  dated: true
+  rss: null
+  rss_note: No RSS or Atom feed is published for the announcements page.
+entries:
+- date: '2026-08-11'
+  title: IPO Application APIs
+  tag: Beta
+  type: addition
+  highlights: >-
+    Four new IPO endpoints — apply for a mainboard or SME issue with up to three bids, list applications
+    with pagination, fetch one by order ID, cancel while the bidding window is open.
+  url: https://upstox.com/developer/api-documentation/announcements/ipo-application-apis
+- date: '2026-08-01'
+  title: Closing Auction Session (CAS) Support
+  type: addition
+  breaking: false
+  highlights: >-
+    Effective 3 August 2026. New cas_eligible flag in the Instruments JSON and Instrument Search API;
+    Exchange Status API returns a cas_eligible_status object. F&O segment now closes at 3:40 PM IST.
+  url: https://upstox.com/developer/api-documentation/announcements/closing-auction-session
+- date: '2026-07-07'
+  title: Upstox Plugin Marketplace for Claude
+  type: addition
+  highlights: >-
+    MCP server and Agent Skill installable from a single Claude plugin marketplace
+    (upstox/upstox-plugin-marketplace) — upstox-mcp for read-only account access, upstox-skill for
+    trading workflows. Supported in Claude Code and the Claude Desktop and web app.
+  url: https://upstox.com/developer/api-documentation/announcements/plugin-marketplace-launch
+- date: '2026-06-06'
+  title: Analytics Token now Supports Portfolio & Trade APIs via Static IP
+  type: addition
+  highlights: Read-only token with 1-year validity now unlocks portfolio, positions, holdings, orders and P&L via Static IP, without daily re-authorization.
+  url: https://upstox.com/developer/api-documentation/announcements/analytics-token-static-ip
+- date: '2026-06-06'
+  title: Payout Management APIs
+  type: addition
+  highlights: Initiate, modify and cancel fund withdrawals via NEFT or IMPS; check payout mode eligibility.
+  url: https://upstox.com/developer/api-documentation/announcements/payout-management-apis
+- date: '2026-06-06'
+  title: Upstox Agent Skills Launch
+  type: addition
+  highlights: >-
+    Official Agent Skill for Claude Code, Codex or any SKILL.md-compatible agent — place orders, stream
+    market data and manage a portfolio across NSE, BSE and MCX, built on upstox-python-sdk.
+  url: https://upstox.com/developer/api-documentation/announcements/agent-skills-launch
+- date: '2026-05-29'
+  title: Smartlist APIs Launch
+  type: addition
+  highlights: Get Futures Smartlist, Get Options Smartlist and Get MTF Smartlist — ranked real-time lists of F&O contracts and MTF-eligible stocks.
+  url: https://upstox.com/developer/api-documentation/announcements/smartlist-apis
+- date: '2026-05-23'
+  title: IPO API Launch
+  type: addition
+  highlights: Paginated IPO listings by status and issue type, plus per-IPO price band, lot size, timeline, registrar info and subscription figures.
+  url: https://upstox.com/developer/api-documentation/announcements/ipo-api
+- date: '2026-05-11'
+  title: Global Instruments Support
+  type: addition
+  highlights: Global Instruments file with instrument keys for GIFT NIFTY, Dow Jones, S&P, FTSE 100 and other global indices.
+  url: https://upstox.com/developer/api-documentation/announcements/global-instruments
+- date: '2026-05-11'
+  title: New Market Information APIs Launch
+  type: addition
+  highlights: Six endpoints — FII activity, DII activity, Open Interest, Change in OI, Max Pain and Put-Call Ratio.
+  url: https://upstox.com/developer/api-documentation/announcements/analytics-apis
+- date: '2026-05-11'
+  title: Company Fundamentals API Launch
+  type: addition
+  highlights: >-
+    Eight endpoints by ISIN — Company Profile, Balance Sheet, Cash Flow, Income Statement, Share
+    Holdings, Key Ratios, Corporate Actions and Competitors.
+  url: https://upstox.com/developer/api-documentation/announcements/company-fundamentals-api
+- date: '2026-05-04'
+  title: Payments API Launch
+  type: addition
+  highlights: Retrieve pay-in and payout transactions with amount, mode, status, bank name and charge details.
+  url: https://upstox.com/developer/api-documentation/announcements/payments-api
+- date: '2026-04-24'
+  title: Mutual Funds API Launch
+  type: addition
+  highlights: Order book, order details, SIPs and holdings for mutual funds.
+  url: https://upstox.com/developer/api-documentation/announcements/mutual-fund-apis
+- date: '2026-04-17'
+  title: Webhook URL Security Policy
+  type: change
+  breaking: true
+  highlights: >-
+    All webhook URLs registered on the developer platform are now validated against a security filter
+    before an app can be created — dynamic DNS, phishing, malware, spam and proxy-bypass hosts rejected.
+  url: https://upstox.com/developer/api-documentation/announcements/webhook-url-security-policy
+- date: '2026-04-17'
+  title: News API Launch
+  type: addition
+  highlights: News articles for instrument keys, current positions or holdings, with pagination.
+  url: https://upstox.com/developer/api-documentation/announcements/news-api
+- date: '2026-04-10'
+  title: Get Fund and Margin V3 API
+  type: addition
+  highlights: Detailed balance breakdown — cash available, pledged margin, unsettled profit — without a segment parameter.
+  url: https://upstox.com/developer/api-documentation/announcements/get-funds-and-margin-v3
+- date: '2026-04-10'
+  title: Kill Switch API Launch
+  type: addition
+  highlights: Two endpoints to enable or disable trading in specific segments programmatically.
+  url: https://upstox.com/developer/api-documentation/announcements/kill-switch-api
+- date: '2026-04-10'
+  title: Static IP Management APIs
+  type: addition
+  highlights: GET and PUT /user/ip to read and update user-level static IP addresses required for algo trading compliance.
+  url: https://upstox.com/developer/api-documentation/announcements/static-ip-apis
+- date: '2026-03-20'
+  title: Analytics Token
+  type: addition
+  highlights: Long-lived read-only access token with 1-year validity for market data, holdings, positions and historical records, bypassing the daily OAuth flow.
+  url: https://upstox.com/developer/api-documentation/analytics-token
+- date: '2026-03-17'
+  title: Search API for Instruments
+  tag: Beta
+  type: addition
+  highlights: Query instruments by text with filters for exchanges, segments, instrument types, expiry or ATM offset — no full JSON download required.
+  url: https://upstox.com/developer/api-documentation/announcements/instrument-search-api
+- date: '2026-03-11'
+  title: Market Protection for Market and Stoploss Market Orders
+  tag: Beta
+  type: addition
+  highlights: Optional market_protection parameter on Market and Stoploss Market order placement and modification.
+  url: https://upstox.com/developer/api-documentation/announcements/market-protection
+- date: '2025-12-06'
+  title: NSE's Pre-Open Session for Futures
+  type: change
+  highlights: NSE pre-open session for futures live from 8 December 2025; updated market timing schedules.
+  url: https://upstox.com/developer/api-documentation/announcements/nse-pre-open-session
+- date: '2025-08-22'
+  title: V2 Websocket Discontinued
+  tag: Discontinued
+  type: breaking
+  breaking: true
+  highlights: Market Data Feeder V2 WebSocket discontinued 22 August 2025 and stopped after that date. Migrate to V3.
+  url: https://upstox.com/developer/api-documentation/announcements/v2-websocket-discontinued
+- date: '2025-07-19'
+  title: Fund and Margin API Response Change
+  type: breaking
+  breaking: true
+  highlights: From 19 July 2025 the Fund and Margin API returns combined Equity and Commodity funds in the equity object, affecting apps that process segment-specific funds separately.
+  url: https://upstox.com/developer/api-documentation/announcements/fund-margin-api-change
+- date: '2025-06-30'
+  title: Deprecation of several V2 APIs
+  tag: Deprecated
+  type: deprecation
+  breaking: true
+  highlights: >-
+    Nine v2 endpoints deprecated in favour of v3 replacements — Place/Modify/Cancel Order, Historical and
+    Intraday Candle Data, Market OHLC and LTP Quotes, Market Data Feed and Market Data Feed Authorize.
+  url: https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2
+- date: '2025-06-30'
+  title: Launch of Trailing Stop Loss order
+  tag: Beta
+  type: addition
+  highlights: Trailing Stop Loss added to the GTT Order API.
+  url: https://upstox.com/developer/api-documentation/announcements/tsl-gtt-order
+- date: '2025-06-20'
+  title: Support for MTF in GTT Order
+  type: addition
+  highlights: Margin Trading Facility product type supported in GTT order placement.
+  url: https://upstox.com/developer/api-documentation/announcements/gtt-mtf-support
+- date: '2025-05-13'
+  title: Expired Instruments APIs Launch
+  tag: Upstox Plus
+  type: addition
+  highlights: Get Expiries, Get Expired Option Contracts, Get Expired Future Contracts and Get Expired Historical Candle Data, under the Upstox Plus plan.
+  url: https://upstox.com/developer/api-documentation/announcements/expired-instruments-api
+- date: '2025-05-13'
+  title: Websocket Plus Features
+  tag: Upstox Plus
+  type: addition
+  highlights: Up to 5 concurrent connections per user and full D30 subscription mode supporting 50 instruments per connection.
+  url: https://upstox.com/developer/api-documentation/announcements/websocket-plus
+- date: '2025-04-17'
+  title: Enhanced Historical Candle Data APIs - V3 Launch
+  type: addition
+  highlights: V3 Intraday and Historical Candle Data with customizable units from minutes to months and flexible intervals.
+  url: https://upstox.com/developer/api-documentation/announcements/enhanced-historical-candle-data-apis-v3
+- date: '2025-04-17'
+  title: Market Quote V3 API
+  type: addition
+  highlights: Market Quote V3 endpoints with additional data fields for OHLC, LTP and full quotes.
+  url: https://upstox.com/developer/api-documentation/announcements/market-quote-v3
+- date: '2025-01-16'
+  title: Sandbox Mode for API Integration
+  type: addition
+  highlights: Sandbox environment introduced for testing integrations before going live.
+  url: https://upstox.com/developer/api-documentation/announcements/sandbox-mode-for-apis
+- date: '2025-01-03'
+  title: Market Data Feeder V3 Launch & V2 Deprecation
+  type: deprecation
+  breaking: true
+  highlights: Feeder V3 launched; Feeder V2 deprecated by 2 March 2025, V3 only from 3 March 2025.
+  url: https://upstox.com/developer/api-documentation/announcements/new-market-feeder-v3
+- date: '2024-11-11'
+  title: Beta Launch of Order API V3
+  tag: Beta
+  type: addition
+  highlights: Order API V3 with order slicing and latency information tracking.
+  url: https://upstox.com/developer/api-documentation/announcements/beta-launch-of-v3-order
+- date: '2024-09-10'
+  title: Deprecation of Fields in Market Data Feed
+  type: deprecation
+  breaking: true
+  highlights: Several market data feed fields discontinued on 10 October 2024.
+  url: https://upstox.com/developer/api-documentation/announcements/market-proto-changes-notice
+- date: '2024-04-25'
+  title: CSV Instruments File Deprecation Notice
+  type: deprecation
+  breaking: true
+  highlights: CSV instruments file deprecated in favour of JSON.
+  url: https://upstox.com/developer/api-documentation/announcements/instruments-csv-deprecation-notice
+- date: '2024-03-07'
+  title: New URL and Simplified Headers
+  type: change
+  breaking: false
+  highlights: New base URL https://api.upstox.com/v2 with simplified header requirements; old and new URLs operational during transition.
+  url: https://upstox.com/developer/api-documentation/announcements/new-url-and-simplified-headers
+summary:
+  entries_recorded: 37
+  earliest: '2024-03-07'
+  latest: '2026-08-11'
+  breaking_or_deprecation_entries: 9
+  note: >-
+    The published page carries more entries than are captured here (it runs to 2024 with a few undated
+    "Important Updates" items); the recent window plus every breaking/deprecation entry is recorded.

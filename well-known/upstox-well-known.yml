@@ -1,0 +1,137 @@
+generated: '2026-09-02'
+method: probed
+source: 'Direct HTTPS probes of the named /.well-known/ path list on every Upstox host: the website
+  (upstox.com), the API host (api.upstox.com), the OpenAPI servers[] host (api-v2.upstox.com), the
+  high-frequency order host (api-hft.upstox.com) and the hosted MCP host (mcp.upstox.com).'
+name: Upstox well-known documents
+description: >-
+  Upstox serves no /.well-known/ documents from its website or REST API hosts. Its hosted Model
+  Context Protocol server at mcp.upstox.com is the exception and serves a complete OAuth 2.0
+  discovery surface: RFC 8414 authorization-server metadata (with a dynamic client registration
+  endpoint and PKCE S256) and RFC 9728 protected-resource metadata at both the root and the
+  resource-specific /.well-known/oauth-protected-resource/mcp path. No A2A agent card, no
+  api-catalog, no security.txt, no ai-plugin.json anywhere.
+hosts:
+- host: upstox.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    note: >-
+      Origin object store answered AccessDenied (XML), not an RFC 9116 document. Treated as absent.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+- host: api.upstox.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+- host: api-v2.upstox.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+- host: api-hft.upstox.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+- host: mcp.upstox.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: upstox-mcp-oauth-authorization-server.json
+    note: >-
+      RFC 8414 authorization server metadata. issuer https://mcp.upstox.com, authorization_code +
+      refresh_token grants, dynamic client registration at /register, PKCE plain and S256.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: upstox-mcp-oauth-protected-resource.json
+    note: RFC 9728 protected resource metadata for the MCP host root.
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    file: upstox-mcp-oauth-protected-resource-mcp.json
+    note: >-
+      RFC 9728 metadata scoped to the MCP endpoint itself (resource https://mcp.upstox.com/mcp) —
+      the document an MCP client reads from the 401 WWW-Authenticate challenge.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+summary:
+  hosts_probed: 5
+  paths_probed_per_host: 9
+  documents_served: 3
+  security_txt: false
+  api_catalog: false
+  agent_card: false
+  openid_configuration: false
+  oauth_metadata: true

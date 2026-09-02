@@ -1,0 +1,258 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  mcp/upstox-mcp.yml (documented MCP capability domains, live schemas OAuth-gated) bound against
+  openapi/upstox-developer-api-openapi.yml operationIds
+name: Upstox MCP to REST crosswalk
+description: >-
+  Binds each documented Upstox MCP capability domain to the REST operations that back it, and records
+  what each surface can do that the other cannot. The divergence here is unusually clean and unusually
+  large: the MCP server is read-only by design and covers six account domains, while the REST API
+  exposes 101 operations including every write path. Nothing is MCP-only. Ninety-one REST operations
+  have no MCP counterpart, and that is a deliberate safety boundary Upstox documents rather than an
+  oversight — write workflows are routed to the Agent Skill, which drives the Python SDK directly.
+surfaces:
+  openapi:
+    file: openapi/upstox-developer-api-openapi.yml
+    live: https://api.upstox.com/v2/api-docs
+    operations: 101
+    gated: false
+  mcp:
+    url: https://mcp.upstox.com/mcp
+    gated: true
+    gated_note: >-
+      tools/list returns HTTP 401 invalid_token without an authenticated OAuth session, so live tool
+      identifiers and inputSchemas could not be read. Mapping below is by documented capability domain
+      and semantics, and confidence is set accordingly.
+  graphql:
+    present: false
+  agent_skill:
+    repository: https://github.com/upstox/upstox-skills
+    transport: upstox-python-sdk (not MCP)
+    writes: true
+crosswalk:
+- tool: profile
+  category: account
+  rest:
+  - getProfile
+  binding: 1:1
+  confidence: high
+  note: GET /v2/user/profile. Upstox documents the MCP server as reading "Profile — account status and configuration details" and links the user profile APIs.
+- tool: funds_and_margin
+  category: account
+  rest:
+  - getUserFundMarginV3
+  - getUserFundMargin
+  binding: 1:n
+  confidence: high
+  note: >-
+    GET /v3/user/get-funds-and-margin and the v2 equivalent. Upstox documents "Available margins —
+    real-time buying power and margin utilization" and links the margin APIs. Which version the server
+    calls is not published.
+- tool: holdings
+  category: portfolio
+  rest:
+  - getHoldings
+  binding: 1:1
+  confidence: high
+  note: GET /v2/portfolio/long-term-holdings.
+- tool: positions
+  category: portfolio
+  rest:
+  - getPositions
+  - getMtfPositions
+  binding: 1:n
+  confidence: medium
+  note: >-
+    GET /v2/portfolio/short-term-positions plus GET /v3/portfolio/mtf-positions. The MCP docs list
+    "Positions" as one domain and separately advertise MTF position questions in the server repository's
+    example prompts, so both operations plausibly back it; the split is not published.
+- tool: orders
+  category: orders
+  rest:
+  - getOrderBook
+  - getOrderStatus
+  - getOrderDetails
+  - getTradeHistory
+  - getTradesByOrder
+  binding: 1:n
+  confidence: medium
+  note: >-
+    The MCP docs list "Orders" as a read domain and the server repository's example prompts cover the
+    day's orders, pending orders, order history and order status — which maps to the order book, order
+    details, order history and trade read operations. Exact operation set not published.
+- tool: mutual_funds
+  category: portfolio
+  rest:
+  - getMutualFundHoldings
+  - getMutualFundOrders
+  - getMutualFundOrder
+  - getMutualFundSips
+  binding: 1:n
+  confidence: medium
+  note: >-
+    "Mutual funds" is a documented MCP read domain; the REST surface splits it into holdings, order book,
+    order-by-id and SIPs. Which subset the server exposes is not published.
+mcp_only: []
+mcp_only_note: >-
+  No MCP capability lacks a REST backing. The Upstox MCP server is a strict read-only projection of
+  existing REST operations — there is no composite tool, no MCP-native aggregation and no capability
+  reachable only through the agent surface.
+rest_only:
+- category: orders (write)
+  operations:
+  - placeOrder
+  - placeOrder_1
+  - placeMultiOrder
+  - modifyOrder
+  - modifyOrder_1
+  - cancelOrder
+  - cancelOrder_1
+  - cancelMultiOrder
+  - exitPositions
+  reason: >-
+    The MCP server is read-only by published policy — "the agent cannot place orders, modify positions,
+    or move funds through it". These are reachable only through the REST API or the Upstox Agent Skill.
+- category: GTT orders
+  operations:
+  - placeGTTOrder
+  - modifyGTTOrder
+  - cancelGTTOrder
+  - getGttOrderDetails
+  reason: No MCP capability domain covers GTT conditional orders, read or write.
+- category: market data
+  operations:
+  - getLtp
+  - ltp
+  - getMarketQuoteOHLCV3
+  - getMarketQuoteOHLC
+  - getFullMarketQuote
+  - getMarketQuoteOptionGreek
+  - getHistoricalCandleData
+  - getHistoricalCandleData_1
+  - getHistoricalCandleData_2
+  - getHistoricalCandleData_3
+  - getIntraDayCandleData
+  - getIntraDayCandleData_1
+  reason: >-
+    Upstox describes the MCP integration as delivering "real-time market context" and "individual stock
+    analysis", but the published supported-data list names only the six account domains. Market quote and
+    candle operations are not listed as MCP capabilities, so they are recorded as REST-only rather than
+    assumed.
+- category: options
+  operations:
+  - getOptionContracts
+  - getPutCallOptionChain
+  reason: Not in the published MCP capability list.
+- category: expired instruments
+  operations:
+  - getExpiriesResponse
+  - getExpiredOptionContracts
+  - getExpiredFutureContracts
+  - getExpiredHistoricalCandleData
+  reason: Upstox Plus gated REST surface; not in the MCP capability list.
+- category: fundamentals
+  operations:
+  - getCompanyProfile
+  - getBalanceSheet
+  - getCashFlow
+  - getIncomeStatement
+  - getKeyRatios
+  - getShareHoldings
+  - getCorporateActions
+  - getCompetitors
+  reason: Not in the published MCP capability list.
+- category: market information analytics
+  operations:
+  - getFiiData
+  - getDiiData
+  - getOiData
+  - getChangeOiData
+  - getMaxPainData
+  - getPcrData
+  - getSmartlistFutures
+  - getSmartlistOptions
+  - getSmartlistMtf
+  reason: Not in the published MCP capability list.
+- category: market status and calendar
+  operations:
+  - getMarketStatus
+  - getExchangeTimings
+  - getHolidays
+  - getHoliday
+  reason: Not in the published MCP capability list.
+- category: IPO
+  operations:
+  - getIpoListing
+  - getIpoDetails
+  - getIpoOrders
+  - getIpoOrderById
+  - applyForIpo
+  - cancelIpoOrder
+  reason: Not in the published MCP capability list; applyForIpo and cancelIpoOrder are writes and excluded by policy.
+- category: payments
+  operations:
+  - getPayinHistory
+  - getPayoutHistory
+  - getPayoutModes
+  - initiatePayout
+  - modifyPayout
+  - cancelPayout
+  reason: >-
+    Fund movement is explicitly out of scope for the MCP server — "the agent cannot ... move funds
+    through it".
+- category: charges and P&L
+  operations:
+  - postMargin
+  - getBrokerage
+  - getTradesByDateRange
+  - getTradeWiseProfitAndLossData
+  - getTradeWiseProfitAndLossMetaData
+  - getProfitAndLossCharges
+  reason: >-
+    Upstox advertises "profit/loss tracking" and "activity summaries" as MCP capabilities but does not
+    list P&L among the six supported data domains, so these are recorded as REST-only pending an
+    authenticated tools/list.
+- category: risk controls and account admin
+  operations:
+  - getKillSwitch
+  - updateKillSwitch
+  - getUserIps
+  - updateUserIp
+  - convertPositions
+  reason: Account administration and risk controls are not exposed through MCP.
+- category: streaming
+  operations:
+  - getMarketDataFeed
+  - getMarketDataFeedAuthorize
+  - getPortfolioStreamFeed
+  - getPortfolioStreamFeedAuthorize
+  reason: WebSocket feeds have no MCP equivalent — MCP is request/response and the feeds are long-lived streams.
+- category: instruments and news
+  operations:
+  - searchInstrument
+  - getNews
+  reason: Not in the published MCP capability list.
+- category: session
+  operations:
+  - authorize
+  - token
+  - initTokenRequestForIndieUser
+  - logout
+  - publishEvent
+  reason: OAuth session management is handled by the MCP server's own authorization layer, not exposed as tools.
+coverage:
+  mcp_tools_documented: 6
+  mcp_tools_mapped: 6
+  mcp_only: 0
+  rest_operations: 101
+  rest_operations_reachable_via_mcp: 13
+  rest_only: 88
+  mcp_coverage_of_rest: '13%'
+  confidence_high: 3
+  confidence_medium: 3
+  confidence_low: 0
+  note: >-
+    rest_operations_reachable_via_mcp counts the distinct operationIds named in crosswalk[].rest. The
+    figure is a documented-capability mapping, not a verified manifest — an authenticated tools/list
+    would replace medium-confidence rows with exact bindings and inputSchemas.

@@ -1,0 +1,93 @@
+generated: '2026-09-02'
+method: searched
+source: https://upstox.com/developer/api-documentation/sandbox
+name: Upstox sandbox
+description: >-
+  Upstox runs a genuine sandbox environment with its own app type and its own access token, announced
+  16 January 2025 and rolled out in phases. A sandbox app is created separately from a live app in the
+  developer console, and its token is scoped strictly to sandbox orders — it cannot be used against the
+  live system. Coverage is partial and explicitly incomplete: only the order write path is sandbox
+  enabled today, and the documentation marks sandbox-capable endpoints with a "Sandbox enabled" flag it
+  says will be phased out once every API supports it.
+docs:
+- https://upstox.com/developer/api-documentation/sandbox
+- https://upstox.com/developer/api-documentation/build-using-sandbox
+- https://upstox.com/developer/api-documentation/announcements/sandbox-mode-for-apis
+mode:
+  separation: separate app and separate token
+  console: https://account.upstox.com/developer/apps
+  creation: 'Developer apps page -> New Sandbox App -> complete form -> Generate token'
+  token_validity: 30 days
+  token_scope: sandbox orders only; cannot be used for live transactions
+  apps_per_user: 1
+  environment: >-
+    Simulated environment that emulates the live API payloads. Available without time restriction,
+    unlike the live system which only operates during market sessions, and at no cost.
+key_prefixes:
+  documented: false
+  note: >-
+    Upstox does not publish a test-vs-live key prefix convention. The separation is by app type and by
+    token, not by a distinguishable credential prefix — a sandbox token is not visually identifiable
+    from a live token in published documentation.
+sandbox_enabled_operations:
+- operationId: placeOrder_1
+  path: /v2/order/place
+  label: Place Order
+- operationId: placeOrder
+  path: /v3/order/place
+  label: Place Order V3
+- operationId: placeMultiOrder
+  path: /v2/order/multi/place
+  label: Place Multi Order
+- operationId: modifyOrder_1
+  path: /v2/order/modify
+  label: Modify Order
+- operationId: modifyOrder
+  path: /v3/order/modify
+  label: Modify Order V3
+- operationId: cancelOrder_1
+  path: /v2/order/cancel
+  label: Cancel Order
+- operationId: cancelOrder
+  path: /v3/order/cancel
+  label: Cancel Order V3
+coverage:
+  sandbox_enabled: 7
+  total_operations: 101
+  note: >-
+    7 of 101 published operations are sandbox enabled — all of them on the order write path. Read
+    surfaces (portfolio, funds, market quotes, historical candles, fundamentals, mutual funds, IPO,
+    payments) have no sandbox and must be exercised against live data. GTT orders, payouts and IPO
+    application — the three highest-consequence write paths after ordering — are not sandbox enabled.
+test_data:
+  test_cards: null
+  test_accounts: null
+  magic_values: null
+  note: >-
+    No published test cards, magic identifiers, fixture triggers or time simulation. Upstox publishes no
+    test values of any kind for the sandbox; the environment accepts real instrument keys and returns
+    simulated order responses. Recorded as absent rather than invented.
+time_simulation:
+  supported: false
+  note: No test clock or time-travel facility is documented. Sandbox has no market-session restriction, which is the only time-related affordance published.
+sdk_support:
+  supported: true
+  note: >-
+    The official SDKs expose sandbox as a client flag rather than a separate base URL. In Python,
+    upstox_client.Configuration(sandbox=True) with an access_token read from UPSTOX_SANDBOX_ACCESS_TOKEN
+    switches the client to sandbox. Upstox's own Agent Skill instructs agents to "always rehearse
+    order-placement workflows in the sandbox before going live".
+  env_vars:
+  - UPSTOX_ACCESS_TOKEN
+  - UPSTOX_SANDBOX_ACCESS_TOKEN
+  source: https://github.com/upstox/upstox-skills/blob/master/skills/upstox/SKILL.md
+in_docs_console:
+  present: true
+  note: >-
+    Sandbox-enabled reference pages carry an inline request form pre-filled with a sample payload and a
+    "Send API Request" button — paste a sandbox token and execute the call from the documentation page.
+    This is the console/playground surface.
+limitations:
+- Redirect URL and postback URL fields on a sandbox app are collected but currently non-functional; Upstox says they will mirror live behaviour later.
+- One sandbox app per user.
+- Sandbox tokens expire after 30 days and cannot be used against live endpoints.

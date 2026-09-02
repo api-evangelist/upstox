@@ -1,0 +1,128 @@
+generated: '2026-09-02'
+method: probed
+source: >-
+  https://upstox.com/developer/api-documentation/mcp-integration,
+  https://upstox.com/developer/api-documentation/agent-quickstart,
+  https://github.com/upstox/mcp-server-upstox-api, and a live JSON-RPC tools/list POST to
+  https://mcp.upstox.com/mcp on 2026-09-02.
+name: Upstox MCP Server
+description: >-
+  Upstox operates a first-party hosted Model Context Protocol server that gives an AI assistant
+  read-only access to a connected Upstox brokerage account. It is a genuine agent surface: an MCP client
+  POSTs directly to https://mcp.upstox.com/mcp, authorizes over OAuth 2.0 with dynamic client
+  registration and PKCE, and the account connection expires daily. Upstox also open-sources the server
+  (a Cloudflare Worker) so a developer can run it locally, and ships a Claude plugin marketplace that
+  installs it as a connector in one command. The MCP surface is deliberately narrower than the REST API
+  — it reads six account domains and cannot place, modify or cancel anything. Write workflows are
+  handled by the separate Upstox Agent Skill, which drives the Python SDK rather than MCP.
+deployment:
+  mode: both
+  endpoint: https://mcp.upstox.com/mcp
+  install: /plugin marketplace add upstox/upstox-plugin-marketplace && /plugin install upstox-mcp@upstox-plugins-official
+  package: https://github.com/upstox/mcp-server-upstox-api
+  auth: oauth
+  verified: probed
+deployment_detail:
+  remote:
+    endpoint: https://mcp.upstox.com/mcp
+    transport: streamable HTTP
+    probed: '2026-09-02'
+    probe_method: 'POST {"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    probe_status: 401
+    probe_body: '{"error":"invalid_token","error_description":"Missing or invalid access token"}'
+    probe_note: >-
+      The endpoint exists and is live. A 401 with an invalid_token error is the correct MCP
+      authorization response to an anonymous call — the tool list and its inputSchemas require an
+      authenticated OAuth session tied to a real Upstox brokerage account, which this pipeline does not
+      hold. Tool names below are taken from the provider's own MCP integration documentation, not from
+      the live manifest; their input schemas require authenticated introspection.
+    oauth:
+      authorization_server: https://mcp.upstox.com
+      metadata: well-known/upstox-mcp-oauth-authorization-server.json
+      protected_resource_metadata: well-known/upstox-mcp-oauth-protected-resource-mcp.json
+      authorization_endpoint: https://mcp.upstox.com/authorize
+      token_endpoint: https://mcp.upstox.com/token
+      registration_endpoint: https://mcp.upstox.com/register
+      revocation_endpoint: https://mcp.upstox.com/token
+      grant_types:
+      - authorization_code
+      - refresh_token
+      pkce:
+      - plain
+      - S256
+      dynamic_client_registration: true
+      reauthorization: Daily — Upstox expires the account connection every day and requires fresh OAuth consent.
+  local:
+    package: https://github.com/upstox/mcp-server-upstox-api
+    language: TypeScript
+    runtime: Cloudflare Worker (wrangler dev)
+    install: git clone https://github.com/upstox/mcp-server-upstox-api && npm install && npm start
+    local_endpoint: http://localhost:8787/mcp
+    credentials: UPSTOX_CLIENT_ID and UPSTOX_CLIENT_SECRET in .dev.vars, from an app created at https://account.upstox.com/developer/apps with redirect URL http://localhost:8787/callback
+    published_to_npm: false
+    npm_note: >-
+      package.json declares private true and version 0.0.0 — the server is source-distributed, not
+      published as an npm package.
+    note: >-
+      This is a self-hosted variant of the same server, intended for development and testing. It is not
+      a stdio server; it speaks HTTP on localhost and clients reach it through the mcp-remote bridge.
+status: published
+access: read-only
+clients_documented:
+- Claude Desktop and the Claude web app (plugin marketplace connector)
+- Claude Code (plugin marketplace, native HTTP)
+- ChatGPT (Developer mode, custom app with endpoint https://mcp.upstox.com/mcp)
+- Cursor (npx mcp-remote bridge)
+- VS Code with GitHub Copilot (url https://mcp.upstox.com/mcp)
+client_config_examples:
+  cursor: '{"mcpServers":{"Upstox MCP":{"command":"npx","args":["mcp-remote","https://mcp.upstox.com/mcp"]}}}'
+  vscode: '{"mcp":{"inputs":[],"servers":{"Upstox MCP":{"url":"https://mcp.upstox.com/mcp"}}}}'
+  claude_code: '/plugin marketplace add upstox/upstox-plugin-marketplace then /plugin install upstox-mcp@upstox-plugins-official'
+capability_domains:
+- domain: Holdings
+  access: read
+- domain: Orders
+  access: read
+- domain: Positions
+  access: read
+- domain: Mutual funds
+  access: read
+- domain: Funds
+  access: read
+- domain: Profile
+  access: read
+tools:
+  source: provider documentation (https://upstox.com/developer/api-documentation/mcp-integration)
+  schemas_available: false
+  schemas_note: >-
+    Live tool schemas are OAuth-gated. The six entries below are the account data domains Upstox
+    documents the MCP server as supporting, mapped to their backing REST operations in
+    mcp/upstox-tool-crosswalk.yml. Tool identifiers are not published and are NOT invented here.
+  domains:
+  - name: profile
+    reads: Account details, enabled exchanges, order types and product configuration.
+  - name: funds_and_margin
+    reads: Available margin and buying power by segment.
+  - name: holdings
+    reads: Long-term demat holdings with current value and P&L.
+  - name: positions
+    reads: Open intraday and delivery positions with unrealised P&L. Includes MTF positions.
+  - name: orders
+    reads: Order book for the trading day, order status and history.
+  - name: mutual_funds
+    reads: Mutual fund orders, SIPs and holdings.
+guardrails:
+  published: true
+  source: https://upstox.com/developer/api-documentation/agent-quickstart
+  rules:
+  - Read-only by default — the MCP server cannot place orders, modify positions or move funds. Only the separate Agent Skill can execute trades.
+  - Daily re-authorization — account connections expire every day and require fresh OAuth consent, limiting the window of any accidental or unauthorized access.
+  - Verify before acting — Upstox states AI output is research support, not investment advice.
+  - Least privilege — grant only the access a task needs and review rules files so the agent confirms before state-changing actions.
+enterprise_note: >-
+  On Claude Team and Enterprise plans the Upstox connector is a custom connector, so the Install/Connect
+  control stays disabled until an organization Owner enables connectors and allows custom connectors.
+related:
+  agent_skill: skills/_index.yml
+  crosswalk: mcp/upstox-tool-crosswalk.yml
+  openapi: openapi/upstox-developer-api-openapi.yml

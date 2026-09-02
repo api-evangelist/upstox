@@ -1,0 +1,153 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://upstox.com/developer/api-documentation/authentication,
+  https://upstox.com/developer/api-documentation/analytics-token,
+  https://upstox.com/developer/api-documentation/access-token-request and
+  openapi/upstox-developer-api-openapi.yml (derived baseline upgraded with the docs)
+docs: https://upstox.com/developer/api-documentation/authentication
+name: Upstox API authentication
+description: >-
+  Upstox authenticates every API call with an OAuth 2.0 bearer token issued through the authorization
+  code flow. All logins happen on upstox.com — there is deliberately no endpoint that lets a third-party
+  app collect a customer's Upstox credentials — so an integrator redirects the customer to Upstox,
+  receives a single-use authorization code on a pre-registered redirect URI, and exchanges it
+  server-to-server for an access token. The operational wrinkle that shapes every automated integration
+  is token lifetime: a standard access token lasts one trading day, so Upstox publishes three separate
+  ways to get one (interactive, semi-automated via a notifier webhook, and manual from the dashboard)
+  plus a long-lived read-only Analytics Token that trades daily re-auth for a registered static IP.
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+  scheme_count: 1
+  applied_to_operations: 101
+schemes:
+- name: OAUTH2
+  type: oauth2
+  in: header
+  header: Authorization
+  format: Bearer <access_token>
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+    documented_authorizationUrl: https://api.upstox.com/v2/login/authorization/dialog
+    tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+    documented_tokenUrl: https://api.upstox.com/v2/login/authorization/token
+    token_endpoint_content_type: application/x-www-form-urlencoded
+    scopes: 2
+    pkce: false
+    refresh_token: false
+    note: >-
+      The served OpenAPI declares the api-v2.upstox.com spelling of both endpoints while the
+      authentication documentation uses api.upstox.com. Both resolve; the documented form is the one to
+      code against.
+  sources:
+  - openapi/upstox-developer-api-openapi.yml
+  - https://upstox.com/developer/api-documentation/authentication
+authorization_request:
+  endpoint: https://api.upstox.com/v2/login/authorization/dialog
+  operationId: authorize
+  parameters:
+  - name: client_id
+    required: true
+    description: The API key from app creation. In OAuth terms this is the API Key, not the customer's UCC.
+  - name: redirect_uri
+    required: true
+    description: Must exactly match the redirect URI registered during app creation.
+  - name: response_type
+    required: true
+    description: Must always be `code`.
+  - name: state
+    required: false
+    description: Returned unchanged on the callback for request/response continuity.
+  gotchas:
+  - Redirect URLs ending in .php or similar extensions may be blocked; Upstox advises not placing the redirect at the end of the URL.
+  - An Invalid Credentials error (UDAPI100016) usually means client_id, redirect_uri or response_type does not match the registered app values.
+token_exchange:
+  endpoint: https://api.upstox.com/v2/login/authorization/token
+  operationId: token
+  method: POST
+  server_to_server: true
+  content_type: application/x-www-form-urlencoded
+  parameters:
+  - code
+  - client_id
+  - client_secret
+  - redirect_uri
+  - grant_type
+  grant_type: authorization_code
+  code_single_use: true
+  code_note: The authorization code is valid for a single use regardless of whether token generation succeeds.
+token_types:
+- name: access_token
+  lifetime: one trading day
+  scope: full API surface subject to app permissions
+  renewal: Re-run the authorization code flow, or use the semi-automated or manual paths.
+- name: extended_token
+  lifetime: extended
+  restriction: >-
+    Not permitted on every API. Calling a disallowed endpoint returns UDAPI100067 — "The API you are
+    trying to access is not permitted with an extended_token".
+- name: Analytics Token
+  lifetime: 1 year
+  access: read-only
+  scope: >-
+    Market data freely; portfolio, positions, holdings, orders and profit-and-loss require the account to
+    have a registered static IP.
+  docs: https://upstox.com/developer/api-documentation/analytics-token
+  announced: '2026-03-20'
+- name: sandbox access token
+  lifetime: 30 days
+  scope: sandbox orders only; cannot be used for live transactions
+  docs: https://upstox.com/developer/api-documentation/sandbox
+token_acquisition_methods:
+- method: authorization code flow
+  best_for: Apps that log customers in interactively.
+  delivery: Exchanged on your server from a single-use code.
+- method: semi-automated
+  best_for: Scheduled or automated apps that still require human approval.
+  delivery: >-
+    The app triggers an auth request at a scheduled time; the customer approves from a mobile
+    notification or the Developer Apps page, and the token is pushed to the app's notifier URL.
+  docs: https://upstox.com/developer/api-documentation/access-token-request
+  status: beta
+- method: manual
+  best_for: One-off or personal utilities.
+  delivery: Generated and copied from the developer dashboard at https://account.upstox.com/developer/apps.
+customer_authentication:
+  location: upstox.com only
+  note: >-
+    There is no public endpoint that lets another application log a customer into upstox.com. Upstox
+    states all logins and logouts are handled exclusively by upstox.com for security and compliance.
+  mfa:
+    supported: true
+    factors:
+    - PIN (1FA)
+    - SMS OTP (2FA)
+    - TOTP (2FA, opt-in alternative to SMS OTP)
+session_termination:
+  operationId: logout
+  endpoint: DELETE /v2/logout
+  effect: Invalidates the active access token and ends the session.
+static_ip:
+  required_for:
+  - Algo trading order flow (per the exchange circular dated 5 May 2025)
+  - Account-scoped APIs when using the Analytics Token
+  management_operations:
+  - getUserIps
+  - updateUserIp
+  limits: Weekly update limits apply; a successful update invalidates the current token.
+  docs: https://upstox.com/developer/api-documentation/update-app-static-ips
+mcp_authentication:
+  server: https://mcp.upstox.com/mcp
+  model: OAuth 2.0 with dynamic client registration and PKCE (S256), separate from the REST authorization server.
+  reauthorization: daily
+  detail: mcp/upstox-mcp.yml
+  metadata: well-known/upstox-mcp-oauth-authorization-server.json
+gaps:
+- No PKCE on the REST authorization code flow (only the MCP authorization server advertises it).
+- No refresh_token grant on the REST flow — the daily expiry must be re-authorized, which is why the semi-automated and Analytics Token paths exist.
+- Only 32 of 101 operations declare a 401 response in the OpenAPI despite the whole surface being OAuth protected.
+- No /.well-known/openid-configuration and no OpenID Connect scheme; Upstox is an OAuth authorization provider, not an identity provider.

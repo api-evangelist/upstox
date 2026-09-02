@@ -1,0 +1,320 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  openapi/upstox-developer-api-openapi.yml — 211 component schemas, their $ref links and their
+  id-reference fields; identifier formats cross-checked against
+  https://github.com/upstox/upstox-skills/blob/master/skills/upstox/SKILL.md and
+  https://upstox.com/developer/api-documentation/appendix/field-pattern
+name: Upstox data model
+description: >-
+  The Upstox object graph hangs off one identifier — instrument_key — and everything tradable, quotable
+  or reportable references it. Orders, GTT rules, positions, holdings, quotes, candles, option chains,
+  margins and news are all keyed on it. The second axis is the account: a user has funds and margin,
+  holdings, positions, orders, trades, mutual fund folios, IPO applications and payment transactions.
+  Relationships are expressed almost entirely as id-reference fields rather than as nested $refs — the
+  spec has 106 schemas with $ref links, but nearly all of them are envelope-to-payload wrappers, not
+  entity-to-entity edges. An agent joins Upstox entities by identifier, not by traversal.
+primary_key:
+  name: instrument_key
+  format: 'SEGMENT|IDENTIFIER'
+  examples:
+  - value: NSE_EQ|INE002A01018
+    meaning: Equity — segment plus ISIN (ISO 6166)
+  - value: NSE_INDEX|Nifty 50
+    meaning: Index — segment plus index name
+  - value: NSE_FO|43919
+    meaning: Derivative — segment plus numeric exchange token, which changes per expiry
+  segments:
+  - NSE_EQ
+  - NSE_FO
+  - NSE_INDEX
+  - BSE_EQ
+  - BSE_FO
+  - BSE_INDEX
+  - NCD_FO
+  - BCD_FO
+  - MCX_FO
+  resolution: >-
+    Human names must be resolved to instrument_key via GET /v2/instruments/search (searchInstrument) or
+    the downloadable instrument files. Derivative tokens must never be guessed — they are reassigned per
+    expiry.
+  usage:
+    instrument_key_fields: 9
+    instrument_token_fields: 18
+  note: >-
+    The spec carries both instrument_key and the legacy instrument_token spelling on the same objects
+    (18 schemas use instrument_token, 9 use instrument_key), and the webhook payload emits both. This is
+    a live naming migration an agent must be aware of when matching objects across surfaces.
+identifiers:
+- field: instrument_key
+  identifies: Instrument
+  scope: global
+- field: instrument_token
+  identifies: Instrument
+  scope: global
+  deprecated: true
+  note: Legacy spelling of instrument_key, still emitted on webhook payloads and in 18 schemas.
+- field: isin
+  identifies: Company / security
+  scope: global
+  standard: ISO 6166
+  note: The whole Company Fundamentals suite is addressed by ISIN as a path parameter.
+- field: order_id
+  identifies: Order
+  scope: account
+- field: exchange_order_id
+  identifies: Order at the exchange
+  scope: exchange
+  note: Populated once the exchange accepts the order; empty while the order is still with Upstox.
+- field: order_ref_id
+  identifies: Order reference
+  scope: account
+- field: parent_order_id
+  identifies: Parent order (cover / bracket legs)
+  scope: account
+- field: order_request_id
+  identifies: Order request revision
+  scope: order
+- field: gtt_order_id
+  identifies: GTT order
+  scope: account
+  format: 'GTT-<alphanumeric>, e.g. GTT-CU25270200024002'
+- field: trade_id
+  identifies: Trade (fill)
+  scope: account
+- field: transaction_id
+  identifies: Payin / payout transaction
+  scope: account
+- field: sip_id
+  identifies: Mutual fund SIP registration
+  scope: account
+- field: folio
+  identifies: Mutual fund folio
+  scope: account
+- field: settlement_id
+  identifies: Settlement
+  scope: account
+- field: user_id
+  identifies: Upstox user
+  scope: global
+- field: client_id
+  identifies: Developer app
+  scope: platform
+- field: correlation_id
+  identifies: Leg within a multi-order request
+  scope: request
+- field: underlying_key
+  identifies: Underlying instrument of a derivative
+  scope: global
+  note: An instrument_key pointing at the underlying — the derivative-to-underlying edge.
+- field: expired_instrument_key
+  identifies: Expired derivative contract
+  scope: global
+entities:
+- name: Instrument
+  schemas:
+  - Instrument
+  - InstrumentData
+  key: instrument_key
+  description: A tradable security or index on NSE, BSE or MCX. The root of the graph.
+- name: Order
+  schemas:
+  - OrderData
+  - OrderBookData
+  - OrderMetadata
+  key: order_id
+  description: A trading order in one of the documented order statuses, with product, validity, variety, price and quantity.
+- name: Trade
+  schemas:
+  - TradeData
+  - TradeHistoryResponseTradeData
+  key: trade_id
+  description: An execution (fill) against an order.
+- name: GttOrder
+  schemas:
+  - GttOrderData
+  - GttOrderDetails
+  - GttRule
+  - Rule
+  key: gtt_order_id
+  description: A Good Till Triggered conditional order carrying one or more rules (ENTRY, STOPLOSS, TARGET), each with its own trigger and resulting order_id.
+- name: Position
+  schemas:
+  - PositionData
+  key: instrument_key + product
+  description: An open intraday, delivery or MTF position with realised and unrealised P&L.
+- name: Holding
+  schemas:
+  - HoldingsData
+  key: isin
+  description: A long-term demat holding.
+- name: FundsAndMargin
+  schemas:
+  - MarginData
+  - Margin
+  - MarginFromPledge
+  key: segment
+  description: Available and utilised funds and margin, with the V3 breakdown into cash, pledged margin, available-to-trade and unavailable-to-trade.
+- name: Quote
+  schemas:
+  - Ohlc
+  - OhlcV3
+  key: instrument_key
+  description: LTP, OHLC and full market quote snapshots including depth.
+- name: OptionChain
+  schemas:
+  - OptionStrikeData
+  - PutCallOptionChainData
+  key: underlying_key + expiry + strike
+  description: Strike-wise call and put data with greeks and probability of profit.
+- name: MutualFundHolding
+  schemas:
+  - MutualFundHoldingData
+  key: isin + folio
+  description: Mutual fund units held, with last NAV and unrealised P&L.
+- name: MutualFundOrder
+  schemas:
+  - MutualFundOrderData
+  key: order_id
+- name: MutualFundSip
+  schemas:
+  - MutualFundSipData
+  key: sip_id
+- name: Ipo
+  schemas:
+  - IpoListingData
+  - IpoDetailsData
+  - IpoTimeline
+  - IpoRegistrarInfo
+  - IpoInvestorType
+  key: ipo id / slug
+- name: IpoOrder
+  schemas:
+  - IpoOrderData
+  - IpoOrderBid
+  - IpoApplyData
+  - IpoCancelData
+  key: order_id
+  description: An IPO application carrying up to three bids and a UPI mandate state.
+- name: Payout
+  schemas:
+  - PayoutDetails
+  - PayoutModesData
+  key: transaction_id
+- name: Profile
+  schemas:
+  - ProfileData
+  key: user_id
+- name: ProfitAndLoss
+  schemas:
+  - TradeWiseProfitAndLossData
+  - TradeWiseMetaData
+  key: trade_id
+relationships:
+- from: Order
+  to: Instrument
+  type: belongs_to
+  via: instrument_key
+- from: Order
+  to: Trade
+  type: has_many
+  via: order_id
+  operation: getTradesByOrder
+- from: Order
+  to: Order
+  type: belongs_to
+  via: parent_order_id
+  note: Cover and bracket legs point at their parent.
+- from: GttOrder
+  to: GttRule
+  type: has_many
+  via: rules[]
+  ref: true
+- from: GttRule
+  to: Order
+  type: has_one
+  via: order_id
+  note: A fired rule produces a regular order.
+- from: GttOrder
+  to: Instrument
+  type: belongs_to
+  via: instrument_token
+- from: Position
+  to: Instrument
+  type: belongs_to
+  via: instrument_key
+- from: Holding
+  to: Instrument
+  type: belongs_to
+  via: isin
+- from: Quote
+  to: Instrument
+  type: belongs_to
+  via: instrument_key
+- from: OptionChain
+  to: Instrument
+  type: belongs_to
+  via: underlying_key
+  note: The derivative-to-underlying edge; also used by option contracts, expiries and expired instruments.
+- from: MutualFundHolding
+  to: MutualFundOrder
+  type: has_many
+  via: isin + folio
+- from: MutualFundSip
+  to: MutualFundOrder
+  type: has_many
+  via: sip_id
+- from: IpoOrder
+  to: IpoBid
+  type: has_many
+  via: bids[]
+  ref: true
+- from: IpoOrder
+  to: Ipo
+  type: belongs_to
+  via: ipo id
+- from: Ipo
+  to: IpoTimeline
+  type: has_one
+  via: timeline
+  ref: true
+- from: Ipo
+  to: IpoRegistrarInfo
+  type: has_one
+  via: registrar_info
+  ref: true
+- from: Ipo
+  to: IpoInvestorType
+  type: has_many
+  via: investors[]
+  ref: true
+- from: ProfitAndLoss
+  to: Trade
+  type: belongs_to
+  via: trade_id
+- from: Payout
+  to: Profile
+  type: belongs_to
+  via: user_id
+- from: MarginRequest
+  to: Instrument
+  type: has_many
+  via: instruments[]
+  ref: true
+pagination_entities:
+- schema: Pagination
+  used_by:
+  - IpoMetaData
+  - MutualFundMetaData
+- schema: TradeHistoryResponsePageData
+  used_by:
+  - TradeHistoryResponseMetaData
+  note: Trade history uses its own page-data schema rather than the shared Pagination object — the same divergence recorded in conventions/upstox-conventions.yml.
+summary:
+  schemas: 211
+  schemas_with_refs: 106
+  entities: 16
+  relationships: 21
+  note: >-
+    Derived from the contract only. Upstox publishes no standalone object reference or ERD page, so
+    entity boundaries here are inferred from schema names, path structure and identifier fields.

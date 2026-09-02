@@ -1,0 +1,150 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enrichment overlay for the Upstox Developer API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-09-02'
+  method: generated
+  source: openapi/upstox-developer-api-openapi.yml
+  extends: openapi/upstox-developer-api-openapi.yml
+  note: >-
+    Non-destructive enhancements to the spec Upstox serves at https://api.upstox.com/v2/api-docs. The
+    original is never mutated. Every value below is sourced from Upstox's own documentation — the
+    identity fields from the developer portal, the deprecation marks from the 30 June 2025 deprecation
+    notice, and the base-URL note from the March 2024 URL announcement and the July 2024 HFT endpoint
+    announcement.
+extends: openapi/upstox-developer-api-openapi.yml
+actions:
+- target: $.info
+  description: >-
+    The served spec identifies itself only as "OpenAPI definition" version v0, which is a
+    springdoc-generated default. Replace with the product identity Upstox publishes on its developer
+    portal so a consumer can tell whose contract this is.
+  update:
+    title: Upstox Developer API
+    version: v2/v3
+    description: >-
+      Suite of RESTful APIs for building investment and trading platforms on NSE, BSE and MCX. Covers
+      order placement and management (V2 and V3, including slicing, multi-order and GTT), portfolio
+      holdings and positions, funds and margin, brokerage and charge calculation, market quotes and
+      option greeks, historical and intraday candles, expired-instrument history, company fundamentals,
+      IPO application, mutual funds, fund payouts, news, market-information analytics and WebSocket
+      streaming.
+    termsOfService: https://upstox.com/terms-of-use-and-privacy-policy/
+    contact:
+      name: Upstox Developer Support
+      url: https://community.upstox.com/
+      email: api@upstox.com
+    license:
+      name: Upstox Terms of Use
+      url: https://upstox.com/terms-of-use-and-privacy-policy/
+    x-documentation: https://upstox.com/developer/api-documentation/
+    x-changelog: https://upstox.com/developer/api-documentation/announcements
+    x-status-page: https://status.upstox.com/
+    x-rate-limits: https://upstox.com/developer/api-documentation/rate-limiting
+    x-error-codes: https://upstox.com/developer/api-documentation/error-codes
+- target: $.servers
+  description: >-
+    The served spec declares only https://api-v2.upstox.com. Upstox's own request-structure page tells
+    developers to call https://api.upstox.com/[version], and a dedicated low-latency host exists for
+    order operations. Record all three without removing the original.
+  update:
+  - url: https://api-v2.upstox.com
+    description: Host declared in the served OpenAPI definition.
+  - url: https://api.upstox.com
+    description: >-
+      Documented base URL. The request-structure page instructs callers to use
+      https://api.upstox.com/[API_VERSION]/[API_ENDPOINT].
+  - url: https://api-hft.upstox.com
+    description: >-
+      High-frequency order endpoint for place, modify and cancel operations, announced 26 July 2024. Not
+      declared in the served spec.
+- target: $.paths['/v2/order/place'].post
+  description: Mark the v2 order placement operation deprecated per the 30 June 2025 deprecation notice. The served spec carries no deprecated flag.
+  update:
+    deprecated: true
+    x-replacement: placeOrder (POST /v3/order/place)
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2
+    x-sandbox-enabled: true
+- target: $.paths['/v2/order/modify'].put
+  description: Mark the v2 order modification operation deprecated per the 30 June 2025 deprecation notice.
+  update:
+    deprecated: true
+    x-replacement: modifyOrder (PUT /v3/order/modify)
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2
+    x-sandbox-enabled: true
+- target: $.paths['/v2/order/cancel'].delete
+  description: Mark the v2 order cancellation operation deprecated per the 30 June 2025 deprecation notice.
+  update:
+    deprecated: true
+    x-replacement: cancelOrder (DELETE /v3/order/cancel)
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2
+    x-sandbox-enabled: true
+- target: $.paths['/v2/market-quote/ohlc'].get
+  description: Mark the v2 OHLC quote operation deprecated per the 30 June 2025 deprecation notice.
+  update:
+    deprecated: true
+    x-replacement: getMarketQuoteOHLCV3 (GET /v3/market-quote/ohlc)
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2
+- target: $.paths['/v2/market-quote/ltp'].get
+  description: Mark the v2 LTP quote operation deprecated per the 30 June 2025 deprecation notice.
+  update:
+    deprecated: true
+    x-replacement: getLtp (GET /v3/market-quote/ltp)
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/deprecation-notice-v2
+- target: $.paths['/v2/feed/market-data-feed'].get
+  description: >-
+    Mark the v2 market data feed deprecated. Beyond deprecation this surface was actually discontinued on
+    22 August 2025 — it is the one Upstox shutdown with an executed date.
+  update:
+    deprecated: true
+    x-replacement: Market Data Feed V3
+    x-sunset: '2025-08-22'
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/v2-websocket-discontinued
+- target: $.paths['/v2/feed/market-data-feed/authorize'].get
+  description: Mark the v2 market data feed authorize operation deprecated and sunset alongside the feed it authorizes.
+  update:
+    deprecated: true
+    x-replacement: Market Data Feed Authorize V3
+    x-sunset: '2025-08-22'
+    x-deprecation-notice: https://upstox.com/developer/api-documentation/announcements/v2-websocket-discontinued
+- target: $.components.securitySchemes.OAUTH2
+  description: Add the documentation pointer and the token lifetime, which the served scheme omits.
+  update:
+    description: >-
+      OAuth 2.0 authorization code flow. Access tokens expire daily and require re-authorization. A
+      separate long-lived read-only Analytics Token (1-year validity) exists for market data and, with a
+      registered static IP, for account APIs.
+    x-documentation: https://upstox.com/developer/api-documentation/authentication
+    x-token-lifetime: daily
+    x-analytics-token: https://upstox.com/developer/api-documentation/analytics-token
+- target: $
+  description: >-
+    Record cross-cutting runtime semantics the served contract does not express — no idempotency on any
+    write, no rate-limit response headers, page-number pagination with no metadata, and the bespoke error
+    envelope.
+  update:
+    x-conventions: conventions/upstox-conventions.yml
+    x-idempotency:
+      supported: false
+      note: No idempotency key on any write operation, including order placement and payout initiation.
+    x-rate-limit-headers:
+      supported: false
+      status_on_exhaustion: 429
+      error_code: UDAPI10005
+      documentation: https://upstox.com/developer/api-documentation/rate-limiting
+    x-pagination:
+      style: page-number
+      params:
+      - page_number
+      - page_size
+      - records
+      response_metadata: false
+    x-error-envelope:
+      format: bespoke-json
+      rfc9457: false
+      shape: '{"status": "error", "errors": [{"error_code", "message", "property_path", "invalid_value"}]}'
+      catalog: errors/upstox-error-codes.yml
+    x-webhooks: asyncapi/upstox-webhooks.yml
+    x-mcp-server: https://mcp.upstox.com/mcp
+    x-agent-skill: https://github.com/upstox/upstox-skills
