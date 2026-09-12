@@ -1,0 +1,14 @@
+{
+  "repo": "upstox",
+  "feeds": [
+    {
+      "source": "https://community.upstox.com/",
+      "feed_url": "https://community.upstox.com/posts.rss",
+      "title": "",
+      "saved": 31,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 31,
+  "fetched": "2026-09-06T19:17:18Z"
+}
