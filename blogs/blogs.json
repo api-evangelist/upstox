@@ -5,10 +5,17 @@
       "source": "https://community.upstox.com/",
       "feed_url": "https://community.upstox.com/posts.rss",
       "title": "",
-      "saved": 31,
+      "saved": 0,
       "method": "discovered"
+    },
+    {
+      "source": "https://community.upstox.com/posts.rss",
+      "feed_url": "https://community.upstox.com/posts.rss",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
     }
   ],
-  "post_count": 31,
-  "fetched": "2026-09-06T19:17:18Z"
+  "post_count": 54,
+  "fetched": "2026-09-13T13:00:00Z"
 }
