@@ -27,6 +27,17 @@ created: '2026-09-02'
 modified: '2026-09-02'
 tags:
 - Company
+- Financial-Services
+- Stock Trading
+- Brokerage
+- Market Data
+- Investing
+- Capital Markets
+- Mutual Funds
+- Algorithmic Trading
+- India
+tags_raw:
+- Company
 - Financial Services
 - Stock Trading
 - Brokerage
@@ -37,60 +48,16 @@ tags:
 - Algorithmic Trading
 - India
 apis:
-- aid: upstox:upstox-developer-api
-  name: Upstox Developer API
-  description: >-
-    The Upstox Developer API is a free OAuth 2.0 REST and WebSocket suite for building trading and
-    investment applications against a live SEBI-registered brokerage account. It covers order placement,
-    modification and cancellation (V2 and the newer V3 endpoints with order slicing), multi-order and
-    exit-all-positions batch operations, GTT and trailing-stop-loss conditional orders, portfolio
-    holdings, positions and MTF positions, funds and margin, brokerage and charge calculation,
-    trade-wise profit and loss reporting, market quotes with LTP/OHLC/full depth and option greeks,
-    historical and intraday candle data, expired instrument history for backtesting, option chains and
-    contracts, company fundamentals by ISIN, IPO listing and application, mutual fund orders, SIPs and
-    holdings, fund pay-in and payout management, market information analytics (FII/DII activity, OI,
-    change in OI, max pain, put-call ratio), a kill switch, static IP management for algo-trading
-    compliance, and streaming market-data and portfolio feeds over WebSocket.
-  humanURL: https://upstox.com/developer/api-documentation/
-  baseURL: https://api.upstox.com
-  tags:
-  - Orders
-  - Portfolio
-  - Market Data
-  - Historical Data
-  - Options
-  - Mutual Funds
-  - IPO
-  - Fundamentals
-  - Payments
-  - WebSocket
-  properties:
-  - type: OpenAPI
-    url: openapi/upstox-developer-api-openapi.yml
-  - type: Documentation
-    url: https://upstox.com/developer/api-documentation/open-api
-  - type: APIReference
-    url: https://upstox.com/developer/api-documentation/api-overview
-  - type: GettingStarted
-    url: https://upstox.com/developer/api-documentation/installing-sdk
-  - type: Authentication
-    url: https://upstox.com/developer/api-documentation/authentication
-  - type: Overlay
-    url: overlays/upstox-developer-api-overlay.yaml
-  - type: Postman
-    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
-  - type: Webhooks
-    url: https://upstox.com/developer/api-documentation/webhook
 - aid: upstox:upstox-mcp-server
   name: Upstox MCP Server
   description: >-
     Upstox operates a hosted, OAuth-protected Model Context Protocol server at https://mcp.upstox.com/mcp
     that gives AI assistants — Claude Desktop and the Claude web app, Claude Code, ChatGPT in Developer
-    mode, Cursor, and VS Code with GitHub Copilot — read-only access to a connected Upstox account:
-    holdings, orders, positions, mutual funds, funds and profile. Authorization uses OAuth 2.0 with
-    dynamic client registration and PKCE, advertised through RFC 8414 and RFC 9728 metadata documents
-    on the MCP host, and account connections expire daily. The same server can be run locally from the
-    open-source mcp-server-upstox-api Cloudflare Worker for development.
+    mode, Cursor, and VS Code with GitHub Copilot — read-only access to a connected Upstox account: holdings,
+    orders, positions, mutual funds, funds and profile. Authorization uses OAuth 2.0 with dynamic client
+    registration and PKCE, advertised through RFC 8414 and RFC 9728 metadata documents on the MCP host,
+    and account connections expire daily. The same server can be run locally from the open-source mcp-server-upstox-api
+    Cloudflare Worker for development.
   humanURL: https://upstox.com/developer/api-documentation/mcp-integration
   baseURL: https://mcp.upstox.com/mcp
   tags:
@@ -109,12 +76,499 @@ apis:
     url: https://upstox.com/developer/api-documentation/agent-quickstart
   - type: SourceCode
     url: https://github.com/upstox/mcp-server-upstox-api
+- aid: upstox:upstox-charge-api
+  name: Upstox Charge API
+  description: The Charge API from Upstox — 2 operation(s) for charge.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Charge
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-charge-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-events-controller-v-2-api
+  name: Upstox Events Controller V 2 API
+  description: The events-controller-v-2 API from Upstox — 1 operation(s) for events-controller-v-2.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - events-controller-v-2
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-events-controller-v-2-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-expired-instrument-api
+  name: Upstox Expired Instrument API
+  description: The Expired Instrument API from Upstox — 4 operation(s) for expired instrument.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Expired Instrument
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-expired-instrument-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-fundamentals-api
+  name: Upstox Fundamentals API
+  description: The Fundamentals API from Upstox — 8 operation(s) for fundamentals.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Fundamentals
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-fundamentals-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-history-api
+  name: Upstox History API
+  description: The History API from Upstox — 3 operation(s) for history.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - History
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-history-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-history-v3-api
+  name: Upstox History V3 API
+  description: Historical Candle Data V3
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - History V3
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-history-v3-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-instruments-api
+  name: Upstox Instruments API
+  description: The Instruments API from Upstox — 1 operation(s) for instruments.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Instruments
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-instruments-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-ipo-api
+  name: Upstox IPO API
+  description: The IPO API from Upstox — 4 operation(s) for ipo.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - IPO
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-ipo-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-login-api
+  name: Upstox Login API
+  description: The Login API from Upstox — 4 operation(s) for login.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Login
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-login-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-market-holidays-and-timings-api
+  name: Upstox Market Holidays and Timings API
+  description: >-
+    The Market Holidays and Timings API from Upstox — 13 operation(s) for market holidays and timings.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Market Holidays and Timings
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-market-holidays-and-timings-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-market-quote-api
+  name: Upstox Market Quote API
+  description: The Market Quote API from Upstox — 3 operation(s) for market quote.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Market Quote
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-market-quote-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-market-quote-v3-api
+  name: Upstox Market Quote V3 API
+  description: The Market Quote V3 API from Upstox — 3 operation(s) for market quote v3.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Market Quote V3
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-market-quote-v3-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-mutual-fund-api
+  name: Upstox Mutual Fund API
+  description: The Mutual Fund API from Upstox — 4 operation(s) for mutual fund.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Mutual Fund
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-mutual-fund-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-news-api
+  name: Upstox News API
+  description: The News API from Upstox — 1 operation(s) for news.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - News
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-news-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-options-api
+  name: Upstox Options API
+  description: The Options API from Upstox — 2 operation(s) for options.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Options
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-options-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-order-api
+  name: Upstox Order API
+  description: The Order API from Upstox — 18 operation(s) for order.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Order
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-order-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-payments-api
+  name: Upstox PAYMENTS API
+  description: The PAYMENTS API from Upstox — 4 operation(s) for payments.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - PAYMENTS
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-payments-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-portfolio-api
+  name: Upstox Portfolio API
+  description: The Portfolio API from Upstox — 4 operation(s) for portfolio.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Portfolio
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-portfolio-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-post-trade-api
+  name: Upstox Post Trade API
+  description: The Post Trade API from Upstox — 1 operation(s) for post trade.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Post Trade
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-post-trade-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-trade-profit-and-loss-api
+  name: Upstox Trade Profit And Loss API
+  description: The Trade Profit And Loss API from Upstox — 3 operation(s) for trade profit and loss.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Trade Profit And Loss
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-trade-profit-and-loss-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-user-api
+  name: Upstox User API
+  description: The User API from Upstox — 5 operation(s) for user.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-user-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
+- aid: upstox:upstox-websocket-api
+  name: Upstox Websocket API
+  description: The Websocket API from Upstox — 4 operation(s) for websocket.
+  humanURL: https://upstox.com/developer/api-documentation/
+  baseURL: https://api.upstox.com
+  tags:
+  - Websocket
+  properties:
+  - type: OpenAPI
+    url: openapi/upstox-websocket-api-openapi.yml
+  - type: Documentation
+    url: https://upstox.com/developer/api-documentation/open-api
+  - type: APIReference
+    url: https://upstox.com/developer/api-documentation/api-overview
+  - type: GettingStarted
+    url: https://upstox.com/developer/api-documentation/installing-sdk
+  - type: Authentication
+    url: https://upstox.com/developer/api-documentation/authentication
+  - type: Postman
+    url: https://gist.github.com/Rahulzz/a0da2ad28a7dcc81e887f24cfdbc80a8
+  - type: Webhooks
+    url: https://upstox.com/developer/api-documentation/webhook
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/upstox-developer-api-overlay.yaml
 - type: Website
   url: https://upstox.com/
 - type: DeveloperPortal
