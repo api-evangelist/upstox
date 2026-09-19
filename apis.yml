@@ -435,6 +435,8 @@ apis:
   humanURL: https://upstox.com/developer/api-documentation/
   baseURL: https://api.upstox.com
   tags:
+  - Payments
+  tags_raw:
   - PAYMENTS
   properties:
   - type: OpenAPI
@@ -479,6 +481,8 @@ apis:
   humanURL: https://upstox.com/developer/api-documentation/
   baseURL: https://api.upstox.com
   tags:
+  - Post-Trade
+  tags_raw:
   - Post Trade
   properties:
   - type: OpenAPI
@@ -545,6 +549,8 @@ apis:
   humanURL: https://upstox.com/developer/api-documentation/
   baseURL: https://api.upstox.com
   tags:
+  - WebSocket
+  tags_raw:
   - Websocket
   properties:
   - type: OpenAPI
