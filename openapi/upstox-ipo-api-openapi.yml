@@ -1,0 +1,1104 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition IPO API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: IPO
+paths:
+  /v2/ipos/orders:
+    get:
+      tags:
+      - IPO
+      summary: Get IPO Orders
+      description: Fetches the authenticated user's IPO orders/applications.
+      operationId: getIpoOrders
+      parameters:
+      - name: page_number
+        in: query
+        description: Page number, starting at 1
+        required: false
+        schema:
+          type: string
+          example: 1
+          minimum: 1
+      - name: records
+        in: query
+        description: Number of records per page
+        required: false
+        schema:
+          type: string
+          example: 10
+          maximum: 30
+          minimum: 1
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Invalid pagination parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpoOrderResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+    post:
+      tags:
+      - IPO
+      summary: Apply for IPO
+      description: Places an IPO application for the authenticated user.
+      operationId: applyForIpo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpoApplyRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpoApplyResponse'
+        '404':
+          description: IPO not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/ipos:
+    get:
+      tags:
+      - IPO
+      summary: Get IPO Listing
+      description: Fetches list of IPOs filtered by status.
+      operationId: getIpoListing
+      parameters:
+      - name: status
+        in: query
+        description: IPO status to filter by
+        required: false
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - listed
+          - upcoming
+          example: open
+          pattern: ^(open|closed|listed|upcoming)$
+      - name: issue_type
+        in: query
+        description: Issue type filter. `regular` is a mainboard issue. Returns both when omitted
+        required: false
+        schema:
+          type: string
+          enum:
+          - regular
+          - sme
+          example: regular
+          pattern: ^(regular|sme)$
+      - name: page_number
+        in: query
+        description: Page number, starting at 1
+        required: false
+        schema:
+          type: string
+          example: 1
+          minimum: 1
+      - name: records
+        in: query
+        description: Number of records per page
+        required: false
+        schema:
+          type: string
+          example: 20
+          maximum: 30
+          minimum: 1
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Invalid status or issue_type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpoListingResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/ipos/{id}:
+    get:
+      tags:
+      - IPO
+      summary: Get IPO Details
+      description: Fetches detailed information for an IPO by its slug ID.
+      operationId: getIpoDetails
+      parameters:
+      - name: id
+        in: path
+        description: IPO id (slug), as returned in `id` by the IPO listing API
+        required: true
+        schema:
+          type: string
+          example: mandb-engineering-limited-ipo
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Invalid IPO ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpoDetailsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/ipos/orders/{order_id}:
+    get:
+      tags:
+      - IPO
+      summary: Get IPO Order
+      description: Fetches a single IPO order of the authenticated user by order id.
+      operationId: getIpoOrderById
+      parameters:
+      - name: order_id
+        in: path
+        description: IPO application id, as returned in `order_id` by the apply and orders APIs
+        required: true
+        schema:
+          type: string
+          example: UPROYAL00000003
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpoOrderDetailResponse'
+        '404':
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+    delete:
+      tags:
+      - IPO
+      summary: Cancel IPO Order
+      description: Cancels/deletes an IPO order of the authenticated user by order id.
+      operationId: cancelIpoOrder
+      parameters:
+      - name: order_id
+        in: path
+        description: IPO application id, as returned in `order_id` by the apply and orders APIs
+        required: true
+        schema:
+          type: string
+          example: UPROYAL00000003
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpoCancelResponse'
+        '404':
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    IpoBidRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Number of shares bid for. Must be a multiple of the IPO's `lot_size` and at least its `minimum_quantity`
+          example: 20
+        price:
+          type: number
+          description: Bid price per share, in whole rupees — decimals are not accepted. Must sit within the IPO's price band, or equal its `cut_off_price`
+          example: 850
+      required:
+      - price
+      - quantity
+    IpoTimeline:
+      type: object
+      properties:
+        pre_apply_start_date:
+          type: string
+          description: Date pre-apply opens, in yyyy-MM-dd
+          example: '2026-07-28'
+        application_start_date:
+          type: string
+          description: Date the issue opens for applications, in yyyy-MM-dd
+          example: '2026-10-08'
+        application_end_date:
+          type: string
+          description: Date the issue closes for applications, in yyyy-MM-dd
+          example: '2026-10-10'
+        allotment_start_date:
+          type: string
+          description: Date allotment processing starts, in yyyy-MM-dd
+          example: '2026-10-13'
+        allotment_date:
+          type: string
+          description: Date allotment is finalised, in yyyy-MM-dd
+          example: '2026-10-14'
+        refund_initiation_date:
+          type: string
+          description: Date refunds are initiated for unallotted applications, in yyyy-MM-dd
+          example: '2026-10-15'
+        listing_date:
+          type: string
+          description: Date the share lists on the exchange, in yyyy-MM-dd
+          example: '2026-10-16'
+        mandate_end_date:
+          type: string
+          description: Last date the UPI mandate can be approved, in yyyy-MM-dd
+          example: '2026-10-11'
+    IpoDetailsData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: IPO id (slug). Pass this as the id to the apply API
+          example: mandb-engineering-limited-ipo
+        symbol:
+          type: string
+          description: Trading symbol of the issuer
+          example: MANDB
+        name:
+          type: string
+          description: Name of the issuer
+          example: M and B Engineering Limited
+        status:
+          type: string
+          description: Current stage of the IPO
+          enum:
+          - open
+          - closed
+          - listed
+          - upcoming
+          example: open
+        isin:
+          type: string
+          description: ISIN of the issue
+          example: INE0S5T01015
+        issue_type:
+          type: string
+          description: Issue type of the IPO. `regular` is a mainboard issue
+          enum:
+          - regular
+          - sme
+          example: regular
+        issue_size:
+          type: number
+          format: double
+          description: Total issue size in crores
+          example: 650.0
+        industry:
+          type: string
+          description: Industry the issuer operates in
+          example: Capital Goods
+        minimum_price:
+          type: number
+          format: double
+          description: Lower end of the price band, per share
+          example: 366.0
+        maximum_price:
+          type: number
+          format: double
+          description: Upper end of the price band, per share
+          example: 385.0
+        bidding_start_date:
+          type: string
+          description: Date bidding opens, in yyyy-MM-dd
+          example: '2026-10-08'
+        bidding_end_date:
+          type: string
+          description: Date bidding closes, in yyyy-MM-dd
+          example: '2026-10-10'
+        daily_start_time:
+          type: string
+          description: Time bidding opens each day, in HH:mm IST
+          example: '10:00'
+        daily_end_time:
+          type: string
+          description: Time bidding closes each day, in HH:mm IST
+          example: '17:00'
+        face_value:
+          type: number
+          format: double
+          description: Face value of one share
+          example: 10.0
+        tick_size:
+          type: number
+          format: double
+          description: Minimum price increment for a bid
+          example: 1.0
+        lot_size:
+          type: integer
+          format: int32
+          description: Number of shares in one lot
+          example: 20
+        minimum_quantity:
+          type: integer
+          format: int32
+          description: Smallest quantity that can be bid for; bids must be in multiples of the lot size
+          example: 20
+        cut_off_price:
+          type: number
+          format: double
+          description: Cut-off price for retail applications
+          example: 850.0
+        listing_price:
+          type: number
+          format: double
+          description: Price the share listed at; null until listing
+          example: 1200.0
+        listing_exchange:
+          type: string
+          description: Exchange(s) the issue lists on. Comma-separated when the issue lists on more than one
+          example: BSE,NSE
+        rhp_url:
+          type: string
+          description: Link to the Red Herring Prospectus
+          example: https://example.com/rhp.pdf
+        drhp_url:
+          type: string
+          description: Link to the Draft Red Herring Prospectus
+          example: https://example.com/drhp.pdf
+        timeline:
+          $ref: '#/components/schemas/IpoTimeline'
+          description: Key dates for the issue, from pre-apply through listing
+        registrar_info:
+          $ref: '#/components/schemas/IpoRegistrarInfo'
+          description: Registrar handling the issue
+        total_subscription:
+          type: string
+          description: Overall subscription so far; null until the issue opens
+          example: 2.5x
+        investors:
+          type: array
+          description: Investor categories the issue accepts
+          items:
+            $ref: '#/components/schemas/IpoInvestorType'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    IpoListingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpoListingData'
+        meta_data:
+          $ref: '#/components/schemas/IpoMetaData'
+    IpoOrderDetailResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IpoOrderData'
+    IpoOrderBid:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Number of shares bid for
+          example: 30
+        price:
+          type: number
+          description: Bid price per share
+          example: 150.3
+        amount:
+          type: number
+          description: Value of the bid, quantity x price
+          example: 4509.0
+        message:
+          type: string
+          description: Message from the exchange for this bid, when one was returned
+          example: Bid accepted
+    IpoMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
+    IpoApplyResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IpoApplyData'
+    IpoListingData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: IPO id (slug). Pass this as the id to the IPO details and apply APIs
+          example: mandb-engineering-limited-ipo
+        symbol:
+          type: string
+          description: Trading symbol of the issuer
+          example: MANDB
+        name:
+          type: string
+          description: Name of the issuer
+          example: M and B Engineering Limited
+        status:
+          type: string
+          description: Current stage of the IPO
+          enum:
+          - open
+          - closed
+          - listed
+          - upcoming
+          example: open
+        isin:
+          type: string
+          description: ISIN of the issue
+          example: INE0S5T01015
+        issue_type:
+          type: string
+          description: Issue type of the IPO. `regular` is a mainboard issue
+          enum:
+          - regular
+          - sme
+          example: regular
+        issue_size:
+          type: number
+          format: double
+          description: Total issue size in crores
+          example: 650.0
+        industry:
+          type: string
+          description: Industry the issuer operates in
+          example: Capital Goods
+        minimum_price:
+          type: number
+          format: double
+          description: Lower end of the price band, per share
+          example: 366.0
+        maximum_price:
+          type: number
+          format: double
+          description: Upper end of the price band, per share
+          example: 385.0
+        bidding_start_date:
+          type: string
+          description: Date bidding opens, in yyyy-MM-dd
+          example: '2026-10-08'
+        bidding_end_date:
+          type: string
+          description: Date bidding closes, in yyyy-MM-dd
+          example: '2026-10-10'
+        total_subscription:
+          type: string
+          description: Overall subscription so far; null until the issue opens
+          example: 2.5x
+        investors:
+          type: array
+          description: Investor categories the issue accepts. Empty when the listing data carries none — the IPO details API is the authoritative source
+          items:
+            $ref: '#/components/schemas/IpoInvestorType'
+    IpoCancelData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Application id that was cancelled
+          example: 6715c003289265c3
+        status:
+          type: string
+          description: Free-text message returned by the IPO service for the cancellation request
+    IpoRegistrarInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the registrar handling the issue
+          example: Link Intime India Pvt Ltd
+        email:
+          type: string
+          description: Contact email for the registrar
+          example: ipo@linkintime.co.in
+        contact_name:
+          type: string
+          description: Contact person at the registrar
+          example: Investor Services
+        contact_number:
+          type: string
+          description: Contact number for the registrar
+          example: 022-49186200
+        website:
+          type: string
+          description: Registrar's website
+          example: https://linkintime.co.in
+        registrar:
+          type: string
+          description: SEBI registration number of the registrar
+          example: INR000004058
+    Pagination:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+        records:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+    IpoInvestorType:
+      type: object
+      properties:
+        category:
+          type: string
+          description: Investor category the issue accepts. Pass this value as category when applying
+          enum:
+          - IND
+          - HNI
+          example: IND
+        description:
+          type: string
+          description: Human-readable name of the category; null when the IPO service does not provide one
+          example: Individual Investor
+    IpoOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpoOrderData'
+        meta_data:
+          $ref: '#/components/schemas/IpoMetaData'
+    IpoDetailsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IpoDetailsData'
+    IpoApplyData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Application id created for this IPO application. Pass this as order_id to the get-order and cancel-order APIs
+          example: UPCHK500000020
+    IpoOrderData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Reference id of the IPO the application was placed against
+          example: deepak-3188545e-93d5
+        symbol:
+          type: string
+          description: Trading symbol of the issuer
+          example: DBEIL
+        exchange:
+          type: string
+          description: Exchange the application was submitted to. Casing follows the exchange feed and may vary
+          example: nse
+        request_id:
+          type: string
+          description: Id of the request that created the application
+          example: LEGACY-1d7f24d7-aaee-4351-b726-b4f41fd0a0e9
+        order_id:
+          type: string
+          description: Application id. Pass this as order_id to the get-order and cancel-order APIs
+          example: 6715c003289265c3
+        status:
+          type: string
+          description: 'Lifecycle stage of the application. Known values: awaiting_mandate, ipo_allotted, ipo_not_allotted, application_deleted'
+          example: ipo_allotted
+        order_status:
+          type: string
+          description: 'Outcome of the application. Known values: success, allotted, not_allotted'
+          example: allotted
+        payment_status:
+          type: string
+          description: 'State of the UPI mandate backing the application. Known values: pending, mandate_accepted'
+          example: mandate_accepted
+        category:
+          type: string
+          description: Investor category the application was placed under. IND (individual) and HNI can be applied for; EMP appears on employee-quota applications
+          example: IND
+        issue_type:
+          type: string
+          description: Issue type of the IPO. `regular` is a mainboard issue
+          enum:
+          - regular
+          - sme
+          example: regular
+        reason:
+          type: string
+          description: Free-text reason from the exchange or registrar explaining the current status
+          example: alloted
+        upi:
+          type: string
+          description: UPI id the mandate was raised against
+          example: 9136776254@ybl
+        upi_amount_blocked:
+          type: string
+          description: Amount blocked in the applicant's bank account for this application, as a decimal string. Absent until the mandate is accepted
+          example: 14819.0
+        nse_submitted_date:
+          type: string
+          description: When the application was submitted to NSE, in yyyy-MM-dd'T'HH:mm:ss; null if not submitted there
+          example: '2024-10-21T08:14:20'
+        bse_submitted_date:
+          type: string
+          description: When the application was submitted to BSE, in yyyy-MM-dd'T'HH:mm:ss; null if not submitted there
+          example: '2024-10-21T08:14:20'
+        mandate_approved_date:
+          type: string
+          description: When the UPI mandate was approved; null until approved
+          example: '2024-10-21T09:02:11'
+        rejection_date:
+          type: string
+          description: When the application was rejected; null unless rejected
+          example: '2024-10-22T11:30:00'
+        mandate_rejection_date:
+          type: string
+          description: When the UPI mandate was rejected; null unless rejected
+          example: '2024-10-22T11:30:00'
+        cancel_requested_date:
+          type: string
+          description: When cancellation was requested; null unless a cancellation was raised
+          example: '2024-10-23T10:15:00'
+        cancel_accepted_date:
+          type: string
+          description: When cancellation was accepted; null unless the cancellation completed
+          example: '2024-10-23T10:45:00'
+        units_allotted:
+          type: integer
+          format: int32
+          description: Shares allotted. 0 until allotment completes, and on applications that were not allotted
+          example: 73
+        bids:
+          type: array
+          description: Bids placed in this application
+          items:
+            $ref: '#/components/schemas/IpoOrderBid'
+        created_at:
+          type: string
+          description: When the application was created, in yyyy-MM-dd'T'HH:mm:ss
+          example: '2024-11-07T17:33:10'
+        last_updated_at:
+          type: string
+          description: When the application was last updated, in yyyy-MM-dd'T'HH:mm:ss
+          example: '2026-06-30T17:36:36'
+    IpoCancelResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IpoCancelData'
+    IpoApplyRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: IPO id (slug) to apply for, as returned in `id` by the IPO listing and details APIs
+          example: mandb-engineering-limited-ipo
+          minLength: 1
+        upi:
+          type: string
+          description: UPI id used to block the application amount
+          example: test@upi
+          minLength: 1
+        category:
+          type: string
+          description: Investor category to apply under. Must be one the issue accepts — see `investors[].category` in the IPO details API
+          enum:
+          - IND
+          - HNI
+          example: IND
+          minLength: 1
+        bids:
+          type: array
+          description: List of bids for the application (1 to 3 bids)
+          items:
+            $ref: '#/components/schemas/IpoBidRequest'
+          maxItems: 3
+          minItems: 0
+      required:
+      - bids
+      - category
+      - id
+      - upi
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

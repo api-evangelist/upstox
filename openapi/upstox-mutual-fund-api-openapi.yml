@@ -1,0 +1,595 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Mutual Fund API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Mutual Fund
+paths:
+  /v2/mf/sips:
+    get:
+      tags:
+      - Mutual Fund
+      summary: Get mutual fund SIPs
+      description: Returns active and paused SIP orders for the authenticated user.
+      operationId: getMutualFundSips
+      parameters:
+      - name: page_number
+        in: query
+        description: Page number for pagination.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        example: 1
+      - name: records
+        in: query
+        description: no of records in a single page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        example: 20
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMutualFundSipsResponse'
+      security:
+      - OAUTH2: []
+  /v2/mf/orders:
+    get:
+      tags:
+      - Mutual Fund
+      summary: Get mutual fund orders
+      description: Returns mutual fund orders from the last 7 days for the authenticated user.
+      operationId: getMutualFundOrders
+      parameters:
+      - name: status
+        in: query
+        description: Mutual fund order status
+        required: false
+        schema:
+          type: string
+          default: ALL
+          pattern: ^(ALL|ARCHIVED|NEW|PENDING|OPEN|INPROCESS|COMPLETED|PLACED|REJECTED|CREATED|PAYMENT_PENDING|FAILED|CANCELLED|VERIFIED)$
+        example: PENDING
+      - name: transaction_type
+        in: query
+        description: Mutual fund order transaction type
+        required: false
+        schema:
+          type: string
+          default: ALL
+        example: BUY
+      - name: page_number
+        in: query
+        description: Page number for pagination.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        example: 1
+      - name: records
+        in: query
+        description: no of records in a single page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        example: 20
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMutualFundOrdersResponse'
+      security:
+      - OAUTH2: []
+  /v2/mf/orders/{order_id}:
+    get:
+      tags:
+      - Mutual Fund
+      summary: Get mutual fund order by id
+      description: Returns a single mutual fund order by order id.
+      operationId: getMutualFundOrder
+      parameters:
+      - name: order_id
+        in: path
+        description: Mutual fund order id
+        required: true
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9]+
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMutualFundOrderDetailsResponse'
+      security:
+      - OAUTH2: []
+  /v2/mf/holdings:
+    get:
+      tags:
+      - Mutual Fund
+      summary: Get mutual fund holdings
+      description: Returns mutual fund holdings for the authenticated user.
+      operationId: getMutualFundHoldings
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Business error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMutualFundHoldingsResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    GetMutualFundSipsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Open SIP orders (active and paused).
+          items:
+            $ref: '#/components/schemas/MutualFundSipData'
+        meta_data:
+          $ref: '#/components/schemas/MutualFundMetaData'
+          description: Meta data for mutual fund sips
+    Pagination:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+        records:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+    MutualFundMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
+    MutualFundOrderData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Current status of the order.
+        folio:
+          type: string
+          description: Folio number, when allotted.
+        fund:
+          type: string
+          description: Display name of the fund.
+        amount:
+          type: number
+          format: double
+          description: Order amount.
+        variety:
+          type: string
+          description: Order variety or channel-specific classification, if available.
+        quantity:
+          type: number
+          format: double
+          description: Units allotted or sold.
+        price:
+          type: number
+          format: double
+          description: Price or NAV used for the transaction, when available.
+        order_id:
+          type: string
+          description: Unique order identifier.
+        exchange_order_id:
+          type: string
+          description: Exchange-generated order id, if available.
+        instrument_key:
+          type: string
+          description: ISIN of the fund, when available.
+        status_message:
+          type: string
+          description: Human-readable status or rejection reason.
+        order_timestamp:
+          type: string
+          description: Timestamp when the order was registered.
+        exchange_timestamp:
+          type: string
+          description: Exchange date for the order, if available.
+        settlement_id:
+          type: string
+          description: Exchange settlement id, if available.
+        transaction_type:
+          type: string
+          description: BUY or SELL.
+        purchase_type:
+          type: string
+          description: FRESH or ADDITIONAL for buys, when available.
+        last_price:
+          type: number
+          format: double
+          description: Last known NAV.
+        average_price:
+          type: number
+          format: double
+          description: Allotted or sold NAV.
+        last_price_date:
+          type: string
+          description: Date for which last NAV is available.
+    MutualFundSipData:
+      type: object
+      properties:
+        fund:
+          type: string
+          description: Display name of the fund.
+        status:
+          type: string
+          description: ACTIVE, PAUSED, or CANCELLED.
+        created:
+          type: string
+          description: Timestamp when the SIP was registered.
+        frequency:
+          type: string
+          description: Frequency (e.g. monthly, weekly).
+        instalments:
+          type: integer
+          format: int64
+          description: Total number of instalments when applicable; -1 if open-ended.
+        sip_id:
+          type: string
+          description: Unique SIP identifier.
+        sip_reg_number:
+          type: string
+          description: SIP registration number when available.
+        instrument_key:
+          type: string
+          description: ISIN of the fund, when available.
+        dividend_type:
+          type: string
+          description: Dividend option when available (e.g. growth, idcw).
+        transaction_type:
+          type: string
+          description: BUY or SELL.
+        next_instalment:
+          type: string
+          description: Next instalment date.
+        instalment_amount:
+          type: number
+          format: double
+          description: Amount per instalment.
+        last_instalment:
+          type: string
+          description: Last triggered instalment timestamp.
+        pending_instalments:
+          type: integer
+          format: int64
+          description: Pending instalments when applicable.
+        instalment_day:
+          type: integer
+          format: int64
+          description: Day of month for monthly SIPs when applicable.
+        completed_instalments:
+          type: integer
+          format: int64
+          description: Completed instalment count when available.
+        trigger_price:
+          type: number
+          format: double
+          description: Trigger price when applicable.
+        sip_type:
+          type: string
+          description: SIP channel/type (e.g. sip, amc_sip).
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    MutualFundHoldingData:
+      type: object
+      properties:
+        folio:
+          type: string
+          description: Folio number when available.
+        fund:
+          type: string
+          description: Fund display name when available.
+        pnl:
+          type: number
+          format: double
+          description: Unrealized P/L.
+        quantity:
+          type: number
+          format: double
+          description: Units held.
+        instrument_key:
+          type: string
+          description: ISIN of the fund, when available.
+        average_price:
+          type: number
+          format: double
+          description: Average cost per unit.
+        last_price:
+          type: number
+          format: double
+          description: Last available NAV.
+        last_price_date:
+          type: string
+          description: Date for which last NAV is available.
+        pledged_quantity:
+          type: number
+          format: double
+          description: Units pledged as collateral when applicable.
+    GetMutualFundHoldingsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Mutual fund holdings.
+          items:
+            $ref: '#/components/schemas/MutualFundHoldingData'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GetMutualFundOrderDetailsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MutualFundOrderData'
+          description: Mutual fund order details.
+    GetMutualFundOrdersResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Mutual fund orders in the requested window.
+          items:
+            $ref: '#/components/schemas/MutualFundOrderData'
+        meta_data:
+          $ref: '#/components/schemas/MutualFundMetaData'
+          description: Meta data for mutual fund orders
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

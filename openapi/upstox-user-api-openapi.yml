@@ -1,0 +1,916 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition User API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: User
+paths:
+  /v2/user/ip:
+    get:
+      tags:
+      - User
+      operationId: getUserIps
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserIpResponse'
+      security:
+      - OAUTH2: []
+      summary: Get user ips
+      x-summary-source: derived
+    put:
+      tags:
+      - User
+      operationId: updateUserIp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserIpRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserIpResponse'
+      security:
+      - OAUTH2: []
+      summary: Update user ip
+      x-summary-source: derived
+  /v2/user/kill-switch:
+    get:
+      tags:
+      - User
+      summary: Get kill switch status
+      description: Returns the disable/enable status of all trading segments for the user.
+      operationId: getKillSwitch
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1181 - The specified segment does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KillSwitchResponse'
+      security:
+      - OAUTH2: []
+    post:
+      tags:
+      - User
+      summary: Update kill switch
+      description: Enable or disable specific trading segments.
+      operationId: updateKillSwitch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/KillSwitchSegmentUpdateRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1184 - Segment status cannot be changed until all open positions are closed.
+
+            UDAPI1185 - Cannot enable segment - cooling period is still in effect.
+
+            UDAPI1186 - The specified segment does not exist.
+
+            UDAPI1187 - Failed to update segment status due to an error processing open orders.
+
+            UDAPI1188 - Invalid action. Allowed values are ENABLE and DISABLE.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KillSwitchResponse'
+      security:
+      - OAUTH2: []
+  /v3/user/get-funds-and-margin:
+    get:
+      tags:
+      - User
+      summary: Get User Fund And Margin
+      description: Shows the detailed balance breakdown of the user including cash, pledged margin, available-to-trade, and unavailable-to-trade components.
+      operationId: getUserFundMarginV3
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserFundMarginV3Response'
+      security:
+      - OAUTH2: []
+  /v2/user/profile:
+    get:
+      tags:
+      - User
+      summary: Get profile
+      description: This API allows to fetch the complete information of the user who is logged in including the products, order types and exchanges enabled for the user
+      operationId: getProfile
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProfileResponse'
+      security:
+      - OAUTH2: []
+  /v2/user/get-funds-and-margin:
+    get:
+      tags:
+      - User
+      summary: Get User Fund And Margin
+      description: Shows the balance of the user in equity and commodity market.
+      operationId: getUserFundMargin
+      parameters:
+      - name: segment
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SEC
+          - COM
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1019 - segment is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserFundMarginResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    PledgeAvailableToTrade:
+      type: object
+      properties:
+        margin_from_pledge:
+          $ref: '#/components/schemas/MarginFromPledge'
+        margin_used:
+          $ref: '#/components/schemas/PledgeMarginUsed'
+    FamilyMemberData:
+      type: object
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+    UserIpResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/UserIpResponseData'
+          description: Current IP configuration.
+    UserFundMarginData:
+      type: object
+      properties:
+        used_margin:
+          type: number
+          format: float
+          description: "Positive values denote the amount blocked into an Open order or position. \nNegative value denotes the amount being released."
+          example: 120.01
+          readOnly: true
+        payin_amount:
+          type: number
+          format: float
+          description: Instant payin will reflect here
+          example: 0
+          readOnly: true
+        span_margin:
+          type: number
+          format: float
+          description: Amount blocked on futures and options towards SPAN
+          example: 0
+          readOnly: true
+        adhoc_margin:
+          type: number
+          format: float
+          description: Payin amount credited through a manual process
+          example: 0
+          readOnly: true
+        notional_cash:
+          type: number
+          format: float
+          description: The amount maintained for withdrawal
+          example: 0
+          readOnly: true
+        available_margin:
+          type: number
+          format: float
+          description: Total margin available for trading
+          example: 200.0
+          readOnly: true
+        exposure_margin:
+          type: number
+          format: float
+          description: Amount blocked on futures and options towards Exposure
+          example: 0
+          readOnly: true
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    UpdateUserIpRequest:
+      type: object
+      properties:
+        primary_ip:
+          type: string
+        secondary_ip:
+          type: string
+    AvailableToTrade:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        cash_available_to_trade:
+          $ref: '#/components/schemas/CashAvailableToTrade'
+        pledge_available_to_trade:
+          $ref: '#/components/schemas/PledgeAvailableToTrade'
+    UserFundMarginV3Data:
+      type: object
+      properties:
+        available_to_trade:
+          $ref: '#/components/schemas/AvailableToTrade'
+        unavailable_to_trade:
+          $ref: '#/components/schemas/UnavailableToTrade'
+    GetUserFundMarginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/UserFundMarginData'
+          description: Response data for Balance
+    UnavailableToTrade:
+      type: object
+      properties:
+        cash_unavailable_to_trade:
+          $ref: '#/components/schemas/CashUnavailableToTrade'
+        pledge_unavailable_to_trade:
+          $ref: '#/components/schemas/PledgeUnavailableToTrade'
+    CashAvailableToTrade:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        cash:
+          $ref: '#/components/schemas/CashBreakdown'
+        margin_used:
+          $ref: '#/components/schemas/CashMarginUsed'
+    PledgeUnavailableToTrade:
+      type: object
+      properties:
+        equity:
+          type: number
+          format: float
+        mutual_funds:
+          type: number
+          format: float
+    KillSwitchSegmentUpdateRequest:
+      type: object
+      properties:
+        segment:
+          type: string
+          enum:
+          - BSE_EQ
+          - NSE_EQ
+          - NCD_FO
+          - BCD_FO
+          - NSE_FO
+          - BSE_FO
+          - BSE_MF
+          - MCX_FO
+          - NSE_COM
+        action:
+          type: string
+          enum:
+          - ENABLE
+          - DISABLE
+      required:
+      - action
+      - segment
+    DeliveryMargin:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        equity:
+          type: number
+          format: float
+        fo_settlement:
+          type: number
+          format: float
+    Loss:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        realised:
+          type: number
+          format: float
+        unrealised:
+          type: number
+          format: float
+    UnsettledProfit:
+      type: object
+      properties:
+        todays_profit:
+          type: number
+          format: float
+        previous_days:
+          type: number
+          format: float
+    MarginFromPledge:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        equity:
+          type: number
+          format: float
+        mutual_funds:
+          type: number
+          format: float
+    KillSwitchResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KillSwitchSegmentData'
+    KillSwitchSegmentData:
+      type: object
+      properties:
+        segment:
+          type: string
+        segment_status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        kill_switch_enabled:
+          type: boolean
+    UserIpResponseData:
+      type: object
+      properties:
+        primary_ip:
+          type: string
+        secondary_ip:
+          type: string
+        primary_ip_updated_at:
+          type: string
+          description: ISO-8601 timestamp when primary IP was last changed.
+        secondary_ip_updated_at:
+          type: string
+          description: ISO-8601 timestamp when secondary IP was last changed.
+        primary_ip_family_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/FamilyMemberData'
+        secondary_ip_family_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/FamilyMemberData'
+        access_tokens_invalidated:
+          type: boolean
+    CashBreakdown:
+      type: object
+      properties:
+        opening_balance:
+          type: number
+          format: float
+        added_today:
+          type: number
+          format: float
+        withdrawn_today:
+          type: number
+          format: float
+        amount_from_stock_sale:
+          type: number
+          format: float
+        unpaid_charges:
+          type: number
+          format: float
+    PledgeMarginUsed:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        mtf:
+          type: number
+          format: float
+        span_exposure:
+          type: number
+          format: float
+        cash_margin_var_elm:
+          type: number
+          format: float
+        premium_present:
+          type: number
+          format: float
+        delivery_margin:
+          $ref: '#/components/schemas/DeliveryMargin'
+    CashUnavailableToTrade:
+      type: object
+      properties:
+        unsettled_profit:
+          $ref: '#/components/schemas/UnsettledProfit'
+    GetProfileResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ProfileData'
+          description: Response data for user profile
+    GetUserFundMarginV3Response:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/UserFundMarginV3Data'
+          description: Response data for fund and margin v3
+    ProfileData:
+      type: object
+      properties:
+        email:
+          type: string
+          description: E-mail address of the user
+          example: client@email.com
+          readOnly: true
+        exchanges:
+          type: array
+          description: Lists the exchanges to which the user has access
+          example: NSE
+          items:
+            type: string
+            enum:
+            - NSE
+            - NFO
+            - CDS
+            - BSE
+            - BFO
+            - BCD
+            - MCX
+            - NSCOM
+          readOnly: true
+        products:
+          type: array
+          description: Lists the products types to which the user has access
+          example: D
+          items:
+            type: string
+            enum:
+            - I
+            - D
+            - CO
+            - OCO
+            - MTF
+          readOnly: true
+        broker:
+          type: string
+          description: The broker ID
+          example: UPSTOX
+          readOnly: true
+        user_id:
+          type: string
+          description: Uniquely identifies the user
+          example: 202251
+          readOnly: true
+        user_name:
+          type: string
+          description: Name of the user
+          example: client
+          readOnly: true
+        order_types:
+          type: array
+          description: Order types enabled for the user
+          example: LIMIT
+          items:
+            type: string
+            enum:
+            - MARKET
+            - LIMIT
+            - SL
+            - SL-M
+          readOnly: true
+        user_type:
+          type: string
+          description: "\t\nIdentifies the user's registered role at the broker. This will be individual for all retail users"
+          example: individual
+          readOnly: true
+        poa:
+          type: boolean
+          description: "\t\nTo depict if the user has given power of attorney for transactions"
+          example: true
+          readOnly: true
+        ddpi:
+          type: boolean
+          description: "\t\nIndicates if DDPI is enabled for trading"
+          example: true
+          readOnly: true
+        is_active:
+          type: boolean
+          description: "\t\nWhether the status of account is active or not"
+          example: true
+          readOnly: true
+    CashMarginUsed:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        mtf:
+          type: number
+          format: float
+        loss:
+          $ref: '#/components/schemas/Loss'
+        span_exposure:
+          type: number
+          format: float
+        cash_margin_var_elm:
+          type: number
+          format: float
+        premium_present:
+          type: number
+          format: float
+        delivery_margin:
+          $ref: '#/components/schemas/DeliveryMargin'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

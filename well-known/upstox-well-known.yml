@@ -1,23 +1,20 @@
-generated: '2026-09-02'
+generated: '2026-09-19'
 method: probed
-source: 'Direct HTTPS probes of the named /.well-known/ path list on every Upstox host: the website
-  (upstox.com), the API host (api.upstox.com), the OpenAPI servers[] host (api-v2.upstox.com), the
-  high-frequency order host (api-hft.upstox.com) and the hosted MCP host (mcp.upstox.com).'
+source: 'Direct HTTPS probes of the named /.well-known/ path list on every Upstox host: the website (upstox.com),
+  the API host (api.upstox.com), the OpenAPI servers[] host (api-v2.upstox.com), the high-frequency order
+  host (api-hft.upstox.com) and the hosted MCP host (mcp.upstox.com).'
 name: Upstox well-known documents
-description: >-
-  Upstox serves no /.well-known/ documents from its website or REST API hosts. Its hosted Model
-  Context Protocol server at mcp.upstox.com is the exception and serves a complete OAuth 2.0
-  discovery surface: RFC 8414 authorization-server metadata (with a dynamic client registration
-  endpoint and PKCE S256) and RFC 9728 protected-resource metadata at both the root and the
-  resource-specific /.well-known/oauth-protected-resource/mcp path. No A2A agent card, no
-  api-catalog, no security.txt, no ai-plugin.json anywhere.
+description: 'Upstox serves no /.well-known/ documents from its website or REST API hosts. Its hosted
+  Model Context Protocol server at mcp.upstox.com is the exception and serves a complete OAuth 2.0 discovery
+  surface: RFC 8414 authorization-server metadata (with a dynamic client registration endpoint and PKCE
+  S256) and RFC 9728 protected-resource metadata at both the root and the resource-specific /.well-known/oauth-protected-resource/mcp
+  path. No A2A agent card, no api-catalog, no security.txt, no ai-plugin.json anywhere.'
 hosts:
 - host: upstox.com
   documents:
   - path: /.well-known/security.txt
     status: 403
-    note: >-
-      Origin object store answered AccessDenied (XML), not an RFC 9116 document. Treated as absent.
+    note: Origin object store answered AccessDenied (XML), not an RFC 9116 document. Treated as absent.
   - path: /.well-known/openid-configuration
     status: 404
   - path: /.well-known/oauth-authorization-server
@@ -99,8 +96,7 @@ hosts:
   - path: /.well-known/oauth-authorization-server
     status: 200
     file: upstox-mcp-oauth-authorization-server.json
-    note: >-
-      RFC 8414 authorization server metadata. issuer https://mcp.upstox.com, authorization_code +
+    note: RFC 8414 authorization server metadata. issuer https://mcp.upstox.com, authorization_code +
       refresh_token grants, dynamic client registration at /register, PKCE plain and S256.
   - path: /.well-known/oauth-protected-resource
     status: 200
@@ -109,8 +105,7 @@ hosts:
   - path: /.well-known/oauth-protected-resource/mcp
     status: 200
     file: upstox-mcp-oauth-protected-resource-mcp.json
-    note: >-
-      RFC 9728 metadata scoped to the MCP endpoint itself (resource https://mcp.upstox.com/mcp) —
+    note: RFC 9728 metadata scoped to the MCP endpoint itself (resource https://mcp.upstox.com/mcp) —
       the document an MCP client reads from the 401 WWW-Authenticate challenge.
   - path: /.well-known/security.txt
     status: 404
@@ -126,6 +121,7 @@ hosts:
     status: 404
   - path: /.well-known/aauth-resource.json
     status: 404
+  path_echo_control: passed
 summary:
   hosts_probed: 5
   paths_probed_per_host: 9
@@ -135,3 +131,19 @@ summary:
   agent_card: false
   openid_configuration: false
   oauth_metadata: true
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://mcp.upstox.com
+    path: /.well-known/oauth-protected-resource
+    file: upstox-mcp-oauth-protected-resource.json
+  - host: https://mcp.upstox.com
+    path: /.well-known/oauth-authorization-server
+    file: upstox-mcp-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

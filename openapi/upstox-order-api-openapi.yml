@@ -1,0 +1,2630 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Order API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Order
+paths:
+  /v3/order/modify:
+    put:
+      tags:
+      - Order
+      operationId: modifyOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ModifyOrderV3Response'
+      security:
+      - OAUTH2: []
+      summary: Modify order
+      x-summary-source: derived
+  /v3/order/gtt/modify:
+    put:
+      tags:
+      - Order
+      summary: Modify GTT order
+      description: This API allows you to modify GTT orders.
+      operationId: modifyGTTOrder
+      parameters:
+      - name: Origin
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GttModifyOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GttTriggerOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/modify:
+    put:
+      tags:
+      - Order
+      summary: Modify order
+      description: This API allows you to modify an order. For modification orderId is mandatory. With orderId you need to send the optional parameter which needs to be modified. In case the optional parameters aren't sent, the default will be considered from the original order
+      operationId: modifyOrder_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI100010 - Unknown order id | order request rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyOrderResponse'
+      security:
+      - OAUTH2: []
+  /v3/order/place:
+    post:
+      tags:
+      - Order
+      operationId: placeOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaceOrderV3Request'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PlaceOrderV3Response'
+      security:
+      - OAUTH2: []
+      summary: Place order
+      x-summary-source: derived
+  /v3/order/gtt/place:
+    post:
+      tags:
+      - Order
+      summary: Place GTT order
+      description: This API allows you to place GTT orders.
+      operationId: placeGTTOrder
+      parameters:
+      - name: Origin
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GttPlaceOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GttTriggerOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/positions/exit:
+    post:
+      tags:
+      - Order
+      summary: Exit all positions
+      description: This API provides the functionality to exit all the positions
+      operationId: exitPositions
+      parameters:
+      - name: tag
+        in: query
+        description: The tag associated with the positions for which the positions must be exit
+        required: false
+        schema:
+          type: string
+      - name: segment
+        in: query
+        description: The segment for which the positions must be exit
+        required: false
+        schema:
+          type: string
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1105 - Invalid segment. <br>UDAPI1108 - No open position available to exit.<br>UDAPI1109 - Available open positions should not be more than limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelOrExitMultiOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/place:
+    post:
+      tags:
+      - Order
+      summary: Place order
+      description: This API allows you to place an order to the exchange via Upstox.
+      operationId: placeOrder_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaceOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/multi/place:
+    post:
+      tags:
+      - Order
+      summary: Place multi order
+      description: This API allows you to place multiple orders to the exchange via Upstox.
+      operationId: placeMultiOrder
+      parameters:
+      - name: Origin
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/MultiOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiOrderResponse'
+      security:
+      - OAUTH2: []
+  /v3/order/gtt:
+    get:
+      tags:
+      - Order
+      summary: Get GTT order details
+      description: GTT_ORDER_DESCRIPTION
+      operationId: getGttOrderDetails
+      parameters:
+      - name: gtt_order_id
+        in: query
+        description: Unique identifier of the GTT order for which the order history is required
+        required: false
+        schema:
+          type: string
+          pattern: ^GTT-.+$
+        example: GTT-XX221130000253265
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGttOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/trades:
+    get:
+      tags:
+      - Order
+      summary: Get trades for order
+      description: Retrieve the trades executed for an order
+      operationId: getTradesByOrder
+      parameters:
+      - name: order_id
+        in: query
+        description: The order ID for which the order to get order trades
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          pattern: ^[-a-zA-Z0-9]+
+        example: 12345667890
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1010 - Order id accepts only alphanumeric characters and '-'.<br>UDAPI1023 - Order id is required<br>UDAPI100010 - Unknown order id | order request rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTradeResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/trades/get-trades-for-day:
+    get:
+      tags:
+      - Order
+      summary: Get trades
+      description: Retrieve the trades executed for the day
+      operationId: getTradeHistory
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTradeResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/retrieve-all:
+    get:
+      tags:
+      - Order
+      summary: Get order book
+      description: This API provides the list of orders placed by the user. The orders placed by the user is transient for a day and is cleared by the end of the trading session. This API returns all states of the orders, namely, open, pending, and filled ones.
+      operationId: getOrderBook
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderBookResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/history:
+    get:
+      tags:
+      - Order
+      summary: Get order history
+      description: 'This API provides the details of the particular order the user has placed. The orders placed by the user is transient for a day and are cleared by the end of the trading session. This API returns all states of the orders, namely, open, pending, and filled ones.
+
+
+        The order history can be requested either using order_id or tag.
+
+
+        If both the options are passed, the history of the order which precisely matches both the order_id and tag will be returned in the response.
+
+
+        If only the tag is passed, the history of all the associated orders which matches the tag will be shared in the response.'
+      operationId: getOrderDetails
+      parameters:
+      - name: order_id
+        in: query
+        description: The order reference ID for which the order history is required
+        required: false
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9]+
+        example: 12345667890
+      - name: tag
+        in: query
+        description: The unique tag of the order for which the order history is being requested
+        required: false
+        schema:
+          type: string
+        example: 2qdqjppebx
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1010 - Order id accepts only alphanumeric characters and '-'<br>UDAPI1023 - Order id is required<br>UDAPI100010 - Unknown order id | order request rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/details:
+    get:
+      tags:
+      - Order
+      summary: Get order details
+      description: This API provides the recent detail of the particular order the user has placed. The orders placed by the user is transient for a day and are cleared by the end of the trading session.\n\nThe order details can be requested using order_id.
+      operationId: getOrderStatus
+      parameters:
+      - name: order_id
+        in: query
+        description: The order reference ID for which the order details is required
+        required: false
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9]+
+        example: 12345667890
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1010 - Order id accepts only alphanumeric characters and '-'<br>UDAPI1023 - Order id is required<br>UDAPI100010 - Unknown order id | order request rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderDetailsResponse'
+      security:
+      - OAUTH2: []
+  /v3/order/gtt/cancel:
+    delete:
+      tags:
+      - Order
+      summary: Cancel GTT order
+      description: This API allows you to cancel GTT orders.
+      operationId: cancelGTTOrder
+      parameters:
+      - name: Origin
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GttCancelOrderRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GttTriggerOrderResponse'
+      security:
+      - OAUTH2: []
+  /v3/order/cancel:
+    delete:
+      tags:
+      - Order
+      operationId: cancelOrder
+      parameters:
+      - name: order_id
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          pattern: ^[-a-zA-Z0-9]+
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CancelOrderV3Response'
+      security:
+      - OAUTH2: []
+      summary: Cancel order
+      x-summary-source: derived
+  /v2/order/multi/cancel:
+    delete:
+      tags:
+      - Order
+      summary: Cancel multi order
+      description: API to cancel all the open or pending orders which can be applied to both AMO and regular orders.
+      operationId: cancelMultiOrder
+      parameters:
+      - name: tag
+        in: query
+        description: The tag associated with the orders for which the orders must be cancelled
+        required: false
+        schema:
+          type: string
+      - name: segment
+        in: query
+        description: The segment for which the orders must be cancelled
+        required: false
+        schema:
+          type: string
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1105 - Invalid segment<br>UDAPI1108 - No open or pending order available<br>UDAPI1109 - Available open or pending orders should not be more than limit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelOrExitMultiOrderResponse'
+      security:
+      - OAUTH2: []
+  /v2/order/cancel:
+    delete:
+      tags:
+      - Order
+      summary: Cancel order
+      description: 'Cancel order API can be used for two purposes:
+
+        Cancelling an open order which could be an AMO or a normal order
+
+        It is also used to EXIT a CO or OCO(bracket order)'
+      operationId: cancelOrder_1
+      parameters:
+      - name: order_id
+        in: query
+        description: The order ID for which the order must be cancelled
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          pattern: ^[-a-zA-Z0-9]+
+        example: 12345667890
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1010 - Order id accepts only alphanumeric characters and '-'.<br>UDAPI1023 - Order id is required<br>UDAPI100010 - Unknown order id | order request rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelOrderResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    CancelOrderData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Reference order ID
+          example: 1644490272000
+          readOnly: true
+    BatchExecutionSummary:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of order lines present in the payload.
+          example: 3
+          readOnly: true
+        success:
+          type: integer
+          format: int32
+          description: The number of order lines that were successfully placed without any errors.
+          example: 2
+          readOnly: true
+        error:
+          type: integer
+          format: int32
+          description: The number of order lines that encountered errors during processing, despite their payloads being valid.
+          example: 1
+          readOnly: true
+    ModifyOrderV3Response:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ModifyOrderData'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    CancelOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CancelOrderData'
+          description: Response data for Cancel order request
+    ModifyOrderData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Order ID
+          example: 1644490272000
+          readOnly: true
+    MultiOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for multi order request
+          items:
+            $ref: '#/components/schemas/MultiOrderData'
+        errors:
+          type: array
+          description: Error details for multi order request
+          items:
+            $ref: '#/components/schemas/MultiOrderError'
+        summary:
+          $ref: '#/components/schemas/MultiOrderSummary'
+          description: Execution summary for multi order request
+    Rule:
+      type: object
+      properties:
+        strategy:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        trigger_type:
+          type: string
+        trigger_price:
+          type: number
+          format: double
+        transaction_type:
+          type: string
+        order_id:
+          type: string
+        trailing_gap:
+          type: number
+          format: double
+    PlaceOrderData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: An order ID for the order request placed
+          example: 1644490272000
+          readOnly: true
+    GttTriggerOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/GttOrderData'
+          description: Response data for GTT order request
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    MultiOrderError:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+        correlation_id:
+          type: string
+          description: A unique identifier for tracking individual orders within the batch
+          example: 213fsf2324
+          readOnly: true
+    OrderBookData:
+      type: object
+      properties:
+        exchange:
+          type: string
+          description: Exchange to which the order is associated
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CoverOrder or OneCancelsOther
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+          readOnly: true
+        price:
+          type: number
+          format: float
+          description: Price at which the order was placed
+          example: 120.01
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order was placed
+          example: 1
+          readOnly: true
+        status:
+          type: string
+          description: Indicates the current status of the order. Valid order status’ are outlined in the table below
+          example: Complete
+          readOnly: true
+        guid:
+          type: string
+          readOnly: true
+        tag:
+          type: string
+          description: Tag to uniquely identify an order
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Identifier issued by Upstox used for subscribing to live market quotes
+          example: 151064324
+          readOnly: true
+        placed_by:
+          type: string
+          description: Uniquely identifies the user
+          example: 200123
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+          readOnly: true
+        validity:
+          type: string
+          description: Order validity (DAY- Day and IOC- Immediate or Cancel (IOC) order)
+          enum:
+          - DAY
+          - IOC
+          - EOS
+          example: DAY
+          readOnly: true
+        trigger_price:
+          type: number
+          format: float
+          description: If the order was a stop loss order then the trigger price set is mentioned here
+          example: 120
+          readOnly: true
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 1
+          readOnly: true
+        transaction_type:
+          type: string
+          description: Indicates whether the order was a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Average price at which the qty got traded
+          example: 120.01
+          readOnly: true
+        filled_quantity:
+          type: integer
+          format: int32
+          description: The total quantity traded from this particular order
+          example: 120.01
+          readOnly: true
+        pending_quantity:
+          type: integer
+          format: int32
+          description: Pending quantity to be filled
+          example: 1
+          readOnly: true
+        status_message:
+          type: string
+          description: Indicates the reason when any order is rejected, not modified or cancelled
+          readOnly: true
+        status_message_raw:
+          type: string
+          description: Description of the order's status as received from RMS
+          readOnly: true
+        exchange_order_id:
+          type: string
+          description: Unique order ID assigned by the exchange for the order placed
+          example: 221013001021540
+          readOnly: true
+        parent_order_id:
+          type: string
+          description: In case the order is part of the second or third leg of a CO or OCO, the parent order ID is indicated here
+          example: 221013001021541
+          readOnly: true
+        order_id:
+          type: string
+          description: Unique order ID assigned internally for the order placed
+          example: 221013001021541
+          readOnly: true
+        variety:
+          type: string
+          description: Order complexity
+          example: SIMPLE
+          readOnly: true
+        order_timestamp:
+          type: string
+          description: User readable timestamp at which the order was placed
+          example: 23-Apr-2021 14:22:06
+          readOnly: true
+        exchange_timestamp:
+          type: string
+          description: User readable time at which the order was placed or updated
+          example: 24-Apr-2021 14:22:06
+          readOnly: true
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+          readOnly: true
+        order_request_id:
+          type: string
+          description: Apart from 1st order it shows the count of how many requests were sent
+          example: 221013001021542
+          readOnly: true
+        order_ref_id:
+          type: string
+          description: The order reference ID for which the order must be modified
+          example: udapi-12345abcd
+          readOnly: true
+    GetOrderBookResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for order Book
+          items:
+            $ref: '#/components/schemas/OrderBookData'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    GttOrderDetails:
+      type: object
+      properties:
+        type:
+          type: string
+        exchange:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        product:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        trading_symbol:
+          type: string
+        instrument_token:
+          type: string
+        gtt_order_id:
+          type: string
+        expires_at:
+          type: integer
+          format: int64
+        created_at:
+          type: integer
+          format: int64
+    MultiOrderSummary:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of order lines present in the payload.
+          example: 3
+          readOnly: true
+        success:
+          type: integer
+          format: int32
+          description: The number of order lines that were successfully placed without any errors.
+          example: 2
+          readOnly: true
+        error:
+          type: integer
+          format: int32
+          description: The number of order lines that encountered errors during processing, despite their payloads being valid.
+          example: 1
+          readOnly: true
+        payload_error:
+          type: integer
+          format: int32
+          description: 'The number of order lines with payload errors, indicating formatting or data validity issues.<br/><br/><b>Note</b>: Orders are processed only if the entire batch is free of payload_error, ensuring error-free transactions.'
+          example: 0
+          readOnly: true
+    ModifyOrderRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order was placed
+          example: 1
+        validity:
+          type: string
+          description: Order validity (DAY- Day and IOC- Immediate or Cancel (IOC) order)
+          enum:
+          - DAY
+          - IOC
+          example: DAY
+        price:
+          type: number
+          format: float
+          description: Price at which the order was placed
+          example: 120.01
+        order_id:
+          type: string
+          description: The order ID for which the order must be modified
+          example: 1644490272000
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order
+
+            LIMILT refers to Limit Order
+
+            SL refers to Stop Loss Limit
+
+            SL-M refers to Stop Loss Market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 0
+        trigger_price:
+          type: number
+          format: float
+          description: If the order is a stop loss order then the trigger price to be set is mentioned here
+          example: 0
+      required:
+      - order_id
+      - order_type
+      - price
+      - trigger_price
+      - validity
+    CancelOrExitOrderErrorData:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+        instrument_key:
+          type: string
+          description: Key of instrument
+          example: NSE_EQ|INE002A01018
+          readOnly: true
+        order_id:
+          type: string
+          description: Reference order ID
+          example: 1644490272000
+          readOnly: true
+    ModifyOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ModifyOrderData'
+          description: Response data for modify order request
+    GttOrderData:
+      type: object
+      properties:
+        gtt_order_ids:
+          type: array
+          description: Order ID for the placed GTT order
+          example: GTT-221130000253265
+          items:
+            type: string
+          readOnly: true
+    GetTradeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for trades
+          items:
+            $ref: '#/components/schemas/TradeData'
+    PlaceOrderRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery, CO or OCO
+          enum:
+          - I
+          - D
+          example: D
+        validity:
+          type: string
+          description: It can be one of the following - DAY(default), IOC
+          enum:
+          - DAY
+          - IOC
+          example: DAY
+        price:
+          type: number
+          format: float
+          description: Price at which the order will be placed
+          example: 0
+        tag:
+          type: string
+          description: Tag for a particular order
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order
+
+            LIMIT refers to Limit Order
+
+            SL refers to Stop Loss Limit
+
+            SL-M refers to Stop Loss Market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 0
+        trigger_price:
+          type: number
+          format: float
+          description: If the order is a stop loss order then the trigger price to be set is mentioned here
+          example: 0
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+      required:
+      - disclosed_quantity
+      - instrument_token
+      - is_amo
+      - order_type
+      - price
+      - product
+      - quantity
+      - transaction_type
+      - trigger_price
+      - validity
+    PlaceOrderV3Response:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MultiOrderV3Data'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    PlaceOrderV3Request:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery, CO or OCO
+          enum:
+          - I
+          - D
+          example: D
+        validity:
+          type: string
+          description: It can be one of the following - DAY(default), IOC
+          enum:
+          - DAY
+          - IOC
+          example: DAY
+        price:
+          type: number
+          format: float
+          description: Price at which the order will be placed
+          example: 0
+        tag:
+          type: string
+          maxLength: 40
+          minLength: 0
+        slice:
+          type: boolean
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order
+
+            LIMIT refers to Limit Order
+
+            SL refers to Stop Loss Limit
+
+            SL-M refers to Stop Loss Market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 0
+        trigger_price:
+          type: number
+          format: float
+          description: If the order is a stop loss order then the trigger price to be set is mentioned here
+          example: 0
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+      required:
+      - disclosed_quantity
+      - instrument_token
+      - is_amo
+      - order_type
+      - price
+      - product
+      - quantity
+      - transaction_type
+      - trigger_price
+      - validity
+    TradeData:
+      type: object
+      properties:
+        exchange:
+          type: string
+          description: Exchange to which the order is associated
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CO or OCO
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol which could be a combination of symbol name, instrument, expiry date etc
+          example: GMRINFRA-EQ
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol which could be a combination of symbol name, instrument, expiry date etc
+          example: GMRINFRA-EQ
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Identifier issued by Upstox used for subscribing to live market quotes
+          example: 151064324
+          readOnly: true
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+          readOnly: true
+        transaction_type:
+          type: string
+          description: Indicates whether the order was a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: The total quantity traded from this particular order
+          example: 1
+          readOnly: true
+        exchange_order_id:
+          type: string
+          description: Unique order ID assigned by the exchange for the order placed
+          example: 221013001021540
+          readOnly: true
+        order_id:
+          type: string
+          description: Unique order ID assigned internally for the order placed
+          example: 221013001021539
+          readOnly: true
+        exchange_timestamp:
+          type: string
+          description: User readable time at when the trade occurred
+          example: 03-Aug-2017 15:03:42
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Price at which the traded quantity is traded
+          example: 299.4
+          readOnly: true
+        trade_id:
+          type: string
+          description: Trade ID generated from exchange towards traded transaction
+          example: 50091502
+          readOnly: true
+        order_ref_id:
+          type: string
+          description: The order reference ID for which the order must be modified
+          example: udapi-aqwsed14356
+          readOnly: true
+        order_timestamp:
+          type: string
+          description: User readable timestamp at which the order was placed
+          example: 23-Apr-2021 14:22:06
+          readOnly: true
+    OrderData:
+      type: object
+      properties:
+        exchange:
+          type: string
+          description: Exchange to which the order is associated
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
+        price:
+          type: number
+          format: float
+          description: Price at which the order was placed
+          example: 120.01
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CoverOrder or OneCancelsOther
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order was placed
+          example: 1
+          readOnly: true
+        status:
+          type: string
+          description: Indicates the current status of the order. Valid order status’ are outlined in the table below
+          example: complete
+          readOnly: true
+        tag:
+          type: string
+          description: Tag to uniquely identify an order
+          readOnly: true
+        validity:
+          type: string
+          description: Order validity (DAY- Day and IOC- Immediate or Cancel (IOC) order)
+          enum:
+          - DAY
+          - IOC
+          - EOS
+          example: DAY
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Average price at which the qty got traded
+          example: 120.01
+          readOnly: true
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 1
+          readOnly: true
+        exchange_order_id:
+          type: string
+          description: Unique order ID assigned by the exchange for the order placed
+          example: 221013001021540
+          readOnly: true
+        exchange_timestamp:
+          type: string
+          description: User readable time at which the order was placed or updated
+          example: 03-Aug-2017 15:03:42
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Identifier issued by Upstox used for subscribing to live market quotes
+          example: 151064324
+          readOnly: true
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+          readOnly: true
+        status_message:
+          type: string
+          description: Indicates the reason when any order is rejected, not modified or cancelled
+          readOnly: true
+        order_id:
+          type: string
+          description: Unique order ID assigned internally for the order placed
+          example: 221013001021541
+          readOnly: true
+        order_request_id:
+          type: string
+          description: Apart from 1st order it shows the count of how many requests were sent
+          example: 221013001021542
+          readOnly: true
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+          readOnly: true
+        parent_order_id:
+          type: string
+          description: In case the order is part of the second or third leg of a CO or OCO, the parent order ID is indicated here
+          example: 221013001021543
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        order_timestamp:
+          type: string
+          description: User readable timestamp at which the order was placed
+          example: 23-Apr-2021 14:22:06
+          readOnly: true
+        filled_quantity:
+          type: integer
+          format: int32
+          description: The total quantity traded from this particular order
+          example: 1
+          readOnly: true
+        transaction_type:
+          type: string
+          description: Indicates whether the order was a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+          readOnly: true
+        trigger_price:
+          type: number
+          format: float
+          description: If the order was a stop loss order then the trigger price set is mentioned here
+          example: 120.01
+          readOnly: true
+        placed_by:
+          type: string
+          description: Uniquely identifies the user
+          example: 200123
+          readOnly: true
+        variety:
+          type: string
+          description: Order complexity
+          example: SIMPLE
+          readOnly: true
+    MultiOrderRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery, CO or OCO
+          enum:
+          - I
+          - D
+          example: D
+        validity:
+          type: string
+          description: It can be one of the following - DAY(default), IOC
+          enum:
+          - DAY
+          - IOC
+          example: DAY
+        price:
+          type: number
+          format: float
+          description: Price at which the order will be placed
+          example: 0
+        tag:
+          type: string
+          maxLength: 40
+          minLength: 0
+        slice:
+          type: boolean
+          description: To divide the order line based on predefined exchange definitions
+          example: false
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order
+
+            LIMIT refers to Limit Order
+
+            SL refers to Stop Loss Limit
+
+            SL-M refers to Stop Loss Market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 0
+        trigger_price:
+          type: number
+          format: float
+          description: If the order is a stop loss order then the trigger price to be set is mentioned here
+          example: 0
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+        correlation_id:
+          type: string
+          description: A unique identifier for tracking individual orders within the batch
+          example: 12345678
+          maxLength: 20
+          minLength: 1
+        market_protection:
+          type: number
+          format: float
+          description: Optional parameter defining the market protection percentage for the multi order
+          example: 3
+          maximum: 25
+          minimum: -1
+      required:
+      - correlation_id
+      - disclosed_quantity
+      - instrument_token
+      - is_amo
+      - order_type
+      - price
+      - product
+      - quantity
+      - slice
+      - transaction_type
+      - trigger_price
+      - validity
+    CancelOrderV3Response:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CancelOrderData'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    PlaceOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/PlaceOrderData'
+          description: Response data for place order request
+    CancelOrExitMultiOrderData:
+      type: object
+      properties:
+        order_ids:
+          type: array
+          description: Reference order IDs
+          example: '[''1644490272000'']'
+          items:
+            type: string
+          readOnly: true
+    GttModifyOrderRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Type of GTT order. It can be one of the following:
+
+            SINGLE refers to a single-leg GTT order
+
+            MULTIPLE refers to a multi-leg GTT order'
+          enum:
+          - SINGLE
+          - MULTIPLE
+          example: SINGLE
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        rules:
+          type: array
+          description: List of rules defining the conditions for each leg in the GTT order
+          items:
+            $ref: '#/components/schemas/GttRule'
+        gtt_order_id:
+          type: string
+          description: Unique identifier of the GTT order to be modified
+          example: GTT-12345678
+          pattern: ^GTT-.+$
+      required:
+      - gtt_order_id
+      - quantity
+      - rules
+      - type
+    GttCancelOrderRequest:
+      type: object
+      properties:
+        gtt_order_id:
+          type: string
+          description: Unique identifier of the GTT order to be cancelled
+          example: GTT-12345678
+          pattern: ^GTT-.+$
+      required:
+      - gtt_order_id
+    GttPlaceOrderRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Type of GTT order. It can be one of the following:
+
+            SINGLE refers to a single-leg GTT order
+
+            MULTIPLE refers to a multi-leg GTT order'
+          enum:
+          - SINGLE
+          - MULTIPLE
+          example: SINGLE
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery or MTF
+          enum:
+          - I
+          - D
+          - MTF
+          example: D
+        rules:
+          type: array
+          description: List of rules defining the conditions for each leg in the GTT order
+          items:
+            $ref: '#/components/schemas/GttRule'
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+      required:
+      - instrument_token
+      - product
+      - quantity
+      - rules
+      - transaction_type
+      - type
+    GetOrderDetailsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/OrderBookData'
+          description: Response data for order details
+    MultiOrderV3Data:
+      type: object
+      properties:
+        order_ids:
+          type: array
+          items:
+            type: string
+    MultiOrderData:
+      type: object
+      properties:
+        correlation_id:
+          type: string
+          description: A unique identifier for tracking individual orders within the batch
+          example: 213fsf2324
+          readOnly: true
+        order_id:
+          type: string
+          description: An order ID for the order request placed
+          example: 1644490272000
+          readOnly: true
+    GetOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for order details
+          items:
+            $ref: '#/components/schemas/OrderData'
+    OrderMetadata:
+      type: object
+      properties:
+        latency:
+          type: integer
+          format: int64
+    CancelOrExitMultiOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CancelOrExitMultiOrderData'
+          description: Response data for cancel or exit order request
+        errors:
+          type: array
+          description: Error data for cancel or exit order request
+          items:
+            $ref: '#/components/schemas/CancelOrExitOrderErrorData'
+        summary:
+          $ref: '#/components/schemas/BatchExecutionSummary'
+          description: Execution summary for cancel or exit order request
+    GttRule:
+      type: object
+      properties:
+        strategy:
+          type: string
+          description: 'Defines the strategy for the GTT order leg:
+
+            ENTRY - First leg order
+
+            STOPLOSS - Stop-loss order
+
+            TARGET - Target order'
+          enum:
+          - ENTRY
+          - STOPLOSS
+          - TARGET
+          example: ENTRY
+        trigger_type:
+          type: string
+          description: Trigger type for each leg of the order
+          enum:
+          - ABOVE
+          - BELOW
+          - IMMEDIATE
+          example: ABOVE
+        trigger_price:
+          type: number
+          format: double
+          description: Trigger price for the GTT order leg
+          example: 1500.5
+        trailing_gap:
+          type: number
+          format: double
+          description: Optional parameter defining the trailing gap for the GTT order
+          example: 0.5
+        market_protection:
+          type: number
+          format: double
+          description: Optional parameter defining the market protection percentage for the GTT order
+          example: 3
+          maximum: 25
+          minimum: -1
+      required:
+      - strategy
+      - trigger_price
+      - trigger_type
+    GetGttOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for order details
+          items:
+            $ref: '#/components/schemas/GttOrderDetails'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

@@ -1,0 +1,319 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Websocket API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Websocket
+paths:
+  /v2/feed/portfolio-stream-feed:
+    get:
+      tags:
+      - Websocket
+      summary: Portfolio Stream Feed
+      description: This API redirects the client to the respective socket endpoint to receive Portfolio updates.
+      operationId: getPortfolioStreamFeed
+      parameters:
+      - name: update_types
+        in: query
+        description: Identifiers separated by commas denote the types of updates to receive.
+        required: false
+        schema:
+          type: string
+          pattern: ^(order|gtt_order|position|holding)(,(order|gtt_order|position|holding))*$
+        example: order,gtt_order,position,holding
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '302':
+          description: Location for authorized access of portfolio stream feed
+      security:
+      - OAUTH2: []
+  /v2/feed/portfolio-stream-feed/authorize:
+    get:
+      tags:
+      - Websocket
+      summary: Portfolio Stream Feed Authorize
+      description: This API provides the functionality to retrieve the socket endpoint URI for Portfolio updates.
+      operationId: getPortfolioStreamFeedAuthorize
+      parameters:
+      - name: update_types
+        in: query
+        description: Identifiers separated by commas denote the types of updates to receive.
+        required: false
+        schema:
+          type: string
+          pattern: ^(order|gtt_order|position|holding)(,(order|gtt_order|position|holding))*$
+        example: order,gtt_order,position,holding
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebsocketAuthRedirectResponse'
+      security:
+      - OAUTH2: []
+  /v2/feed/market-data-feed:
+    get:
+      tags:
+      - Websocket
+      summary: Market Data Feed
+      description: This API redirects the client to the respective socket endpoint to receive Market updates.
+      operationId: getMarketDataFeed
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '302':
+          description: Location for authorized access of market data feed
+      security:
+      - OAUTH2: []
+  /v2/feed/market-data-feed/authorize:
+    get:
+      tags:
+      - Websocket
+      summary: Market Data Feed Authorize
+      description: This API provides the functionality to retrieve the socket endpoint URI for Market updates.
+      operationId: getMarketDataFeedAuthorize
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebsocketAuthRedirectResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    WebsocketAuthRedirectResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/WebsocketAuthRedirectResponseData'
+          description: Response data for WebsocketAuthRedirectResponse
+    WebsocketAuthRedirectResponseData:
+      type: object
+      properties:
+        authorizedRedirectUri:
+          type: string
+          deprecated: true
+        authorized_redirect_uri:
+          type: string
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

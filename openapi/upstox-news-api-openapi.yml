@@ -1,0 +1,209 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition News API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: News
+paths:
+  /v2/news:
+    get:
+      tags:
+      - News
+      summary: Get News
+      description: Fetches news articles for the given instrument keys, or the user's current positions or holdings.
+      operationId: getNews
+      parameters:
+      - name: category
+        in: query
+        description: 'Category of news to fetch. Allowed values: instrument_keys, positions, holdings'
+        required: true
+        schema:
+          type: string
+        example: instrument_keys
+      - name: instrument_keys
+        in: query
+        description: Comma-separated list of instrument keys. Required when category is instrument_keys.
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE002A01018,NSE_EQ|INE669E01016
+      - name: page_number
+        in: query
+        description: Page number for pagination
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          maximum: 100
+          minimum: 1
+        example: 1
+      - name: page_size
+        in: query
+        description: Number of records per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 100
+          maximum: 100
+          minimum: 1
+        example: 100
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1189 - Invalid category. Allowed values: instrument_keys, positions, holdings.<br>UDAPI1190 - instrument_keys is required when category is instrument_keys.<br>UDAPI1193 - News can be fetched for a maximum of 30 instrument keys per request.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNewsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    NewsItemData:
+      type: object
+      properties:
+        heading:
+          type: string
+        summary:
+          type: string
+        thumbnail:
+          type: string
+        article_link:
+          type: string
+        published_time:
+          type: integer
+          format: int64
+    NewsResponsePageData:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+    NewsResponseMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/NewsResponsePageData'
+    GetNewsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/NewsItemData'
+        metadata:
+          $ref: '#/components/schemas/NewsResponseMetaData'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

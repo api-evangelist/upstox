@@ -1,0 +1,434 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Charge API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Charge
+paths:
+  /v2/charges/margin:
+    post:
+      tags:
+      - Charge
+      summary: Calculate Margin
+      description: Compute Margin
+      operationId: postMargin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarginRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1095 - The price must be greater than zero<br>UDAPI1096 - Quantity cannot be less than or equal to zero<br>UDAPI1097 - The quantity is required<br>UDAPI1098 - The instrument_token is of invalid format<br>UDAPI1099 - The instrument key is required<br>UDAPI1100 - The product is required<br>UDAPI1101 - The transaction_type is required<br>UDAPI1102 - The instrument limit has been exceeded<br>UDAPI1103 - Instrument key cannot be duplicated<br>UDAPI1104 - Quantity should be multiple of lot size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostMarginResponse'
+      security:
+      - OAUTH2: []
+  /v2/charges/brokerage:
+    get:
+      tags:
+      - Charge
+      summary: Brokerage details
+      description: Compute Brokerage Charges
+      operationId: getBrokerage
+      parameters:
+      - name: instrument_token
+        in: query
+        description: Key of the instrument
+        required: true
+        schema:
+          type: string
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+        example: NSE_EQ|INE848E01016
+      - name: quantity
+        in: query
+        description: Quantity with which the order is to be placed
+        required: true
+        schema:
+          type: integer
+          format: int32
+          minimum: 0
+        example: 10
+      - name: product
+        in: query
+        description: Product with which the order is to be placed
+        required: true
+        schema:
+          type: string
+        example: I
+      - name: transaction_type
+        in: query
+        description: Indicates whether its a BUY or SELL order
+        required: true
+        schema:
+          type: string
+        example: BUY
+      - name: price
+        in: query
+        description: Price with which the order is to be placed
+        required: true
+        schema:
+          type: number
+          format: float
+          minimum: 0
+        example: 123.1
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1060 - The quantity is required<br>UDAPI1061 - The price is required<br>UDAPI1062 - The transaction_type is required<br> UDAPI1063 - The product is required<br> UDAPI1064 - The quantity cannot be zero<br>UDAPI1065 - The price cannot be zero<br>UDAPI1059 - The instrument_token is of invalid format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBrokerageResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    Margin:
+      type: object
+      properties:
+        span_margin:
+          type: number
+          format: double
+          description: Upfront margin mandatory by exchange for derivatives trade applicable on only FNO trade
+          readOnly: true
+        exposure_margin:
+          type: number
+          format: double
+          description: Based on ELM percentage values provided by exchange, applicable on only FNO trade
+          readOnly: true
+        equity_margin:
+          type: number
+          format: double
+          description: Margin applicable for any equity trade
+          readOnly: true
+        net_buy_premium:
+          type: number
+          format: double
+          description: Option premium required.
+          readOnly: true
+        additional_margin:
+          type: number
+          format: double
+          description: Application margin applicable on MCX FNO trade for certain commodities
+          readOnly: true
+        total_margin:
+          type: number
+          format: double
+          description: Total margin required for the basket
+          readOnly: true
+        tender_margin:
+          type: number
+          format: double
+          description: Tender margin
+          readOnly: true
+    BrokerageWrapperData:
+      type: object
+      properties:
+        charges:
+          $ref: '#/components/schemas/BrokerageData'
+          description: Response data for charges details
+    GetBrokerageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/BrokerageWrapperData'
+          description: Response data for brokerage
+    MarginData:
+      type: object
+      properties:
+        margins:
+          type: array
+          description: Response data for instrument margin details
+          items:
+            $ref: '#/components/schemas/Margin'
+          readOnly: true
+        required_margin:
+          type: number
+          format: double
+          description: Total margin required to execute the orders
+          readOnly: true
+        final_margin:
+          type: number
+          format: double
+          description: Total margin after margin benefit
+          readOnly: true
+    MarginRequest:
+      type: object
+      properties:
+        instruments:
+          type: array
+          description: instruments
+          example:
+          - instrument_key: NSE_EQ|INE669E01016
+            quantity: 2
+            transaction_type: BUY
+            product: D
+          - instrument_key: NSE_EQ|INE848E01016
+            quantity: 5
+            transaction_type: BUY
+            product: D
+          items:
+            $ref: '#/components/schemas/Instrument'
+      required:
+      - instruments
+    BrokerageTaxes:
+      type: object
+      properties:
+        gst:
+          type: number
+          format: float
+          description: GST charges
+        stt:
+          type: number
+          format: float
+          description: STT charges
+        stamp_duty:
+          type: number
+          format: float
+          description: Stamp duty charges
+    OtherTaxes:
+      type: object
+      properties:
+        transaction:
+          type: number
+          format: float
+          description: Transaction charges
+        clearing:
+          type: number
+          format: float
+          description: Clearing charges
+        ipft:
+          type: number
+          format: float
+          description: IPF charges
+        sebi_turnover:
+          type: number
+          format: float
+          description: SEBI turnover charges
+    PostMarginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MarginData'
+          description: Response data for margin
+    Instrument:
+      type: object
+      properties:
+        instrument_key:
+          type: string
+          description: Instrument Key of the Instrument
+          example: NSE_EQ|INE848E01016
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity of the instrument to buy or sell for margin calculation
+          example: 1
+          minimum: 1
+        product:
+          type: string
+          description: Product with which the order is to be placed
+          example: D
+        transaction_type:
+          type: string
+          description: Indicates whether its a BUY or SELL order
+          example: BUY
+        price:
+          type: number
+          format: double
+          description: price
+          example: 123.9
+          minimum: 0
+      required:
+      - instrument_key
+      - product
+      - quantity
+      - transaction_type
+    BrokerageData:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+          description: Total charges for the order
+          readOnly: true
+        brokerage:
+          type: number
+          format: float
+          description: Brokerage charges for the order
+          readOnly: true
+        taxes:
+          $ref: '#/components/schemas/BrokerageTaxes'
+          description: Taxes levied on order
+          readOnly: true
+        otherTaxes:
+          $ref: '#/components/schemas/OtherTaxes'
+          deprecated: true
+          description: Other charges levied
+          readOnly: true
+        dpPlan:
+          $ref: '#/components/schemas/DpPlan'
+          deprecated: true
+          description: DP charges related information
+          readOnly: true
+        other_charges:
+          $ref: '#/components/schemas/OtherTaxes'
+        dp_plan:
+          $ref: '#/components/schemas/DpPlan'
+    DpPlan:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name
+        min_expense:
+          type: number
+          format: float
+          description: Minimum expense charges
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

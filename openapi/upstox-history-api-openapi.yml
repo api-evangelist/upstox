@@ -1,0 +1,343 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition History API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: History
+paths:
+  /v2/historical-candle/{instrumentKey}/{interval}/{to_date}:
+    get:
+      tags:
+      - History
+      summary: Historical candle data
+      description: 'Get OHLC values for all instruments across various timeframes. Historical data can be fetched for the following durations.
+
+        1minute: last 1 month candles till endDate
+
+        30minute: last 1 year candles till endDate
+
+        day: last 1 year candles till endDate
+
+        week: last 10 year candles till endDate
+
+        month: last 10 year candles till endDate'
+      operationId: getHistoricalCandleData_2
+      parameters:
+      - name: instrumentKey
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+      - name: interval
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(1minute|30minute|day|week|month)$
+      - name: to_date
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1015 - to_date must be greater than or equal to from_date and Date should be in valid format: yyyy-mm-dd<br>UDAPI1020 - Interval accepts one of (1minute,30minute,day,week,month)<br>UDAPI1021 - Instrument key is of invalid format<br>UDAPI1022 - to_date is required<br>UDAPI100011 - Invalid Instrument key'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHistoricalCandleResponse'
+  /v2/historical-candle/{instrumentKey}/{interval}/{to_date}/{from_date}:
+    get:
+      tags:
+      - History
+      summary: Historical candle data
+      description: 'Get OHLC values for all instruments across various timeframes. Historical data can be fetched for the following durations.
+
+        1minute: last 1 month candles till endDate
+
+        30minute: last 1 year candles till endDate
+
+        day: last 1 year candles till endDate
+
+        week: last 10 year candles till endDate
+
+        month: last 10 year candles till endDate'
+      operationId: getHistoricalCandleData_3
+      parameters:
+      - name: instrumentKey
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+      - name: interval
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(1minute|30minute|day|week|month)$
+      - name: to_date
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: from_date
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1015 - to_date must be greater than or equal to from_date and Date should be in valid format: yyyy-mm-dd<br>UDAPI1020 - Interval accepts one of (1minute,30minute,day,week,month)<br>UDAPI1021 - Instrument key is of invalid format<br>UDAPI1022 - to_date is required<br>UDAPI100011 - Invalid Instrument key'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHistoricalCandleResponse'
+  /v2/historical-candle/intraday/{instrumentKey}/{interval}:
+    get:
+      tags:
+      - History
+      summary: Intra day candle data
+      description: Get OHLC values for all instruments for the present trading day
+      operationId: getIntraDayCandleData_1
+      parameters:
+      - name: instrumentKey
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+      - name: interval
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(1minute|30minute)$
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1076 - Interval accepts one of (1minute,30minute)<br>UDAPI1021 - Instrument key is of invalid format<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIntraDayCandleResponse'
+components:
+  schemas:
+    GetHistoricalCandleResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/HistoricalCandleData'
+          description: Get OHLC values for all instruments across various timeframes
+    GetIntraDayCandleResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IntraDayCandleData'
+          description: Get OHLC values for all instruments across various timeframes
+    IntraDayCandleData:
+      type: object
+      properties:
+        candles:
+          type: array
+          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
+          items:
+            type: array
+            items: {}
+          readOnly: true
+    HistoricalCandleData:
+      type: object
+      properties:
+        candles:
+          type: array
+          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
+          items:
+            type: array
+            items: {}
+          readOnly: true
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

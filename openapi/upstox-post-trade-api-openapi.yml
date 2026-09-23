@@ -1,0 +1,228 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Post Trade API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Post Trade
+paths:
+  /v2/charges/historical-trades:
+    get:
+      tags:
+      - Post Trade
+      summary: Get historical trades
+      description: This API retrieves the trade history for a specified time interval.
+      operationId: getTradesByDateRange
+      parameters:
+      - name: segment
+        in: query
+        description: Segment for which data is requested can be from the following options EQ - Equity,   FO - Futures and Options,   COM  - Commodity,   CD - Currency Derivatives MF - Mutual Funds
+        required: false
+        schema:
+          type: string
+          default: ''
+        example: EQ
+      - name: start_date
+        in: query
+        description: Date from which trade history needs to be fetched. Date in YYYY-mm-dd format
+        required: true
+        schema:
+          type: string
+        example: '2022-04-01'
+      - name: end_date
+        in: query
+        description: Date till which history needs needs to be fetched. Date in YYYY-mm-dd format
+        required: true
+        schema:
+          type: string
+        example: '2023-03-31'
+      - name: page_number
+        in: query
+        description: 'Page number for which you want to fetch trade history '
+        required: true
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+        example: 1
+      - name: page_size
+        in: query
+        description: 'How many records you want for a page '
+        required: true
+        schema:
+          type: integer
+          format: int32
+          maximum: 5000
+          minimum: 1
+        example: 100
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TradeHistoryResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    TradeHistoryResponsePageData:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+    TradeHistoryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
+        metaData:
+          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    TradeHistoryResponseMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/TradeHistoryResponsePageData'
+    TradeHistoryResponseTradeData:
+      type: object
+      properties:
+        exchange:
+          type: string
+        segment:
+          type: string
+        option_type:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        amount:
+          type: number
+          format: float
+        trade_id:
+          type: string
+        trade_date:
+          type: string
+        transaction_type:
+          type: string
+        scrip_name:
+          type: string
+        strike_price:
+          type: string
+        expiry:
+          type: string
+        price:
+          type: number
+          format: float
+        isin:
+          type: string
+        symbol:
+          type: string
+        instrument_token:
+          type: string
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

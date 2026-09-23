@@ -1,0 +1,307 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Instruments API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Instruments
+paths:
+  /v2/instruments/search:
+    get:
+      tags:
+      - Instruments
+      summary: Search instruments
+      description: This API provides the functionality to retrieve the instrument details for searched query
+      operationId: searchInstrument
+      parameters:
+      - name: query
+        in: query
+        description: natural language query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: RELIANCE 1500 PE
+      - name: exchanges
+        in: query
+        description: Comma separated exchanges
+        required: false
+        schema:
+          type: string
+          pattern: ^(ALL|NSE|BSE|MCX)(,(ALL|NSE|BSE|MCX))*$
+        example: NSE,BSE,MCX
+      - name: segments
+        in: query
+        description: Comma separated segments
+        required: false
+        schema:
+          type: string
+          pattern: ^(ALL|EQ|FO|CURR|COMM|INDEX|OPT|FUT|OPTION_CHAIN)(,(ALL|EQ|FO|CURR|COMM|INDEX|OPT|FUT|OPTION_CHAIN))*$
+        example: EQ,FO,CURR,COMM
+      - name: instrument_types
+        in: query
+        description: Comma separated instrument types
+        required: false
+        schema:
+          type: string
+        example: CE,PE
+      - name: expiry
+        in: query
+        description: 'expiry in format: yyyy-MM-dd'
+        required: false
+        schema:
+          type: string
+        example: '2025-12-28'
+      - name: atm_offset
+        in: query
+        description: page number greater than or equal to 1
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 2
+      - name: page_number
+        in: query
+        description: ATM offset number for queries like ATM, ATM+1, ATM-1, etc.
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        example: 1
+      - name: records
+        in: query
+        description: no of records in a single page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        example: 20
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchInstrumentResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    InstrumentData:
+      type: object
+      properties:
+        name:
+          type: string
+        segment:
+          type: string
+        exchange:
+          type: string
+        isin:
+          type: string
+        expiry:
+          type: string
+          format: date-time
+        country:
+          type: string
+        latency:
+          type: string
+        description:
+          type: string
+        currency:
+          type: string
+        weekly:
+          type: boolean
+        instrument_key:
+          type: string
+        exchange_token:
+          type: string
+        trading_symbol:
+          type: string
+        short_name:
+          type: string
+        tick_size:
+          type: number
+          format: double
+        lot_size:
+          type: integer
+          format: int64
+        instrument_type:
+          type: string
+        freeze_quantity:
+          type: number
+          format: double
+        underlying_key:
+          type: string
+        underlying_type:
+          type: string
+        underlying_symbol:
+          type: string
+        last_trading_date:
+          type: string
+          format: date-time
+        strike_price:
+          type: number
+          format: double
+        price_quote_unit:
+          type: string
+        qty_multiplier:
+          type: integer
+          format: int64
+        minimum_lot:
+          type: integer
+          format: int64
+        start_time:
+          type: string
+        end_time:
+          type: string
+        week_days:
+          type: string
+        general_denominator:
+          type: number
+          format: double
+        general_numerator:
+          type: number
+          format: double
+        price_numerator:
+          type: number
+          format: double
+        price_denominator:
+          type: number
+          format: double
+        mtf_enabled:
+          type: boolean
+        mtf_bracket:
+          type: number
+          format: double
+        security_type:
+          type: string
+        cas_eligible:
+          type: boolean
+    Pagination:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+        records:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+    SearchMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    SearchInstrumentResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for search instrument request
+          items:
+            $ref: '#/components/schemas/InstrumentData'
+        meta_data:
+          $ref: '#/components/schemas/SearchMetaData'
+          description: Meta data for search instrument response
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

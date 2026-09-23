@@ -1,0 +1,402 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Options API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Options
+paths:
+  /v2/option/contract:
+    get:
+      tags:
+      - Options
+      summary: Get option contracts
+      description: This API provides the functionality to retrieve the option contracts
+      operationId: getOptionContracts
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Instrument key for an underlying symbol
+        required: true
+        schema:
+          type: string
+        example: NSE_INDEX|Nifty 50
+      - name: expiry_date
+        in: query
+        description: 'Expiry date in format: YYYY-mm-dd'
+        required: false
+        schema:
+          type: string
+        example: '2024-02-01'
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOptionContractResponse'
+      security:
+      - OAUTH2: []
+  /v2/option/chain:
+    get:
+      tags:
+      - Options
+      summary: Get option chain
+      description: This API provides the functionality to retrieve the option chain
+      operationId: getPutCallOptionChain
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Instrument key for an underlying symbol
+        required: true
+        schema:
+          type: string
+        example: NSE_INDEX|Nifty 50
+      - name: expiry_date
+        in: query
+        description: 'Expiry date in format: YYYY-mm-dd'
+        required: true
+        schema:
+          type: string
+        example: '2024-02-01'
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOptionChainResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    InstrumentData:
+      type: object
+      properties:
+        name:
+          type: string
+        segment:
+          type: string
+        exchange:
+          type: string
+        isin:
+          type: string
+        expiry:
+          type: string
+          format: date-time
+        country:
+          type: string
+        latency:
+          type: string
+        description:
+          type: string
+        currency:
+          type: string
+        weekly:
+          type: boolean
+        instrument_key:
+          type: string
+        exchange_token:
+          type: string
+        trading_symbol:
+          type: string
+        short_name:
+          type: string
+        tick_size:
+          type: number
+          format: double
+        lot_size:
+          type: integer
+          format: int64
+        instrument_type:
+          type: string
+        freeze_quantity:
+          type: number
+          format: double
+        underlying_key:
+          type: string
+        underlying_type:
+          type: string
+        underlying_symbol:
+          type: string
+        last_trading_date:
+          type: string
+          format: date-time
+        strike_price:
+          type: number
+          format: double
+        price_quote_unit:
+          type: string
+        qty_multiplier:
+          type: integer
+          format: int64
+        minimum_lot:
+          type: integer
+          format: int64
+        start_time:
+          type: string
+        end_time:
+          type: string
+        week_days:
+          type: string
+        general_denominator:
+          type: number
+          format: double
+        general_numerator:
+          type: number
+          format: double
+        price_numerator:
+          type: number
+          format: double
+        price_denominator:
+          type: number
+          format: double
+        mtf_enabled:
+          type: boolean
+        mtf_bracket:
+          type: number
+          format: double
+        security_type:
+          type: string
+        cas_eligible:
+          type: boolean
+    PutCallOptionChainData:
+      type: object
+      properties:
+        instrument_key:
+          type: string
+        market_data:
+          $ref: '#/components/schemas/MarketData'
+        option_greeks:
+          $ref: '#/components/schemas/AnalyticsData'
+    OptionStrikeData:
+      type: object
+      properties:
+        expiry:
+          type: string
+          format: date-time
+        pcr:
+          type: number
+          format: double
+        strike_price:
+          type: number
+          format: double
+        underlying_key:
+          type: string
+        underlying_spot_price:
+          type: number
+          format: double
+        call_options:
+          $ref: '#/components/schemas/PutCallOptionChainData'
+        put_options:
+          $ref: '#/components/schemas/PutCallOptionChainData'
+    MarketData:
+      type: object
+      properties:
+        ltp:
+          type: number
+          format: double
+        volume:
+          type: integer
+          format: int64
+        oi:
+          type: number
+          format: double
+        close_price:
+          type: number
+          format: double
+        bid_price:
+          type: number
+          format: double
+        bid_qty:
+          type: integer
+          format: int32
+        ask_price:
+          type: number
+          format: double
+        ask_qty:
+          type: integer
+          format: int32
+        prev_oi:
+          type: number
+          format: double
+    GetOptionChainResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option chain data
+          items:
+            $ref: '#/components/schemas/OptionStrikeData'
+    AnalyticsData:
+      type: object
+      properties:
+        vega:
+          type: number
+          format: double
+        theta:
+          type: number
+          format: double
+        gamma:
+          type: number
+          format: double
+        delta:
+          type: number
+          format: double
+        iv:
+          type: number
+          format: double
+        pop:
+          type: number
+          format: double
+    GetOptionContractResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option contracts
+          items:
+            $ref: '#/components/schemas/InstrumentData'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

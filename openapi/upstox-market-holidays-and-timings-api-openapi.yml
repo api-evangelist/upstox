@@ -1,0 +1,1233 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Market Holidays and Timings API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Market Holidays and Timings
+paths:
+  /v2/market/timings/{date}:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Exchange Timings on particular date
+      description: This API provides the functionality to retrieve the exchange timings on particular date
+      operationId: getExchangeTimings
+      parameters:
+      - name: date
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExchangeTimingResponse'
+  /v2/market/status/{exchange}:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Market status for particular exchange
+      description: This API provides the functionality to retrieve the market status for particular exchange
+      operationId: getMarketStatus
+      parameters:
+      - name: exchange
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(\s*|(?:NSE|NFO|CDS|BSE|BFO|BCD|MCX|NSCOM)+)$
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMarketStatusResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/smartlist/options:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Smartlist Options
+      description: Fetches the smartlist of options for the given asset type and category.
+      operationId: getSmartlistOptions
+      parameters:
+      - name: asset_type
+        in: query
+        description: 'Asset type. Allowed values: INDEX, STOCK, COMMODITY'
+        required: false
+        schema:
+          type: string
+        example: INDEX
+      - name: category
+        in: query
+        description: 'Category. Allowed values: TOP_TRADED, MOST_ACTIVE, OI_GAINERS, OI_LOSERS, PRICE_GAINERS, PRICE_LOSERS, IV_GAINERS, IV_LOSERS, UNDER_5000, UNDER_10000 (COMMODITY supports only: TOP_TRADED, MOST_ACTIVE, OI_GAINERS, OI_LOSERS)'
+        required: false
+        schema:
+          type: string
+        example: TOP_TRADED
+      - name: page_number
+        in: query
+        description: Page number (optional, 1-indexed)
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: page_size
+        in: query
+        description: Page size (optional, max 50)
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 20
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1212 - Invalid asset_type.<br>UDAPI1213 - Invalid category for the given asset_type.<br>UDAPI1214 - Invalid page_size. Maximum allowed value is 50.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/smartlist/mtf:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Smartlist MTF
+      description: Fetches the smartlist of MTF (Margin Trade Funding) stocks. Prices are enriched with live LTP data.
+      operationId: getSmartlistMtf
+      parameters:
+      - name: page_number
+        in: query
+        description: Page number (optional, 1-indexed)
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: page_size
+        in: query
+        description: Page size (optional, max 50)
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 20
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1214 - Invalid page_size. Maximum allowed value is 50.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/smartlist/futures:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Smartlist Futures
+      description: Fetches the smartlist of futures for the given asset type and category.
+      operationId: getSmartlistFutures
+      parameters:
+      - name: asset_type
+        in: query
+        description: 'Asset type. Allowed values: INDEX, STOCK, COMMODITY'
+        required: false
+        schema:
+          type: string
+        example: INDEX
+      - name: category
+        in: query
+        description: 'Category. Allowed values: TOP_TRADED, MOST_ACTIVE, OI_GAINERS, OI_LOSERS, PRICE_GAINERS, PRICE_LOSERS, PREMIUM, DISCOUNT (COMMODITY supports only: TOP_TRADED, MOST_ACTIVE, OI_GAINERS, OI_LOSERS)'
+        required: false
+        schema:
+          type: string
+        example: TOP_TRADED
+      - name: page_number
+        in: query
+        description: Page number (optional, 1-indexed)
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: page_size
+        in: query
+        description: Page size (optional, max 50)
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 20
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1212 - Invalid asset_type.<br>UDAPI1213 - Invalid category for the given asset_type.<br>UDAPI1214 - Invalid page_size. Maximum allowed value is 50.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/pcr:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get PCR Data
+      description: Fetches PCR (Put-Call Ratio) data for the given instrument key, expiry, date and bucket interval.
+      operationId: getPcrData
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Underlying asset instrument key
+        required: true
+        schema:
+          type: string
+        example: NSE_INDEX|Nifty 50
+      - name: expiry
+        in: query
+        description: Expiry date in YYYY-MM-DD format
+        required: true
+        schema:
+          type: string
+        example: '2026-05-19'
+      - name: date
+        in: query
+        description: Date in YYYY-MM-DD format for which PCR data is required
+        required: true
+        schema:
+          type: string
+        example: '2026-05-06'
+      - name: bucket_interval
+        in: query
+        description: Bucket interval in minutes for the insights list
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 15
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI100011 - Invalid instrument_key.<br>UDAPI1202 - Invalid expiry format.<br>UDAPI1203 - Invalid date format.<br>UDAPI1205 - Invalid bucket_interval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/oi:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get OI Data
+      description: Fetches OI data for the given instrument key, expiry and date.
+      operationId: getOiData
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Underlying asset instrument key
+        required: true
+        schema:
+          type: string
+        example: NSE_INDEX|Nifty 50
+      - name: expiry
+        in: query
+        description: Expiry date in YYYY-MM-DD format
+        required: true
+        schema:
+          type: string
+        example: '2026-05-19'
+      - name: date
+        in: query
+        description: Date in YYYY-MM-DD format for which OI data is required
+        required: true
+        schema:
+          type: string
+        example: '2026-05-06'
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI100011 - Invalid instrument_key.<br>UDAPI1202 - Invalid expiry format.<br>UDAPI1203 - Invalid date format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/max-pain:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Max Pain Data
+      description: Fetches Max Pain data for the given instrument key, expiry, date and bucket interval.
+      operationId: getMaxPainData
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Underlying asset instrument key
+        required: true
+        schema:
+          type: string
+        example: NSE_INDEX|Nifty 50
+      - name: expiry
+        in: query
+        description: Expiry date in YYYY-MM-DD format
+        required: true
+        schema:
+          type: string
+        example: '2026-05-19'
+      - name: date
+        in: query
+        description: Date in YYYY-MM-DD format for which Max Pain data is required
+        required: true
+        schema:
+          type: string
+        example: '2026-05-06'
+      - name: bucket_interval
+        in: query
+        description: Bucket interval in minutes for the insights list
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 15
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI100011 - Invalid instrument_key.<br>UDAPI1202 - Invalid expiry format.<br>UDAPI1203 - Invalid date format.<br>UDAPI1205 - Invalid bucket_interval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/holidays:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Holiday list of current year
+      description: This API provides the functionality to retrieve the holiday list of current year
+      operationId: getHolidays
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHolidayResponse'
+  /v2/market/holidays/{date}:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Holiday on particular date
+      description: This API provides the functionality to retrieve the holiday on particular date
+      operationId: getHoliday
+      parameters:
+      - name: date
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHolidayResponse'
+  /v2/market/fii:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get FII Data
+      description: Fetches FII activity data for the given data type and interval.
+      operationId: getFiiData
+      parameters:
+      - name: data_type
+        in: query
+        description: 'Data type. Allowed values: NSE_FO|INDEX_FUTURES, NSE_FO|STOCK_FUTURES, NSE_FO|INDEX_OPTIONS, NSE_FO|STOCK_OPTIONS, NSE_EQ|CASH'
+        required: true
+        schema:
+          type: string
+        example: NSE_FO|INDEX_FUTURES
+      - name: interval
+        in: query
+        description: 'Interval. Allowed values: 1D, 1M'
+        required: true
+        schema:
+          type: string
+        example: 1D
+      - name: from
+        in: query
+        description: Start date in YYYY-MM-DD format (optional)
+        required: false
+        schema:
+          type: string
+        example: '2024-01-01'
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1198 - Invalid data_type.<br>UDAPI1199 - Invalid interval.<br>UDAPI1200 - Invalid from date format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/dii:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get DII Data
+      description: Fetches DII activity data for the given interval.
+      operationId: getDiiData
+      parameters:
+      - name: data_type
+        in: query
+        description: 'Data type. Allowed value: NSE_EQ|CASH'
+        required: true
+        schema:
+          type: string
+        example: NSE_EQ|CASH
+      - name: interval
+        in: query
+        description: 'Interval. Allowed values: 1D, 1M'
+        required: true
+        schema:
+          type: string
+        example: 1D
+      - name: from
+        in: query
+        description: Start date in YYYY-MM-DD format (optional)
+        required: false
+        schema:
+          type: string
+        example: '2024-01-01'
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1198 - Invalid data_type. Allowed value: NSE_EQ|CASH.<br>UDAPI1199 - Invalid interval.<br>UDAPI1200 - Invalid from date format.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/market/change-oi:
+    get:
+      tags:
+      - Market Holidays and Timings
+      summary: Get Change in OI Data
+      description: Fetches change in OI data for the given instrument key, expiry, date and interval.
+      operationId: getChangeOiData
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Underlying asset instrument key
+        required: true
+        schema:
+          type: string
+        example: NSE_INDEX|Nifty 50
+      - name: expiry
+        in: query
+        description: Expiry date in YYYY-MM-DD format
+        required: true
+        schema:
+          type: string
+        example: '2026-05-19'
+      - name: date
+        in: query
+        description: Date in YYYY-MM-DD format for which change OI data is required
+        required: true
+        schema:
+          type: string
+        example: '2026-05-06'
+      - name: interval
+        in: query
+        description: Number of days for which difference in OI is required
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 2
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI100011 - Invalid instrument_key.<br>UDAPI1202 - Invalid expiry format.<br>UDAPI1203 - Invalid date format.<br>UDAPI1204 - Invalid interval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    HolidayData:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        holiday_type:
+          type: string
+          enum:
+          - ALL
+          - SETTLEMENT_HOLIDAY
+          - TRADING_HOLIDAY
+          - SPECIAL_TIMING
+        closed_exchanges:
+          type: array
+          items:
+            type: string
+        open_exchanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExchangeTimingData'
+    GetExchangeTimingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for exchange timing list
+          items:
+            $ref: '#/components/schemas/ExchangeTimingData'
+    GetMarketStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MarketStatusData'
+          description: Response data for market live status
+    AnalyticsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data: {}
+    GetHolidayResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for holiday list
+          items:
+            $ref: '#/components/schemas/HolidayData'
+    ExchangeTimingData:
+      type: object
+      properties:
+        exchange:
+          type: string
+        start_time:
+          type: integer
+          format: int64
+        end_time:
+          type: integer
+          format: int64
+    MarketStatusData:
+      type: object
+      properties:
+        exchange:
+          type: string
+        status:
+          type: string
+        last_updated:
+          type: integer
+          format: int64
+        cas_eligible_status:
+          $ref: '#/components/schemas/CasEligibleStatusData'
+          description: CAS (Closing Auction Session) status of the segment. Present only for segments where CAS exists (e.g. NSE_EQ); absent otherwise.
+    CasEligibleStatusData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The CAS (Collateral Auction Session / Closing Auction Session) status of the segment.
+          enum:
+          - NORMAL_OPEN
+          - NORMAL_CLOSE
+          - PRE_OPEN_START
+          - PRE_OPEN_END
+          - CLOSING_START
+          - CLOSING_END
+          - CTS_CLOSE
+          - CAS_LM_START
+          - CAS_M_STOP
+          - CAS_STOP
+        last_updated:
+          type: integer
+          format: int64
+          description: The timestamp (in milliseconds) when the CAS status was last updated.
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

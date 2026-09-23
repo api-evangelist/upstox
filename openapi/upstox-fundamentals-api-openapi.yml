@@ -1,0 +1,1107 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Fundamentals API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Fundamentals
+paths:
+  /v2/fundamentals/{isin}/share-holdings:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Share Holdings
+      description: Fetches shareholding pattern for the given ISIN.
+      operationId: getShareHoldings
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1206 - Invalid ISIN.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShareHoldingsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{isin}/profile:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Company Profile
+      description: Fetches company profile information for the given ISIN.
+      operationId: getCompanyProfile
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1206 - Invalid ISIN.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyProfileResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{isin}/key-ratios:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Key Ratios
+      description: Fetches key financial ratios for the given ISIN.
+      operationId: getKeyRatios
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1206 - Invalid ISIN.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyRatiosResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{isin}/income-statement:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Income Statement
+      description: Fetches income statement data for the given ISIN.
+      operationId: getIncomeStatement
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      - name: type
+        in: query
+        description: 'Report type. Allowed values: consolidated or standalone'
+        required: false
+        schema:
+          type: string
+          default: consolidated
+          pattern: ^(consolidated|standalone)$
+        example: consolidated
+      - name: time_period
+        in: query
+        description: 'Time period. Allowed values: yearly, quarterly'
+        required: false
+        schema:
+          type: string
+          default: yearly
+          pattern: ^(yearly|quarterly)$
+        example: yearly
+      - name: fs
+        in: query
+        description: Whether to include the full financial statement
+        required: false
+        schema:
+          type: boolean
+          default: false
+        example: false
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1206 - Invalid ISIN.<br>UDAPI1207 - Invalid type. Allowed values: consolidated, standalone.<br>UDAPI1208 - Invalid time period. Allowed values: yearly, quarterly.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeStatementResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{isin}/corporate-actions:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Corporate Actions
+      description: Fetches corporate actions for the given ISIN.
+      operationId: getCorporateActions
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1206 - Invalid ISIN.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporateActionsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{isin}/cash-flow:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Cash Flow
+      description: Fetches cash flow data for the given ISIN.
+      operationId: getCashFlow
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      - name: type
+        in: query
+        description: 'Report type. Allowed values: consolidated, standalone'
+        required: false
+        schema:
+          type: string
+          default: consolidated
+          pattern: ^(consolidated|standalone)$
+        example: consolidated
+      - name: fs
+        in: query
+        description: Whether to include the full financial statement
+        required: false
+        schema:
+          type: boolean
+          default: false
+        example: false
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1206 - Invalid ISIN.<br>UDAPI1207 - Invalid type. Allowed values: consolidated, standalone.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashFlowResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{isin}/balance-sheet:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Balance Sheet
+      description: Fetches balance sheet data for the given ISIN.
+      operationId: getBalanceSheet
+      parameters:
+      - name: isin
+        in: path
+        description: ISIN of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}[A-Z0-9]{9}[0-9]$
+        example: INE002A01018
+      - name: type
+        in: query
+        description: 'Report type. Allowed values: consolidated or standalone'
+        required: false
+        schema:
+          type: string
+          default: consolidated
+          pattern: ^(consolidated|standalone)$
+        example: consolidated
+      - name: fs
+        in: query
+        description: Whether to include the full financial statement
+        required: false
+        schema:
+          type: boolean
+          default: false
+        example: false
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: 'UDAPI1206 - Invalid ISIN.<br>UDAPI1207 - Invalid type. Allowed values: consolidated, standalone.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceSheetResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/fundamentals/{instrument_key}/competitors:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Competitors
+      description: Fetches the list of competitors for the given instrument_key.
+      operationId: getCompetitors
+      parameters:
+      - name: instrument_key
+        in: path
+        description: Instrument key of the company
+        required: true
+        schema:
+          type: string
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+        example: NSE_EQ|INE002A01018
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI100011 - Invalid Instrument key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompetitorsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    BalanceSheetData:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Report type: consolidated or standalone'
+          example: consolidated
+          readOnly: true
+        time_period:
+          type: string
+          description: 'Time period: yearly or quarterly'
+          example: yearly
+          readOnly: true
+        units_in:
+          type: string
+          description: Unit of monetary values
+          example: crore
+          readOnly: true
+        history:
+          type: array
+          description: Historical balance sheet entries
+          items:
+            $ref: '#/components/schemas/BalanceSheetHistoryItem'
+          readOnly: true
+        full_statement:
+          type: array
+          description: List of financial statement balance sheet items with historical values
+          items:
+            $ref: '#/components/schemas/FinancialStatementEntry'
+          readOnly: true
+    CompetitorData:
+      type: object
+      properties:
+        company_profile:
+          type: string
+          description: Business description of the company
+          readOnly: true
+        sector:
+          type: string
+          description: Sector the company belongs to
+          example: Refineries
+          readOnly: true
+        sector_market_cap_inr:
+          $ref: '#/components/schemas/SectorMarketCapAmount'
+          description: Sector market capitalisation in INR
+          readOnly: true
+        sector_market_cap_usd:
+          $ref: '#/components/schemas/SectorMarketCapAmount'
+          description: Sector market capitalisation in USD
+          readOnly: true
+        instrument_key:
+          type: string
+          description: Instrument key of the competitor company
+          example: NSE_EQ|INE029A01011
+          readOnly: true
+    CorporateActionEventDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the event detail field
+          example: Announcement date
+          readOnly: true
+        value:
+          type: string
+          description: Value of the event detail field
+          example: 25
+          readOnly: true
+    CorporateActionData:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Type of corporate action
+          example: Dividend
+          readOnly: true
+        expiry_date:
+          type: string
+          description: Ex-date or expiry date of the action
+          example: 14
+          readOnly: true
+        amount:
+          type: number
+          format: double
+          description: Amount associated with the action
+          example: 5.5
+          readOnly: true
+        ratio:
+          type: string
+          description: Ratio for bonus or split actions
+          example: '2:10'
+          readOnly: true
+        event_details:
+          type: array
+          description: Detailed event fields for the corporate action
+          items:
+            $ref: '#/components/schemas/CorporateActionEventDetail'
+          readOnly: true
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    BalanceSheetResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/BalanceSheetData'
+    CashFlowEntry:
+      type: object
+      properties:
+        category:
+          type: string
+          description: 'Type of cash flow: Operating, Investing, or Financing'
+          example: Operating
+          readOnly: true
+        history:
+          type: array
+          description: Historical cash flow values for this type
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+          readOnly: true
+    IncomeStatementData:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Report type: consolidated or standalone'
+          example: consolidated
+          readOnly: true
+        time_period:
+          type: string
+          description: 'Time period: yearly or quarterly'
+          example: yearly
+          readOnly: true
+        units_in:
+          type: string
+          description: Unit of monetary values
+          example: crore
+          readOnly: true
+        income_statement:
+          type: array
+          description: Income statement entries grouped by type (Revenue, Operating profit, Net profit)
+          items:
+            $ref: '#/components/schemas/IncomeStatementEntry'
+          readOnly: true
+        full_statement:
+          type: array
+          description: List of financial statement income statement items with historical values
+          items:
+            $ref: '#/components/schemas/FinancialStatementEntry'
+          readOnly: true
+    CorporateActionsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CorporateActionData'
+    SectorMarketCapAmount:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          description: Numeric value of the market capitalisation
+          example: 208.84
+          readOnly: true
+        unit:
+          type: string
+          description: Unit of the market capitalisation value
+          example: billion
+          readOnly: true
+        formatted:
+          type: string
+          description: Human-readable formatted market capitalisation
+          example: $208.84B
+          readOnly: true
+    IncomeStatementResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IncomeStatementData'
+    IncomeStatementEntry:
+      type: object
+      properties:
+        category:
+          type: string
+          description: 'Type of income statement entry: Revenue, Operating profit, or Net profit'
+          example: Revenue
+          readOnly: true
+        history:
+          type: array
+          description: Historical values for this income statement type
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+          readOnly: true
+    KeyRatioData:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the ratio
+          example: P/E
+          readOnly: true
+        company_value:
+          type: string
+          description: Ratio value for the company
+          example: 20.15
+          readOnly: true
+        sector_value:
+          type: string
+          description: Ratio value for the sector reference
+          example: 12.46
+          readOnly: true
+    CashFlowData:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Report type: consolidated or standalone'
+          example: consolidated
+          readOnly: true
+        time_period:
+          type: string
+          description: 'Time period: yearly or quarterly'
+          example: yearly
+          readOnly: true
+        units_in:
+          type: string
+          description: Unit of monetary values
+          example: crore
+          readOnly: true
+        cash_flow:
+          type: array
+          description: Cash flow entries grouped by type (Operating, Investing, Financing)
+          items:
+            $ref: '#/components/schemas/CashFlowEntry'
+          readOnly: true
+        full_statement:
+          type: array
+          description: List of financial statement cash flow items with historical values
+          items:
+            $ref: '#/components/schemas/FinancialStatementEntry'
+          readOnly: true
+    HistoryItem:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          description: Amount value in the reported period
+          example: 79392.0
+          readOnly: true
+        period:
+          type: string
+          description: Reporting period
+          example: Mar 2025
+          readOnly: true
+        change:
+          type: string
+          description: Percentage change compared to previous period
+          example: +7.29%
+          readOnly: true
+    CompanyProfileData:
+      type: object
+      properties:
+        company_profile:
+          type: string
+          description: Business description of the company
+          readOnly: true
+        sector:
+          type: string
+          description: Sector the company belongs to
+          example: Refineries
+          readOnly: true
+        sector_market_cap_inr:
+          $ref: '#/components/schemas/SectorMarketCapAmount'
+          description: Sector market capitalisation in INR
+          readOnly: true
+        sector_market_cap_usd:
+          $ref: '#/components/schemas/SectorMarketCapAmount'
+          description: Sector market capitalisation in USD
+          readOnly: true
+    FinancialStatementEntry:
+      type: object
+      properties:
+        particular:
+          type: string
+          description: Type of financial statement line item
+          example: Revenue
+          readOnly: true
+        history:
+          type: array
+          description: Historical values for this statement line item
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+          readOnly: true
+    BalanceSheetHistoryItem:
+      type: object
+      properties:
+        total_asset:
+          type: number
+          format: double
+          description: Total assets in the reported period
+          example: 1755986.0
+          readOnly: true
+        total_liability:
+          type: number
+          format: double
+          description: Total liabilities in the reported period
+          example: 830198.0
+          readOnly: true
+        period:
+          type: string
+          description: Reporting period
+          example: Mar 2024
+          readOnly: true
+    ShareHoldingsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShareHoldingData'
+    CashFlowResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CashFlowData'
+    KeyRatiosResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyRatioData'
+    ShareHoldingData:
+      type: object
+      properties:
+        category:
+          type: string
+          description: Category of shareholder
+          example: Promoters
+          readOnly: true
+        history:
+          type: array
+          description: Quarterly shareholding history
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+          readOnly: true
+    CompanyProfileResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CompanyProfileData'
+    CompetitorsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompetitorData'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

@@ -1,0 +1,501 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Market Quote API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Market Quote
+paths:
+  /v2/market-quote/quotes:
+    get:
+      tags:
+      - Market Quote
+      summary: Market quotes and instruments - Full market quotes
+      description: This API provides the functionality to retrieve the full market quotes for one or more instruments.This API returns the complete market data snapshot of up to 500 instruments in one go.
+      operationId: getFullMarketQuote
+      parameters:
+      - name: symbol
+        in: query
+        description: Comma separated list of symbols
+        required: false
+        deprecated: true
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE848E01039
+      - name: instrument_key
+        in: query
+        description: Comma separated list of instrument keys
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE848E01039
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1009 - symbol is required<br>UDAPI1011 - symbol is of invalid format<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFullMarketQuoteResponse'
+      security:
+      - OAUTH2: []
+  /v2/market-quote/ohlc:
+    get:
+      tags:
+      - Market Quote
+      summary: Market quotes and instruments - OHLC quotes
+      description: This API provides the functionality to retrieve the OHLC quotes for one or more instruments.This API returns the OHLC snapshots of up to 1000 instruments in one go.
+      operationId: getMarketQuoteOHLC
+      parameters:
+      - name: symbol
+        in: query
+        description: Comma separated list of symbols
+        required: false
+        deprecated: true
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE848E01039
+      - name: instrument_key
+        in: query
+        description: Comma separated list of instrument keys
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE848E01039
+      - name: interval
+        in: query
+        description: Interval to get ohlc data
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          pattern: ^(1d|I1|I30)$
+        example: 1d
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1009 - symbol is required<br>UDAPI1011 - symbol is of invalid format<br>UDAPI1027 - interval is required<br>UDAPI1028 - Invalid interval<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMarketQuoteOHLCResponse'
+      security:
+      - OAUTH2: []
+  /v2/market-quote/ltp:
+    get:
+      tags:
+      - Market Quote
+      summary: Market quotes and instruments - LTP quotes
+      description: This API provides the functionality to retrieve the LTP quotes for one or more instruments.This API returns the LTPs of up to 1000 instruments in one go.
+      operationId: ltp
+      parameters:
+      - name: symbol
+        in: query
+        description: Comma separated list of symbols
+        required: false
+        deprecated: true
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE848E01039
+      - name: instrument_key
+        in: query
+        description: Comma separated list of instrument keys
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE848E01039
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1009 - symbol is required<br>UDAPI1011 - symbol is of invalid format<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMarketQuoteLastTradedPriceResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    Depth:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: quantity
+        price:
+          type: number
+          format: double
+          description: price
+        orders:
+          type: integer
+          format: int32
+          description: orders
+    GetFullMarketQuoteResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbol'
+    MarketQuoteOHLC:
+      type: object
+      properties:
+        ohlc:
+          $ref: '#/components/schemas/Ohlc'
+        last_price:
+          type: number
+          format: float
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        instrument_token:
+          type: string
+    MarketQuoteSymbolLtp:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        instrument_token:
+          type: string
+    DepthMap:
+      type: object
+      properties:
+        buy:
+          type: array
+          description: Bids
+          example: 120.01
+          items:
+            $ref: '#/components/schemas/Depth'
+          readOnly: true
+        sell:
+          type: array
+          description: Asks
+          example: 120.01
+          items:
+            $ref: '#/components/schemas/Depth'
+          readOnly: true
+    Ohlc:
+      type: object
+      properties:
+        open:
+          type: number
+          format: double
+          description: The open price of the trading session
+          example: 120.01
+          readOnly: true
+        high:
+          type: number
+          format: double
+          description: The high price of the trading session
+          example: 121.0
+          readOnly: true
+        low:
+          type: number
+          format: double
+          description: The low price of the trading session
+          example: 119.0
+          readOnly: true
+        close:
+          type: number
+          format: double
+          description: The close price of the symbol from the previous session of trading
+          example: 120.0
+          readOnly: true
+    GetMarketQuoteLastTradedPriceResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbolLtp'
+    GetMarketQuoteOHLCResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOHLC'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    MarketQuoteSymbol:
+      type: object
+      properties:
+        ohlc:
+          $ref: '#/components/schemas/Ohlc'
+        depth:
+          $ref: '#/components/schemas/DepthMap'
+        timestamp:
+          type: string
+          description: Time in milliseconds at which the feeds was updated
+          example: '2022-11-16 06:14:48'
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Key issued by Upstox for the instrument
+          example: NSE_EQ|INE160A01022
+          readOnly: true
+        symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: NHPC
+          readOnly: true
+        last_price:
+          type: number
+          format: double
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        volume:
+          type: integer
+          format: int64
+          description: The volume traded today on symbol
+          example: 2344451
+          readOnly: true
+        average_price:
+          type: number
+          format: double
+          description: Average price
+          example: 120.01
+          readOnly: true
+        oi:
+          type: number
+          format: double
+          description: Total number of outstanding contracts held by market participants exchange-wide (only F&O)
+          example: 0
+          readOnly: true
+        net_change:
+          type: number
+          format: double
+          description: The absolute change from yesterday's close to last traded price
+          example: 0.01
+          readOnly: true
+        total_buy_quantity:
+          type: number
+          format: double
+          description: The total number of bid quantity available for trading
+          example: 0
+          readOnly: true
+        total_sell_quantity:
+          type: number
+          format: double
+          description: The total number of ask quantity available for trading
+          example: 0
+          readOnly: true
+        lower_circuit_limit:
+          type: number
+          format: double
+          description: The lower circuit of symbol
+          example: 119.0
+          readOnly: true
+        upper_circuit_limit:
+          type: number
+          format: double
+          description: The upper circuit of symbol
+          example: 121.0
+          readOnly: true
+        last_trade_time:
+          type: string
+          description: Time in milliseconds at which last trade happened
+          example: '2022-11-16 06:14:48'
+          readOnly: true
+        oi_day_high:
+          type: number
+          format: double
+          example: 0
+          readOnly: true
+        oi_day_low:
+          type: number
+          format: double
+          example: 0
+          readOnly: true
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

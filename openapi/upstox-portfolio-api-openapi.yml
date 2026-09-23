@@ -1,0 +1,731 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Portfolio API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Portfolio
+paths:
+  /v2/portfolio/convert-position:
+    put:
+      tags:
+      - Portfolio
+      summary: Convert Positions
+      description: Convert the margin product of an open position
+      operationId: convertPositions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertPositionRequest'
+        required: true
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConvertPositionResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v3/portfolio/mtf-positions:
+    get:
+      tags:
+      - Portfolio
+      summary: Get MTF positions
+      description: This API allows you to get MTF positions.
+      operationId: getMtfPositions
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPositionResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/portfolio/short-term-positions:
+    get:
+      tags:
+      - Portfolio
+      summary: Get Positions
+      description: Fetches the current positions for the user for the current day.
+      operationId: getPositions
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPositionResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+  /v2/portfolio/long-term-holdings:
+    get:
+      tags:
+      - Portfolio
+      summary: Get Holdings
+      description: Fetches the holdings which the user has bought/sold in previous trading sessions.
+      operationId: getHoldings
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHoldingsResponse'
+        '401':
+          description: Authorization Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    PositionData:
+      type: object
+      properties:
+        exchange:
+          type: string
+          description: Exchange to which the order is associated
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
+        multiplier:
+          type: number
+          format: float
+          description: The quantity/lot size multiplier used for calculating P&Ls
+          example: 1
+          readOnly: true
+        value:
+          type: number
+          format: float
+          description: Net value of the position
+          example: 120
+          readOnly: true
+        pnl:
+          type: number
+          format: float
+          description: Profit and loss - net returns on the position
+          example: 121.01
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CO or OCO
+          example: D
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Key issued by Upstox for the instrument
+          example: 151064324
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Average price at which the net position quantity was acquired
+          example: 120.01
+          readOnly: true
+        buy_value:
+          type: number
+          format: float
+          description: Net value of the bought quantities
+          example: 120
+          readOnly: true
+        overnight_quantity:
+          type: integer
+          format: int32
+          description: Quantity held previously and carried forward over night
+          example: 1
+          readOnly: true
+        day_buy_value:
+          type: number
+          format: float
+          description: Amount at which the quantity is bought during the day
+          example: 120.01
+          readOnly: true
+        day_buy_price:
+          type: number
+          format: float
+          description: Average price at which the day qty was bought. Default is empty string
+          example: 120.01
+          readOnly: true
+        overnight_buy_amount:
+          type: number
+          format: float
+          description: Amount at which the quantity was bought in the previous session
+          example: 12
+          readOnly: true
+        overnight_buy_quantity:
+          type: integer
+          format: int32
+          description: Quantity bought in the previous session
+          example: 12
+          readOnly: true
+        day_buy_quantity:
+          type: integer
+          format: int32
+          description: Quantity bought during the day
+          example: 1
+          readOnly: true
+        day_sell_value:
+          type: number
+          format: float
+          description: Amount at which the quantity is sold during the day
+          example: 0
+          readOnly: true
+        day_sell_price:
+          type: number
+          format: float
+          description: Average price at which the day quantity was sold
+          example: 0
+          readOnly: true
+        overnight_sell_amount:
+          type: number
+          format: float
+          description: Amount at which the quantity was sold in the previous session
+          example: 120.01
+          readOnly: true
+        overnight_sell_quantity:
+          type: integer
+          format: int32
+          description: Quantity sold short in the previous session
+          example: 0
+          readOnly: true
+        day_sell_quantity:
+          type: integer
+          format: int32
+          description: Quantity sold during the day
+          example: 0
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity left after nullifying Day and CF buy quantity towards Day and CF sell quantity
+          example: 2
+          readOnly: true
+        last_price:
+          type: number
+          format: float
+          description: Last traded market price of the instrument
+          example: 120.01
+          readOnly: true
+        unrealised:
+          type: number
+          format: float
+          description: Day PnL generated against open positions
+          example: 121.01
+          readOnly: true
+        realised:
+          type: number
+          format: float
+          description: Day PnL generated against closed positions
+          example: 0
+          readOnly: true
+        sell_value:
+          type: number
+          format: float
+          description: Net value of the sold quantities
+          example: 0
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        close_price:
+          type: number
+          format: float
+          description: Closing price of the instrument from the last trading day
+          example: 102.0
+          readOnly: true
+        buy_price:
+          type: number
+          format: float
+          description: Average price at which quantities were bought
+          example: 102.0
+          readOnly: true
+        sell_price:
+          type: number
+          format: float
+          description: Average price at which quantities were sold
+          example: 102.0
+          readOnly: true
+    HoldingsData:
+      type: object
+      properties:
+        isin:
+          type: string
+          description: The standard ISIN representing stocks listed on multiple exchanges
+          example: INE118H01025
+          readOnly: true
+        cnc_used_quantity:
+          type: integer
+          format: int32
+          description: Quantity either blocked towards open or completed order
+          example: 0
+          readOnly: true
+        collateral_type:
+          type: string
+          description: Category of collateral assigned by RMS
+          example: WC
+          readOnly: true
+        company_name:
+          type: string
+          description: Name of the company
+          example: BSE LIM
+          readOnly: true
+        haircut:
+          type: number
+          format: float
+          description: This is the haircut percentage applied from RMS (applicable incase of collateral)
+          example: 0.23
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CO or OCO
+          example: D
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: The total holding qty
+          example: 1
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol of the instrument
+          example: BSE
+          readOnly: true
+        last_price:
+          type: number
+          format: float
+          description: The last traded price of the instrument
+          example: 120.01
+          readOnly: true
+        close_price:
+          type: number
+          format: float
+          description: Closing price of the instrument from the last trading day
+          example: 120.01
+          readOnly: true
+        pnl:
+          type: number
+          format: float
+          description: Profit and Loss
+          example: 120.01
+          readOnly: true
+        day_change:
+          type: number
+          format: float
+          description: Day's change in absolute value for the stock
+          example: 0
+          readOnly: true
+        day_change_percentage:
+          type: number
+          format: float
+          description: Day's change in percentage for the stock
+          example: 0
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Key issued by Upstox for the instrument
+          example: 151064324
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Average price at which the net holding quantity was acquired
+          example: 120.01
+          readOnly: true
+        collateral_quantity:
+          type: integer
+          format: int32
+          description: Quantity marked as collateral by RMS on users request
+          example: 0
+          readOnly: true
+        collateral_update_quantity:
+          type: integer
+          format: int32
+          example: 0
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: BSE
+          readOnly: true
+        t1_quantity:
+          type: integer
+          format: int32
+          description: Quantity on T+1 day after order execution
+          example: 0
+          readOnly: true
+        exchange:
+          type: string
+          description: Exchange of the trading symbol
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
+    GetHoldingsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for holdings
+          items:
+            $ref: '#/components/schemas/HoldingsData'
+    ConvertPositionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ConvertPositionData'
+          description: Response data for convert position request
+        errors:
+          type: array
+          description: Error details for convert position request
+          items:
+            $ref: '#/components/schemas/Problem'
+    GetPositionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for position details
+          items:
+            $ref: '#/components/schemas/PositionData'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    OrderMetadata:
+      type: object
+      properties:
+        latency:
+          type: integer
+          format: int64
+    ConvertPositionData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status message for convert position request
+          example: complete
+          readOnly: true
+    ConvertPositionRequest:
+      type: object
+      properties:
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: 151064324
+        new_product:
+          type: string
+          description: Indicates the new product to use for the convert positions
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+        old_product:
+          type: string
+          description: Indicates the old product to use for the convert positions
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: I
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy(b) or sell(s) order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the position to convert
+          example: 1
+      required:
+      - instrument_token
+      - new_product
+      - old_product
+      - quantity
+      - transaction_type
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

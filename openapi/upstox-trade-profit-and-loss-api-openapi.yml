@@ -1,0 +1,550 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Trade Profit And Loss API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Trade Profit And Loss
+paths:
+  /v2/trade/profit-loss/metadata:
+    get:
+      tags:
+      - Trade Profit And Loss
+      summary: Get profit and loss meta data on trades
+      description: This API gives the data of the realised Profit and Loss report requested by a user
+      operationId: getTradeWiseProfitAndLossMetaData
+      parameters:
+      - name: from_date
+        in: query
+        description: Date from which data needs to be fetched. from_date and to_date should fall under the same financial year as mentioned in financial_year attribute. Date in dd-mm-yyyy format
+        required: false
+        schema:
+          type: string
+        example: 01-04-2022
+      - name: to_date
+        in: query
+        description: Date till which data needs to be fetched. from_date and to_date should fall under the same financial year as mentioned in financial_year attribute. Date in dd-mm-yyyy format
+        required: false
+        schema:
+          type: string
+        example: 31-03-2023
+      - name: segment
+        in: query
+        description: Segment for which data is requested can be from the following options EQ - Equity,   FO - Futures and Options,   COM  - Commodity,   CD - Currency Derivatives
+        required: true
+        schema:
+          type: string
+        example: EQ
+      - name: financial_year
+        in: query
+        description: Financial year for which data has been requested. Concatenation of last 2 digits of from year and to year Sample:for 2021-2022, financial_year will be 2122
+        required: true
+        schema:
+          type: string
+          pattern: ^(0|[1-9][0-9]*)$
+        example: 2223
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1070 - The financial_year is required<br>UDAPI1067 - The ''segment'' is required<br>UDAPI1066 - The ''segment'' is invalid<br>UDAPI1073 - Financial year should have max length of 4<br>UDAPI1068 - The start_date is required<br>UDAPI1069 - The end_date is required<br>UDAPI1105 - The provided dates do not fall within the specified financial year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTradeWiseProfitAndLossMetaDataResponse'
+      security:
+      - OAUTH2: []
+  /v2/trade/profit-loss/data:
+    get:
+      tags:
+      - Trade Profit And Loss
+      summary: Get Trade-wise Profit and Loss Report Data
+      description: This API gives the data of the realised Profit and Loss report requested by a user
+      operationId: getTradeWiseProfitAndLossData
+      parameters:
+      - name: from_date
+        in: query
+        description: Date from which data needs to be fetched. from_date and to_date should fall under the same financial year as mentioned in financial_year attribute. Date in dd-mm-yyyy format
+        required: false
+        schema:
+          type: string
+        example: 01-04-2022
+      - name: to_date
+        in: query
+        description: Date till which data needs to be fetched. from_date and to_date should fall under the same financial year as mentioned in financial_year attribute. Date in dd-mm-yyyy format
+        required: false
+        schema:
+          type: string
+        example: 31-03-2023
+      - name: segment
+        in: query
+        description: Segment for which data is requested can be from the following options EQ - Equity,   FO - Futures and Options,   COM  - Commodity,   CD - Currency Derivatives
+        required: true
+        schema:
+          type: string
+        example: EQ
+      - name: financial_year
+        in: query
+        description: Financial year for which data has been requested. Concatenation of last 2 digits of from year and to year Sample:for 2021-2022, financial_year will be 2122
+        required: true
+        schema:
+          type: string
+          pattern: ^(0|[1-9][0-9]*)$
+        example: 2223
+      - name: page_number
+        in: query
+        description: Page Number, the pages are starting from 1
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: page_size
+        in: query
+        description: Page size for pagination. The maximum page size value is obtained from P and L report metadata API.
+        required: true
+        schema:
+          type: integer
+          format: int32
+          maximum: 5000
+          minimum: 1
+        example: 3000
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1070 - The financial_year is required<br>UDAPI1071 - The page_number is required<br>UDAPI1072 - The page_size is required<br>UDAPI1067 - The ''segment'' is required<br>UDAPI1066 - The ''segment'' is invalid<br>UDAPI1073 - Financial year should have max length of 4<br>UDAPI1106 - The page_size should be greater than or equal to 1<br>UDAPI1107 - The page_size should be less than or equal to 5000>br>UDAPI1105 - The given dates are not in the mentioned financial year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTradeWiseProfitAndLossDataResponse'
+      security:
+      - OAUTH2: []
+  /v2/trade/profit-loss/charges:
+    get:
+      tags:
+      - Trade Profit And Loss
+      summary: Get profit and loss on trades
+      description: This API gives the charges incurred by users for their trades
+      operationId: getProfitAndLossCharges
+      parameters:
+      - name: from_date
+        in: query
+        description: Date from which data needs to be fetched. from_date and to_date should fall under the same financial year as mentioned in financial_year attribute. Date in dd-mm-yyyy format
+        required: false
+        schema:
+          type: string
+        example: 01-04-2022
+      - name: to_date
+        in: query
+        description: Date till which data needs to be fetched. from_date and to_date should fall under the same financial year as mentioned in financial_year attribute. Date in dd-mm-yyyy format
+        required: false
+        schema:
+          type: string
+        example: 31-03-2023
+      - name: segment
+        in: query
+        description: Segment for which data is requested can be from the following options EQ - Equity,   FO - Futures and Options,   COM  - Commodity,   CD - Currency Derivatives
+        required: true
+        schema:
+          type: string
+        example: EQ
+      - name: financial_year
+        in: query
+        description: Financial year for which data has been requested. Concatenation of last 2 digits of from year and to year Sample:for 2021-2022, financial_year will be 2122
+        required: true
+        schema:
+          type: string
+          pattern: ^(0|[1-9][0-9]*)$
+        example: 2223
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1067 - The ''segment'' is required<br>UDAPI1066 - The ''segment'' is invalid<br>UDAPI1068 - The start_date is required<br>UDAPI1069 - The end_date is required<br>UDAPI1105 - The provided dates do not fall within the specified financial year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProfitAndLossChargesResponse'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    TradeWiseProfitAndLossData:
+      type: object
+      properties:
+        quantity:
+          type: number
+          format: float
+          description: The quantity of stock traded
+          example: 100
+          readOnly: true
+        isin:
+          type: string
+          description: ISIN of the stock
+          example: INE256A01028
+          readOnly: true
+        scrip_name:
+          type: string
+          description: Name of the scrip traded
+          example: ZEE ENTER
+          readOnly: true
+        trade_type:
+          type: string
+          description: 'FUT - Futures
+
+
+            OPT - Options
+
+
+            EQ - Equity'
+          example: EQ
+          readOnly: true
+        buy_date:
+          type: string
+          description: The date on which the stock was bought
+          example: 14-09-2021
+          readOnly: true
+        buy_average:
+          type: number
+          format: float
+          description: The average rate at which each quantity of the stock was bought
+          example: 12345.67
+          readOnly: true
+        sell_date:
+          type: string
+          description: The date on which the stock was sold
+          example: 14-09-2021
+          readOnly: true
+        sell_average:
+          type: number
+          format: float
+          description: The average rate at which each quantity of the stock was sold
+          example: 12345.67
+          readOnly: true
+        buy_amount:
+          type: number
+          format: float
+          description: Total buy amount
+          example: 12345.67
+          readOnly: true
+        sell_amount:
+          type: number
+          format: float
+          description: Total sell amount
+          example: 12345.67
+          readOnly: true
+    GetTradeWiseProfitAndLossDataResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for trade wise data details
+          items:
+            $ref: '#/components/schemas/TradeWiseProfitAndLossData'
+        metadata:
+          $ref: '#/components/schemas/ProfitAndLossMetaDataWrapper'
+    ProfitAndLossOtherChargesTaxes:
+      type: object
+      properties:
+        transaction:
+          type: number
+          format: float
+          description: transaction charges
+        clearing:
+          type: number
+          format: float
+          description: clearing charges
+        ipft:
+          type: number
+          format: float
+          description: IPF charges
+        others:
+          type: number
+          format: float
+          description: others charges
+        sebi_turnover:
+          type: number
+          format: float
+          description: SEBI turnover
+        demat_transaction:
+          type: number
+          format: float
+          description: demat transaction charges
+    ProfitAndLossMetaData:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+          description: pageNumber for pagination
+          example: 1
+          readOnly: true
+        page_size:
+          type: integer
+          format: int32
+          description: Page size
+          example: 2
+          readOnly: true
+    ProfitAndLossChargesWrapperData:
+      type: object
+      properties:
+        charges_breakdown:
+          $ref: '#/components/schemas/ProfitAndLossChargesData'
+          description: Response data for charges details
+    ProfitAndLossChargesData:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+          description: '  Total charges for the user'
+          example: 123.1
+          readOnly: true
+        brokerage:
+          type: number
+          format: float
+          description: Brokerage charges for the order
+          example: 432.1
+          readOnly: true
+        taxes:
+          $ref: '#/components/schemas/ProfitAndLossChargesTaxes'
+          description: Taxes levied on order
+          readOnly: true
+        charges:
+          $ref: '#/components/schemas/ProfitAndLossOtherChargesTaxes'
+          description: Other charges levied
+          readOnly: true
+    TradeWiseMetaData:
+      type: object
+      properties:
+        trades_count:
+          type: integer
+          format: int32
+          description: Total count of trades in the trade wise P and L report
+          example: 10
+          readOnly: true
+        page_size_limit:
+          type: integer
+          format: int32
+          description: Maximum number of trades in a page of the trade wise P and L report API
+          example: 5000
+          readOnly: true
+    ProfitAndLossMetaDataWrapper:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/ProfitAndLossMetaData'
+          description: Meta data for trade wise data details
+    GetProfitAndLossChargesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ProfitAndLossChargesWrapperData'
+          description: Response data for brokerage
+    ProfitAndLossChargesTaxes:
+      type: object
+      properties:
+        gst:
+          type: number
+          format: float
+          description: GST charges
+        stt:
+          type: number
+          format: float
+          description: STT charges
+        stamp_duty:
+          type: number
+          format: float
+          description: Stamp duty charges
+    GetTradeWiseProfitAndLossMetaDataResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/TradeWiseMetaData'
+          description: Response data for brokerage
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

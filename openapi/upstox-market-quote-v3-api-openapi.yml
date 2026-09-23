@@ -1,0 +1,409 @@
+openapi: 3.2.0
+info:
+  title: OpenAPI definition Market Quote V3 API
+  version: v0
+servers:
+- url: https://api-v2.upstox.com
+tags:
+- name: Market Quote V3
+paths:
+  /v3/market-quote/option-greek:
+    get:
+      tags:
+      - Market Quote V3
+      summary: Market quotes and instruments - Option Greek
+      description: This API provides the functionality to retrieve the Option Greek data for one or more instruments.This API returns the Option Greek data of up to 500 instruments in one go.
+      operationId: getMarketQuoteOptionGreek
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Comma separated list of instrument keys
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE009A01021
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1009 - symbol is required<br>UDAPI1011 - symbol is of invalid format<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMarketQuoteOptionGreekResponseV3'
+      security:
+      - OAUTH2: []
+  /v3/market-quote/ohlc:
+    get:
+      tags:
+      - Market Quote V3
+      summary: Market quotes and instruments - OHLC quotes
+      description: This API provides the functionality to retrieve the OHLC quotes for one or more instruments.This API returns the OHLC snapshots of up to 500 instruments in one go.
+      operationId: getMarketQuoteOHLCV3
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Comma separated list of instrument keys
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE009A01021
+      - name: interval
+        in: query
+        description: Interval to get ohlc data
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          pattern: ^(1d|I1|I30)$
+        example: 1d
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1009 - symbol is required<br>UDAPI1011 - symbol is of invalid format<br>UDAPI1027 - interval is required<br>UDAPI1028 - Invalid interval<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMarketQuoteOHLCResponseV3'
+      security:
+      - OAUTH2: []
+  /v3/market-quote/ltp:
+    get:
+      tags:
+      - Market Quote V3
+      summary: Market quotes and instruments - LTP quotes
+      description: This API provides the functionality to retrieve the LTP quotes for one or more instruments.This API returns the LTPs of up to 500 instruments in one go.
+      operationId: getLtp
+      parameters:
+      - name: instrument_key
+        in: query
+        description: Comma separated list of instrument keys
+        required: false
+        schema:
+          type: string
+        example: NSE_EQ|INE848E01016,NSE_EQ|INE009A01021
+      responses:
+        '405':
+          description: Method Not Allowed
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '400':
+          description: UDAPI1009 - symbol is required<br>UDAPI1011 - symbol is of invalid format<br>UDAPI100011 - Invalid Instrument key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '423':
+          description: Locked
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '429':
+          description: Too Many Requests
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiGatewayErrorResponse'
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMarketQuoteLastTradedPriceResponseV3'
+      security:
+      - OAUTH2: []
+components:
+  schemas:
+    GetMarketQuoteLastTradedPriceResponseV3:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbolLtpV3'
+    GetMarketQuoteOHLCResponseV3:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOHLCV3'
+    MarketQuoteOptionGreekV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+        instrument_token:
+          type: string
+        ltq:
+          type: integer
+          format: int64
+        volume:
+          type: integer
+          format: int64
+        cp:
+          type: number
+          format: double
+        iv:
+          type: number
+          format: double
+        vega:
+          type: number
+          format: double
+        gamma:
+          type: number
+          format: double
+        theta:
+          type: number
+          format: double
+        delta:
+          type: number
+          format: double
+        oi:
+          type: number
+          format: double
+    GetMarketQuoteOptionGreekResponseV3:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOptionGreekV3'
+    MarketQuoteOHLCV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        instrument_token:
+          type: string
+        prev_ohlc:
+          $ref: '#/components/schemas/OhlcV3'
+        live_ohlc:
+          $ref: '#/components/schemas/OhlcV3'
+    OhlcV3:
+      type: object
+      properties:
+        open:
+          type: number
+          format: double
+          description: The open price of the trading session
+          example: 120.01
+          readOnly: true
+        high:
+          type: number
+          format: double
+          description: The high price of the trading session
+          example: 121.0
+          readOnly: true
+        low:
+          type: number
+          format: double
+          description: The low price of the trading session
+          example: 119.0
+          readOnly: true
+        close:
+          type: number
+          format: double
+          description: The close price of the symbol from the previous session of trading
+          example: 120.0
+          readOnly: true
+        volume:
+          type: integer
+          format: int64
+          description: The volume of the symbol traded in the session
+          example: 2589075
+          readOnly: true
+        ts:
+          type: integer
+          format: int64
+          description: Starting timestamp of candle
+          example: 1743750900000
+          readOnly: true
+    MarketQuoteSymbolLtpV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+        instrument_token:
+          type: string
+        ltq:
+          type: integer
+          format: int64
+        volume:
+          type: integer
+          format: int64
+        cp:
+          type: number
+          format: double
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+  securitySchemes:
+    OAUTH2:
+      type: oauth2
+      scheme: BEARER
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api-v2.upstox.com/v2/login/authorization/dialog
+          tokenUrl: https://api-v2.upstox.com/v2/login/authorization/token
+          scopes:
+            read: Read access
+            write: Write access

@@ -1,0 +1,63 @@
+{
+  "provider": "upstox",
+  "sources": [
+    "_original/upstox-api-docs.json"
+  ],
+  "outputs": [
+    "upstox-charge-api-openapi.yml",
+    "upstox-expired-instrument-api-openapi.yml",
+    "upstox-fundamentals-api-openapi.yml",
+    "upstox-history-api-openapi.yml",
+    "upstox-history-v3-api-openapi.yml",
+    "upstox-ipo-api-openapi.yml",
+    "upstox-instruments-api-openapi.yml",
+    "upstox-login-api-openapi.yml",
+    "upstox-market-holidays-and-timings-api-openapi.yml",
+    "upstox-market-quote-api-openapi.yml",
+    "upstox-market-quote-v3-api-openapi.yml",
+    "upstox-mutual-fund-api-openapi.yml",
+    "upstox-news-api-openapi.yml",
+    "upstox-options-api-openapi.yml",
+    "upstox-order-api-openapi.yml",
+    "upstox-payments-api-openapi.yml",
+    "upstox-portfolio-api-openapi.yml",
+    "upstox-post-trade-api-openapi.yml",
+    "upstox-trade-profit-and-loss-api-openapi.yml",
+    "upstox-user-api-openapi.yml",
+    "upstox-websocket-api-openapi.yml",
+    "upstox-events-controller-v-2-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "upstox-api-docs.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "upstox-api-docs.json: declared missing tag: events-controller-v-2",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "upstox-charge-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-events-controller-v-2-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-expired-instrument-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-fundamentals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-history-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-history-v3-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-instruments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-ipo-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-login-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-market-holidays-and-timings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-market-quote-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-market-quote-v3-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-mutual-fund-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-news-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-options-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-order-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-payments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-portfolio-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-post-trade-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-trade-profit-and-loss-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-user-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "upstox-websocket-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
