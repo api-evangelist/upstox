@@ -110,41 +110,7 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    NewsItemData:
-      type: object
-      properties:
-        heading:
-          type: string
-        summary:
-          type: string
-        thumbnail:
-          type: string
-        article_link:
-          type: string
-        published_time:
-          type: integer
-          format: int64
-    NewsResponsePageData:
-      type: object
-      properties:
-        page_number:
-          type: integer
-          format: int32
-        page_size:
-          type: integer
-          format: int32
-        total_records:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-          format: int32
-    NewsResponseMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/NewsResponsePageData'
-    GetNewsResponse:
+    ApiGatewayErrorResponse:
       type: object
       properties:
         status:
@@ -153,14 +119,10 @@ components:
           - success
           - error
           - partial_success
-        data:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/NewsItemData'
-        metadata:
-          $ref: '#/components/schemas/NewsResponseMetaData'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     Problem:
       type: object
       properties:
@@ -183,7 +145,21 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    ApiGatewayErrorResponse:
+    NewsItemData:
+      type: object
+      properties:
+        heading:
+          type: string
+        summary:
+          type: string
+        thumbnail:
+          type: string
+        article_link:
+          type: string
+        published_time:
+          type: integer
+          format: int64
+    GetNewsResponse:
       type: object
       properties:
         status:
@@ -192,10 +168,34 @@ components:
           - success
           - error
           - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
+        data:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/NewsItemData'
+        metadata:
+          $ref: '#/components/schemas/NewsResponseMetaData'
+    NewsResponsePageData:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+    NewsResponseMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/NewsResponsePageData'
   securitySchemes:
     OAUTH2:
       type: oauth2

@@ -240,58 +240,6 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    Depth:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          format: int32
-          description: quantity
-        price:
-          type: number
-          format: double
-          description: price
-        orders:
-          type: integer
-          format: int32
-          description: orders
-    GetFullMarketQuoteResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteSymbol'
-    MarketQuoteOHLC:
-      type: object
-      properties:
-        ohlc:
-          $ref: '#/components/schemas/Ohlc'
-        last_price:
-          type: number
-          format: float
-          description: The last traded price of symbol
-          example: 120.01
-          readOnly: true
-        instrument_token:
-          type: string
-    MarketQuoteSymbolLtp:
-      type: object
-      properties:
-        last_price:
-          type: number
-          format: double
-          description: The last traded price of symbol
-          example: 120.01
-          readOnly: true
-        instrument_token:
-          type: string
     DepthMap:
       type: object
       properties:
@@ -309,59 +257,43 @@ components:
           items:
             $ref: '#/components/schemas/Depth'
           readOnly: true
-    Ohlc:
+    ApiGatewayErrorResponse:
       type: object
       properties:
-        open:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    MarketQuoteSymbolLtp:
+      type: object
+      properties:
+        last_price:
           type: number
           format: double
-          description: The open price of the trading session
+          description: The last traded price of symbol
           example: 120.01
           readOnly: true
-        high:
-          type: number
-          format: double
-          description: The high price of the trading session
-          example: 121.0
-          readOnly: true
-        low:
-          type: number
-          format: double
-          description: The low price of the trading session
-          example: 119.0
-          readOnly: true
-        close:
-          type: number
-          format: double
-          description: The close price of the symbol from the previous session of trading
-          example: 120.0
-          readOnly: true
-    GetMarketQuoteLastTradedPriceResponse:
+        instrument_token:
+          type: string
+    MarketQuoteOHLC:
       type: object
       properties:
-        status:
+        ohlc:
+          $ref: '#/components/schemas/Ohlc'
+        last_price:
+          type: number
+          format: float
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        instrument_token:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteSymbolLtp'
-    GetMarketQuoteOHLCResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteOHLC'
     Problem:
       type: object
       properties:
@@ -475,7 +407,34 @@ components:
           format: double
           example: 0
           readOnly: true
-    ApiGatewayErrorResponse:
+    Ohlc:
+      type: object
+      properties:
+        open:
+          type: number
+          format: double
+          description: The open price of the trading session
+          example: 120.01
+          readOnly: true
+        high:
+          type: number
+          format: double
+          description: The high price of the trading session
+          example: 121.0
+          readOnly: true
+        low:
+          type: number
+          format: double
+          description: The low price of the trading session
+          example: 119.0
+          readOnly: true
+        close:
+          type: number
+          format: double
+          description: The close price of the symbol from the previous session of trading
+          example: 120.0
+          readOnly: true
+    GetMarketQuoteOHLCResponse:
       type: object
       properties:
         status:
@@ -484,10 +443,51 @@ components:
           - success
           - error
           - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOHLC'
+    GetMarketQuoteLastTradedPriceResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbolLtp'
+    GetFullMarketQuoteResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbol'
+    Depth:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: quantity
+        price:
+          type: number
+          format: double
+          description: price
+        orders:
+          type: integer
+          format: int32
+          description: orders
   securitySchemes:
     OAUTH2:
       type: oauth2

@@ -155,6 +155,63 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    MarketData:
+      type: object
+      properties:
+        ltp:
+          type: number
+          format: double
+        volume:
+          type: integer
+          format: int64
+        oi:
+          type: number
+          format: double
+        close_price:
+          type: number
+          format: double
+        bid_price:
+          type: number
+          format: double
+        bid_qty:
+          type: integer
+          format: int32
+        ask_price:
+          type: number
+          format: double
+        ask_qty:
+          type: integer
+          format: int32
+        prev_oi:
+          type: number
+          format: double
+    GetOptionContractResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option contracts
+          items:
+            $ref: '#/components/schemas/InstrumentData'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     InstrumentData:
       type: object
       properties:
@@ -245,6 +302,42 @@ components:
           type: string
         cas_eligible:
           type: boolean
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GetOptionChainResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option chain data
+          items:
+            $ref: '#/components/schemas/OptionStrikeData'
     PutCallOptionChainData:
       type: object
       properties:
@@ -275,50 +368,6 @@ components:
           $ref: '#/components/schemas/PutCallOptionChainData'
         put_options:
           $ref: '#/components/schemas/PutCallOptionChainData'
-    MarketData:
-      type: object
-      properties:
-        ltp:
-          type: number
-          format: double
-        volume:
-          type: integer
-          format: int64
-        oi:
-          type: number
-          format: double
-        close_price:
-          type: number
-          format: double
-        bid_price:
-          type: number
-          format: double
-        bid_qty:
-          type: integer
-          format: int32
-        ask_price:
-          type: number
-          format: double
-        ask_qty:
-          type: integer
-          format: int32
-        prev_oi:
-          type: number
-          format: double
-    GetOptionChainResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option chain data
-          items:
-            $ref: '#/components/schemas/OptionStrikeData'
     AnalyticsData:
       type: object
       properties:
@@ -340,55 +389,6 @@ components:
         pop:
           type: number
           format: double
-    GetOptionContractResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option contracts
-          items:
-            $ref: '#/components/schemas/InstrumentData'
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
   securitySchemes:
     OAUTH2:
       type: oauth2

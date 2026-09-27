@@ -383,6 +383,65 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    PayoutDetails:
+      type: object
+      properties:
+        status:
+          type: string
+        mode:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        eta:
+          type: string
+        message:
+          type: string
+        transaction_id:
+          type: string
+        created_at:
+          type: string
+        bank_name:
+          type: string
+        transaction_fee:
+          type: string
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
     PaymentHistoryData:
       type: object
       properties:
@@ -412,8 +471,7 @@ components:
           type: string
         created_at:
           type: string
-    PayoutModesData: {}
-    PayoutModesResponse:
+    PayoutDetailsResponse:
       type: object
       properties:
         status:
@@ -423,21 +481,8 @@ components:
           - error
           - partial_success
         data:
-          $ref: '#/components/schemas/PayoutModesData'
-          description: Available payout modes with eligibility details
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
+          $ref: '#/components/schemas/PayoutDetails'
+          description: Response data for initiate payout request
     InitiatePayoutRequest:
       type: object
       properties:
@@ -456,31 +501,8 @@ components:
       required:
       - amount
       - mode
-    PayoutDetails:
-      type: object
-      properties:
-        status:
-          type: string
-        mode:
-          type: string
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        eta:
-          type: string
-        message:
-          type: string
-        transaction_id:
-          type: string
-        created_at:
-          type: string
-        bank_name:
-          type: string
-        transaction_fee:
-          type: string
-    PayoutDetailsResponse:
+    PayoutModesData: {}
+    PayoutModesResponse:
       type: object
       properties:
         status:
@@ -490,30 +512,8 @@ components:
           - error
           - partial_success
         data:
-          $ref: '#/components/schemas/PayoutDetails'
-          description: Response data for initiate payout request
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
+          $ref: '#/components/schemas/PayoutModesData'
+          description: Available payout modes with eligibility details
     ModifyPayoutRequest:
       type: object
       properties:

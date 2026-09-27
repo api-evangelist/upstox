@@ -327,6 +327,46 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    GetOptionContractResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option contracts
+          items:
+            $ref: '#/components/schemas/InstrumentData'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    GetExpiredFuturesContractResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpiredFutureData'
     InstrumentData:
       type: object
       properties:
@@ -417,41 +457,6 @@ components:
           type: string
         cas_eligible:
           type: boolean
-    HistoricalCandleData:
-      type: object
-      properties:
-        candles:
-          type: array
-          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
-          items:
-            type: array
-            items: {}
-          readOnly: true
-    GetHistoricalCandleResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/HistoricalCandleData'
-          description: Get OHLC values for all instruments across various timeframes
-    GetExpiriesResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          items:
-            type: string
     ExpiredFutureData:
       type: object
       properties:
@@ -519,20 +524,6 @@ components:
           format: int64
           description: Minimum lot size
           example: 25
-    GetOptionContractResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option contracts
-          items:
-            $ref: '#/components/schemas/InstrumentData'
     Problem:
       type: object
       properties:
@@ -555,7 +546,29 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    GetExpiredFuturesContractResponse:
+    HistoricalCandleData:
+      type: object
+      properties:
+        candles:
+          type: array
+          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
+          items:
+            type: array
+            items: {}
+          readOnly: true
+    GetHistoricalCandleResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/HistoricalCandleData'
+          description: Get OHLC values for all instruments across various timeframes
+    GetExpiriesResponse:
       type: object
       properties:
         status:
@@ -567,20 +580,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ExpiredFutureData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
+            type: string
   securitySchemes:
     OAUTH2:
       type: oauth2

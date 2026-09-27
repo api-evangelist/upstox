@@ -251,7 +251,7 @@ paths:
                 $ref: '#/components/schemas/GetIntraDayCandleResponse'
 components:
   schemas:
-    GetHistoricalCandleResponse:
+    ApiGatewayErrorResponse:
       type: object
       properties:
         status:
@@ -260,41 +260,10 @@ components:
           - success
           - error
           - partial_success
-        data:
-          $ref: '#/components/schemas/HistoricalCandleData'
-          description: Get OHLC values for all instruments across various timeframes
-    GetIntraDayCandleResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/IntraDayCandleData'
-          description: Get OHLC values for all instruments across various timeframes
-    IntraDayCandleData:
-      type: object
-      properties:
-        candles:
+        errors:
           type: array
-          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
           items:
-            type: array
-            items: {}
-          readOnly: true
-    HistoricalCandleData:
-      type: object
-      properties:
-        candles:
-          type: array
-          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
-          items:
-            type: array
-            items: {}
-          readOnly: true
+            $ref: '#/components/schemas/Problem'
     Problem:
       type: object
       properties:
@@ -317,7 +286,7 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    ApiGatewayErrorResponse:
+    GetHistoricalCandleResponse:
       type: object
       properties:
         status:
@@ -326,10 +295,41 @@ components:
           - success
           - error
           - partial_success
-        errors:
+        data:
+          $ref: '#/components/schemas/HistoricalCandleData'
+          description: Get OHLC values for all instruments across various timeframes
+    HistoricalCandleData:
+      type: object
+      properties:
+        candles:
           type: array
+          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
           items:
-            $ref: '#/components/schemas/Problem'
+            type: array
+            items: {}
+          readOnly: true
+    IntraDayCandleData:
+      type: object
+      properties:
+        candles:
+          type: array
+          example: '[[<br>        "2022-11-21T00:00:00+05:30",<br>        37.4,<br>        37.8,<br>        36.95,<br>        37.6,<br>        5539471,<br>        0<br>      ]]'
+          items:
+            type: array
+            items: {}
+          readOnly: true
+    GetIntraDayCandleResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IntraDayCandleData'
+          description: Get OHLC values for all instruments across various timeframes
   securitySchemes:
     OAUTH2:
       type: oauth2

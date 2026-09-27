@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: OpenAPI definition Websocket API
+  title: OpenAPI definition WebSocket API
   version: v0
 servers:
 - url: https://api-v2.upstox.com
@@ -251,26 +251,6 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    WebsocketAuthRedirectResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/WebsocketAuthRedirectResponseData'
-          description: Response data for WebsocketAuthRedirectResponse
-    WebsocketAuthRedirectResponseData:
-      type: object
-      properties:
-        authorizedRedirectUri:
-          type: string
-          deprecated: true
-        authorized_redirect_uri:
-          type: string
     Problem:
       type: object
       properties:
@@ -306,6 +286,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Problem'
+    WebsocketAuthRedirectResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/WebsocketAuthRedirectResponseData'
+          description: Response data for WebsocketAuthRedirectResponse
+    WebsocketAuthRedirectResponseData:
+      type: object
+      properties:
+        authorizedRedirectUri:
+          type: string
+          deprecated: true
+        authorized_redirect_uri:
+          type: string
   securitySchemes:
     OAUTH2:
       type: oauth2

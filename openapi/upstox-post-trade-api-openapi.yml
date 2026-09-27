@@ -109,22 +109,7 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    TradeHistoryResponsePageData:
-      type: object
-      properties:
-        page_number:
-          type: integer
-          format: int32
-        page_size:
-          type: integer
-          format: int32
-        total_records:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-          format: int32
-    TradeHistoryResponse:
+    ApiGatewayErrorResponse:
       type: object
       properties:
         status:
@@ -133,12 +118,15 @@ components:
           - success
           - error
           - partial_success
-        data:
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
-        metaData:
-          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
+            $ref: '#/components/schemas/Problem'
+    TradeHistoryResponseMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/TradeHistoryResponsePageData'
     Problem:
       type: object
       properties:
@@ -161,11 +149,21 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    TradeHistoryResponseMetaData:
+    TradeHistoryResponsePageData:
       type: object
       properties:
-        page:
-          $ref: '#/components/schemas/TradeHistoryResponsePageData'
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
     TradeHistoryResponseTradeData:
       type: object
       properties:
@@ -202,7 +200,7 @@ components:
           type: string
         instrument_token:
           type: string
-    ApiGatewayErrorResponse:
+    TradeHistoryResponse:
       type: object
       properties:
         status:
@@ -211,10 +209,12 @@ components:
           - success
           - error
           - partial_success
-        errors:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/Problem'
+            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
+        metaData:
+          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
   securitySchemes:
     OAUTH2:
       type: oauth2

@@ -653,6 +653,19 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     BalanceSheetData:
       type: object
       properties:
@@ -682,44 +695,6 @@ components:
           description: List of financial statement balance sheet items with historical values
           items:
             $ref: '#/components/schemas/FinancialStatementEntry'
-          readOnly: true
-    CompetitorData:
-      type: object
-      properties:
-        company_profile:
-          type: string
-          description: Business description of the company
-          readOnly: true
-        sector:
-          type: string
-          description: Sector the company belongs to
-          example: Refineries
-          readOnly: true
-        sector_market_cap_inr:
-          $ref: '#/components/schemas/SectorMarketCapAmount'
-          description: Sector market capitalisation in INR
-          readOnly: true
-        sector_market_cap_usd:
-          $ref: '#/components/schemas/SectorMarketCapAmount'
-          description: Sector market capitalisation in USD
-          readOnly: true
-        instrument_key:
-          type: string
-          description: Instrument key of the competitor company
-          example: NSE_EQ|INE029A01011
-          readOnly: true
-    CorporateActionEventDetail:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the event detail field
-          example: Announcement date
-          readOnly: true
-        value:
-          type: string
-          description: Value of the event detail field
-          example: 25
           readOnly: true
     CorporateActionData:
       type: object
@@ -751,171 +726,6 @@ components:
           items:
             $ref: '#/components/schemas/CorporateActionEventDetail'
           readOnly: true
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    BalanceSheetResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/BalanceSheetData'
-    CashFlowEntry:
-      type: object
-      properties:
-        category:
-          type: string
-          description: 'Type of cash flow: Operating, Investing, or Financing'
-          example: Operating
-          readOnly: true
-        history:
-          type: array
-          description: Historical cash flow values for this type
-          items:
-            $ref: '#/components/schemas/HistoryItem'
-          readOnly: true
-    IncomeStatementData:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'Report type: consolidated or standalone'
-          example: consolidated
-          readOnly: true
-        time_period:
-          type: string
-          description: 'Time period: yearly or quarterly'
-          example: yearly
-          readOnly: true
-        units_in:
-          type: string
-          description: Unit of monetary values
-          example: crore
-          readOnly: true
-        income_statement:
-          type: array
-          description: Income statement entries grouped by type (Revenue, Operating profit, Net profit)
-          items:
-            $ref: '#/components/schemas/IncomeStatementEntry'
-          readOnly: true
-        full_statement:
-          type: array
-          description: List of financial statement income statement items with historical values
-          items:
-            $ref: '#/components/schemas/FinancialStatementEntry'
-          readOnly: true
-    CorporateActionsResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CorporateActionData'
-    SectorMarketCapAmount:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-          description: Numeric value of the market capitalisation
-          example: 208.84
-          readOnly: true
-        unit:
-          type: string
-          description: Unit of the market capitalisation value
-          example: billion
-          readOnly: true
-        formatted:
-          type: string
-          description: Human-readable formatted market capitalisation
-          example: $208.84B
-          readOnly: true
-    IncomeStatementResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/IncomeStatementData'
-    IncomeStatementEntry:
-      type: object
-      properties:
-        category:
-          type: string
-          description: 'Type of income statement entry: Revenue, Operating profit, or Net profit'
-          example: Revenue
-          readOnly: true
-        history:
-          type: array
-          description: Historical values for this income statement type
-          items:
-            $ref: '#/components/schemas/HistoryItem'
-          readOnly: true
-    KeyRatioData:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the ratio
-          example: P/E
-          readOnly: true
-        company_value:
-          type: string
-          description: Ratio value for the company
-          example: 20.15
-          readOnly: true
-        sector_value:
-          type: string
-          description: Ratio value for the sector reference
-          example: 12.46
-          readOnly: true
     CashFlowData:
       type: object
       properties:
@@ -946,6 +756,139 @@ components:
           items:
             $ref: '#/components/schemas/FinancialStatementEntry'
           readOnly: true
+    CashFlowResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CashFlowData'
+    CompetitorData:
+      type: object
+      properties:
+        company_profile:
+          type: string
+          description: Business description of the company
+          readOnly: true
+        sector:
+          type: string
+          description: Sector the company belongs to
+          example: Refineries
+          readOnly: true
+        sector_market_cap_inr:
+          $ref: '#/components/schemas/SectorMarketCapAmount'
+          description: Sector market capitalisation in INR
+          readOnly: true
+        sector_market_cap_usd:
+          $ref: '#/components/schemas/SectorMarketCapAmount'
+          description: Sector market capitalisation in USD
+          readOnly: true
+        instrument_key:
+          type: string
+          description: Instrument key of the competitor company
+          example: NSE_EQ|INE029A01011
+          readOnly: true
+    BalanceSheetResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/BalanceSheetData'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    KeyRatioData:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the ratio
+          example: P/E
+          readOnly: true
+        company_value:
+          type: string
+          description: Ratio value for the company
+          example: 20.15
+          readOnly: true
+        sector_value:
+          type: string
+          description: Ratio value for the sector reference
+          example: 12.46
+          readOnly: true
+    SectorMarketCapAmount:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          description: Numeric value of the market capitalisation
+          example: 208.84
+          readOnly: true
+        unit:
+          type: string
+          description: Unit of the market capitalisation value
+          example: billion
+          readOnly: true
+        formatted:
+          type: string
+          description: Human-readable formatted market capitalisation
+          example: $208.84B
+          readOnly: true
+    IncomeStatementEntry:
+      type: object
+      properties:
+        category:
+          type: string
+          description: 'Type of income statement entry: Revenue, Operating profit, or Net profit'
+          example: Revenue
+          readOnly: true
+        history:
+          type: array
+          description: Historical values for this income statement type
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+          readOnly: true
+    ShareHoldingsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShareHoldingData'
     HistoryItem:
       type: object
       properties:
@@ -964,6 +907,77 @@ components:
           type: string
           description: Percentage change compared to previous period
           example: +7.29%
+          readOnly: true
+    KeyRatiosResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyRatioData'
+    CompanyProfileResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CompanyProfileData'
+    CashFlowEntry:
+      type: object
+      properties:
+        category:
+          type: string
+          description: 'Type of cash flow: Operating, Investing, or Financing'
+          example: Operating
+          readOnly: true
+        history:
+          type: array
+          description: Historical cash flow values for this type
+          items:
+            $ref: '#/components/schemas/HistoryItem'
+          readOnly: true
+    BalanceSheetHistoryItem:
+      type: object
+      properties:
+        total_asset:
+          type: number
+          format: double
+          description: Total assets in the reported period
+          example: 1755986.0
+          readOnly: true
+        total_liability:
+          type: number
+          format: double
+          description: Total liabilities in the reported period
+          example: 830198.0
+          readOnly: true
+        period:
+          type: string
+          description: Reporting period
+          example: Mar 2024
+          readOnly: true
+    CorporateActionEventDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the event detail field
+          example: Announcement date
+          readOnly: true
+        value:
+          type: string
+          description: Value of the event detail field
+          example: 25
           readOnly: true
     CompanyProfileData:
       type: object
@@ -999,63 +1013,36 @@ components:
           items:
             $ref: '#/components/schemas/HistoryItem'
           readOnly: true
-    BalanceSheetHistoryItem:
+    IncomeStatementData:
       type: object
       properties:
-        total_asset:
-          type: number
-          format: double
-          description: Total assets in the reported period
-          example: 1755986.0
-          readOnly: true
-        total_liability:
-          type: number
-          format: double
-          description: Total liabilities in the reported period
-          example: 830198.0
-          readOnly: true
-        period:
+        type:
           type: string
-          description: Reporting period
-          example: Mar 2024
+          description: 'Report type: consolidated or standalone'
+          example: consolidated
           readOnly: true
-    ShareHoldingsResponse:
-      type: object
-      properties:
-        status:
+        time_period:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
+          description: 'Time period: yearly or quarterly'
+          example: yearly
+          readOnly: true
+        units_in:
+          type: string
+          description: Unit of monetary values
+          example: crore
+          readOnly: true
+        income_statement:
           type: array
+          description: Income statement entries grouped by type (Revenue, Operating profit, Net profit)
           items:
-            $ref: '#/components/schemas/ShareHoldingData'
-    CashFlowResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/CashFlowData'
-    KeyRatiosResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
+            $ref: '#/components/schemas/IncomeStatementEntry'
+          readOnly: true
+        full_statement:
           type: array
+          description: List of financial statement income statement items with historical values
           items:
-            $ref: '#/components/schemas/KeyRatioData'
+            $ref: '#/components/schemas/FinancialStatementEntry'
+          readOnly: true
     ShareHoldingData:
       type: object
       properties:
@@ -1070,7 +1057,7 @@ components:
           items:
             $ref: '#/components/schemas/HistoryItem'
           readOnly: true
-    CompanyProfileResponse:
+    CorporateActionsResponse:
       type: object
       properties:
         status:
@@ -1080,7 +1067,20 @@ components:
           - error
           - partial_success
         data:
-          $ref: '#/components/schemas/CompanyProfileData'
+          type: array
+          items:
+            $ref: '#/components/schemas/CorporateActionData'
+    IncomeStatementResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IncomeStatementData'
     CompetitorsResponse:
       type: object
       properties:

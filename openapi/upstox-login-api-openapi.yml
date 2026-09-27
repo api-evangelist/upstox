@@ -296,6 +296,19 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     IndieUserTokenRequest:
       type: object
       properties:
@@ -308,95 +321,18 @@ components:
         otp_verification_disabled:
           type: boolean
           description: To enable/disable otp auth flow
-    OAuthClientException:
+    LogoutResponse:
       type: object
       properties:
-        cause:
-          type: object
-          properties:
-            stackTrace:
-              type: array
-              items:
-                type: object
-                properties:
-                  classLoaderName:
-                    type: string
-                  moduleName:
-                    type: string
-                  moduleVersion:
-                    type: string
-                  methodName:
-                    type: string
-                  fileName:
-                    type: string
-                  lineNumber:
-                    type: integer
-                    format: int32
-                  className:
-                    type: string
-                  nativeMethod:
-                    type: boolean
-            message:
-              type: string
-            localizedMessage:
-              type: string
-        stackTrace:
-          type: array
-          items:
-            type: object
-            properties:
-              classLoaderName:
-                type: string
-              moduleName:
-                type: string
-              moduleVersion:
-                type: string
-              methodName:
-                type: string
-              fileName:
-                type: string
-              lineNumber:
-                type: integer
-                format: int32
-              className:
-                type: string
-              nativeMethod:
-                type: boolean
-        message:
+        status:
           type: string
-        suppressed:
-          type: array
-          items:
-            type: object
-            properties:
-              stackTrace:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    classLoaderName:
-                      type: string
-                    moduleName:
-                      type: string
-                    moduleVersion:
-                      type: string
-                    methodName:
-                      type: string
-                    fileName:
-                      type: string
-                    lineNumber:
-                      type: integer
-                      format: int32
-                    className:
-                      type: string
-                    nativeMethod:
-                      type: boolean
-              message:
-                type: string
-              localizedMessage:
-                type: string
-        localizedMessage:
-          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: boolean
+          description: Logout status
     TokenResponse:
       type: object
       properties:
@@ -507,18 +443,6 @@ components:
           format: int32
           description: The number of seconds until the refresh token expires
           readOnly: true
-    LogoutResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: boolean
-          description: Logout status
     Problem:
       type: object
       properties:
@@ -541,6 +465,95 @@ components:
         property_path:
           type: string
         invalid_value: {}
+    OAuthClientException:
+      type: object
+      properties:
+        cause:
+          type: object
+          properties:
+            stackTrace:
+              type: array
+              items:
+                type: object
+                properties:
+                  classLoaderName:
+                    type: string
+                  moduleName:
+                    type: string
+                  moduleVersion:
+                    type: string
+                  methodName:
+                    type: string
+                  fileName:
+                    type: string
+                  lineNumber:
+                    type: integer
+                    format: int32
+                  className:
+                    type: string
+                  nativeMethod:
+                    type: boolean
+            message:
+              type: string
+            localizedMessage:
+              type: string
+        stackTrace:
+          type: array
+          items:
+            type: object
+            properties:
+              classLoaderName:
+                type: string
+              moduleName:
+                type: string
+              moduleVersion:
+                type: string
+              methodName:
+                type: string
+              fileName:
+                type: string
+              lineNumber:
+                type: integer
+                format: int32
+              className:
+                type: string
+              nativeMethod:
+                type: boolean
+        message:
+          type: string
+        suppressed:
+          type: array
+          items:
+            type: object
+            properties:
+              stackTrace:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    classLoaderName:
+                      type: string
+                    moduleName:
+                      type: string
+                    moduleVersion:
+                      type: string
+                    methodName:
+                      type: string
+                    fileName:
+                      type: string
+                    lineNumber:
+                      type: integer
+                      format: int32
+                    className:
+                      type: string
+                    nativeMethod:
+                      type: boolean
+              message:
+                type: string
+              localizedMessage:
+                type: string
+        localizedMessage:
+          type: string
     TokenRequest:
       type: object
       properties:
@@ -572,19 +585,6 @@ components:
       - code
       - grant_type
       - redirect_uri
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
   securitySchemes:
     OAUTH2:
       type: oauth2

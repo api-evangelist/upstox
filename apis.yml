@@ -13,6 +13,22 @@ description: >-
   giving AI agents read-only access to a user's holdings, orders, positions, mutual funds, funds and
   profile, and publishes an official Agent Skill and Claude plugin marketplace alongside first-party
   SDKs for Python, Node.js, Java, PHP and .NET.
+deliveryModel:
+  model: saas
+  license_evidence:
+    not_product:
+    - upstox/mcp-server-upstox-api
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 image: https://assets.upstox.com/website/images/upstox-new-logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/upstox/refs/heads/main/apis.yml
 x-type: company
@@ -27,7 +43,7 @@ created: '2026-09-02'
 modified: '2026-09-02'
 tags:
 - Company
-- Financial-Services
+- Financial Services
 - Stock Trading
 - Brokerage
 - Market Data
@@ -47,6 +63,7 @@ tags_raw:
 - Mutual Funds
 - Algorithmic Trading
 - India
+- Financial-Services
 apis:
 - aid: upstox:upstox-mcp-server
   name: Upstox MCP Server

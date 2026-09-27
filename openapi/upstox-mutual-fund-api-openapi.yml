@@ -304,6 +304,58 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    MutualFundMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GetMutualFundOrderDetailsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MutualFundOrderData'
+          description: Mutual fund order details.
     GetMutualFundSipsResponse:
       type: object
       properties:
@@ -321,26 +373,23 @@ components:
         meta_data:
           $ref: '#/components/schemas/MutualFundMetaData'
           description: Meta data for mutual fund sips
-    Pagination:
+    GetMutualFundOrdersResponse:
       type: object
       properties:
-        page_number:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-          format: int32
-        records:
-          type: integer
-          format: int32
-        total_records:
-          type: integer
-          format: int32
-    MutualFundMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Pagination'
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Mutual fund orders in the requested window.
+          items:
+            $ref: '#/components/schemas/MutualFundOrderData'
+        meta_data:
+          $ref: '#/components/schemas/MutualFundMetaData'
+          description: Meta data for mutual fund orders
     MutualFundOrderData:
       type: object
       properties:
@@ -406,6 +455,56 @@ components:
         last_price_date:
           type: string
           description: Date for which last NAV is available.
+    MutualFundHoldingData:
+      type: object
+      properties:
+        folio:
+          type: string
+          description: Folio number when available.
+        fund:
+          type: string
+          description: Fund display name when available.
+        pnl:
+          type: number
+          format: double
+          description: Unrealized P/L.
+        quantity:
+          type: number
+          format: double
+          description: Units held.
+        instrument_key:
+          type: string
+          description: ISIN of the fund, when available.
+        average_price:
+          type: number
+          format: double
+          description: Average cost per unit.
+        last_price:
+          type: number
+          format: double
+          description: Last available NAV.
+        last_price_date:
+          type: string
+          description: Date for which last NAV is available.
+        pledged_quantity:
+          type: number
+          format: double
+          description: Units pledged as collateral when applicable.
+    Pagination:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+        records:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
     MutualFundSipData:
       type: object
       properties:
@@ -469,54 +568,6 @@ components:
         sip_type:
           type: string
           description: SIP channel/type (e.g. sip, amc_sip).
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    MutualFundHoldingData:
-      type: object
-      properties:
-        folio:
-          type: string
-          description: Folio number when available.
-        fund:
-          type: string
-          description: Fund display name when available.
-        pnl:
-          type: number
-          format: double
-          description: Unrealized P/L.
-        quantity:
-          type: number
-          format: double
-          description: Units held.
-        instrument_key:
-          type: string
-          description: ISIN of the fund, when available.
-        average_price:
-          type: number
-          format: double
-          description: Average cost per unit.
-        last_price:
-          type: number
-          format: double
-          description: Last available NAV.
-        last_price_date:
-          type: string
-          description: Date for which last NAV is available.
-        pledged_quantity:
-          type: number
-          format: double
-          description: Units pledged as collateral when applicable.
     GetMutualFundHoldingsResponse:
       type: object
       properties:
@@ -531,57 +582,6 @@ components:
           description: Mutual fund holdings.
           items:
             $ref: '#/components/schemas/MutualFundHoldingData'
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    GetMutualFundOrderDetailsResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/MutualFundOrderData'
-          description: Mutual fund order details.
-    GetMutualFundOrdersResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Mutual fund orders in the requested window.
-          items:
-            $ref: '#/components/schemas/MutualFundOrderData'
-        meta_data:
-          $ref: '#/components/schemas/MutualFundMetaData'
-          description: Meta data for mutual fund orders
   securitySchemes:
     OAUTH2:
       type: oauth2
