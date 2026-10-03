@@ -291,96 +291,21 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    TradeWiseMetaData:
+    ProfitAndLossChargesTaxes:
       type: object
       properties:
-        trades_count:
-          type: integer
-          format: int32
-          description: Total count of trades in the trade wise P and L report
-          example: 10
-          readOnly: true
-        page_size_limit:
-          type: integer
-          format: int32
-          description: Maximum number of trades in a page of the trade wise P and L report API
-          example: 5000
-          readOnly: true
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    GetTradeWiseProfitAndLossMetaDataResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/TradeWiseMetaData'
-          description: Response data for brokerage
-    ProfitAndLossChargesWrapperData:
-      type: object
-      properties:
-        charges_breakdown:
-          $ref: '#/components/schemas/ProfitAndLossChargesData'
-          description: Response data for charges details
-    GetTradeWiseProfitAndLossDataResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for trade wise data details
-          items:
-            $ref: '#/components/schemas/TradeWiseProfitAndLossData'
-        metadata:
-          $ref: '#/components/schemas/ProfitAndLossMetaDataWrapper'
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    ProfitAndLossMetaDataWrapper:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/ProfitAndLossMetaData'
-          description: Meta data for trade wise data details
+        gst:
+          type: number
+          format: float
+          description: GST charges
+        stt:
+          type: number
+          format: float
+          description: STT charges
+        stamp_duty:
+          type: number
+          format: float
+          description: Stamp duty charges
     TradeWiseProfitAndLossData:
       type: object
       properties:
@@ -445,44 +370,123 @@ components:
           description: Total sell amount
           example: 12345.67
           readOnly: true
-    ProfitAndLossChargesData:
+    ProfitAndLossChargesWrapperData:
       type: object
       properties:
-        total:
-          type: number
-          format: float
-          description: '  Total charges for the user'
-          example: 123.1
-          readOnly: true
-        brokerage:
-          type: number
-          format: float
-          description: Brokerage charges for the order
-          example: 432.1
-          readOnly: true
-        taxes:
-          $ref: '#/components/schemas/ProfitAndLossChargesTaxes'
-          description: Taxes levied on order
-          readOnly: true
-        charges:
-          $ref: '#/components/schemas/ProfitAndLossOtherChargesTaxes'
-          description: Other charges levied
-          readOnly: true
-    ProfitAndLossChargesTaxes:
+        charges_breakdown:
+          $ref: '#/components/schemas/ProfitAndLossChargesData'
+          description: Response data for charges details
+    Problem:
       type: object
       properties:
-        gst:
-          type: number
-          format: float
-          description: GST charges
-        stt:
-          type: number
-          format: float
-          description: STT charges
-        stamp_duty:
-          type: number
-          format: float
-          description: Stamp duty charges
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ProfitAndLossMetaDataWrapper:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/ProfitAndLossMetaData'
+          description: Meta data for trade wise data details
+    ProfitAndLossMetaData:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+          description: pageNumber for pagination
+          example: 1
+          readOnly: true
+        page_size:
+          type: integer
+          format: int32
+          description: Page size
+          example: 2
+          readOnly: true
+    GetTradeWiseProfitAndLossDataResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for trade wise data details
+          items:
+            $ref: '#/components/schemas/TradeWiseProfitAndLossData'
+        metadata:
+          $ref: '#/components/schemas/ProfitAndLossMetaDataWrapper'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    GetProfitAndLossChargesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ProfitAndLossChargesWrapperData'
+          description: Response data for brokerage
+    GetTradeWiseProfitAndLossMetaDataResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/TradeWiseMetaData'
+          description: Response data for brokerage
+    TradeWiseMetaData:
+      type: object
+      properties:
+        trades_count:
+          type: integer
+          format: int32
+          description: Total count of trades in the trade wise P and L report
+          example: 10
+          readOnly: true
+        page_size_limit:
+          type: integer
+          format: int32
+          description: Maximum number of trades in a page of the trade wise P and L report API
+          example: 5000
+          readOnly: true
     ProfitAndLossOtherChargesTaxes:
       type: object
       properties:
@@ -510,32 +514,28 @@ components:
           type: number
           format: float
           description: demat transaction charges
-    GetProfitAndLossChargesResponse:
+    ProfitAndLossChargesData:
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/ProfitAndLossChargesWrapperData'
-          description: Response data for brokerage
-    ProfitAndLossMetaData:
-      type: object
-      properties:
-        page_number:
-          type: integer
-          format: int32
-          description: pageNumber for pagination
-          example: 1
+        total:
+          type: number
+          format: float
+          description: '  Total charges for the user'
+          example: 123.1
           readOnly: true
-        page_size:
-          type: integer
-          format: int32
-          description: Page size
-          example: 2
+        brokerage:
+          type: number
+          format: float
+          description: Brokerage charges for the order
+          example: 432.1
+          readOnly: true
+        taxes:
+          $ref: '#/components/schemas/ProfitAndLossChargesTaxes'
+          description: Taxes levied on order
+          readOnly: true
+        charges:
+          $ref: '#/components/schemas/ProfitAndLossOtherChargesTaxes'
+          description: Other charges levied
           readOnly: true
   securitySchemes:
     OAUTH2:

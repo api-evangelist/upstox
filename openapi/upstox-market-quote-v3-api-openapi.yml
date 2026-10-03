@@ -251,112 +251,6 @@ components:
         oi:
           type: number
           format: double
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    GetMarketQuoteOptionGreekResponseV3:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteOptionGreekV3'
-    GetMarketQuoteOHLCResponseV3:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteOHLCV3'
-    GetMarketQuoteLastTradedPriceResponseV3:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteSymbolLtpV3'
-    MarketQuoteOHLCV3:
-      type: object
-      properties:
-        last_price:
-          type: number
-          format: double
-          description: The last traded price of symbol
-          example: 120.01
-          readOnly: true
-        instrument_token:
-          type: string
-        prev_ohlc:
-          $ref: '#/components/schemas/OhlcV3'
-        live_ohlc:
-          $ref: '#/components/schemas/OhlcV3'
-    MarketQuoteSymbolLtpV3:
-      type: object
-      properties:
-        last_price:
-          type: number
-          format: double
-        instrument_token:
-          type: string
-        ltq:
-          type: integer
-          format: int64
-        volume:
-          type: integer
-          format: int64
-        cp:
-          type: number
-          format: double
     OhlcV3:
       type: object
       properties:
@@ -396,6 +290,112 @@ components:
           description: Starting timestamp of candle
           example: 1743750900000
           readOnly: true
+    GetMarketQuoteLastTradedPriceResponseV3:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbolLtpV3'
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    MarketQuoteOHLCV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        instrument_token:
+          type: string
+        prev_ohlc:
+          $ref: '#/components/schemas/OhlcV3'
+        live_ohlc:
+          $ref: '#/components/schemas/OhlcV3'
+    MarketQuoteSymbolLtpV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+        instrument_token:
+          type: string
+        ltq:
+          type: integer
+          format: int64
+        volume:
+          type: integer
+          format: int64
+        cp:
+          type: number
+          format: double
+    GetMarketQuoteOptionGreekResponseV3:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOptionGreekV3'
+    GetMarketQuoteOHLCResponseV3:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOHLCV3'
   securitySchemes:
     OAUTH2:
       type: oauth2

@@ -271,94 +271,6 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    ConvertPositionRequest:
-      type: object
-      properties:
-        instrument_token:
-          type: string
-          description: Key of the instrument
-          example: 151064324
-        new_product:
-          type: string
-          description: Indicates the new product to use for the convert positions
-          enum:
-          - I
-          - D
-          - CO
-          - OCO
-          - MTF
-          example: D
-        old_product:
-          type: string
-          description: Indicates the old product to use for the convert positions
-          enum:
-          - I
-          - D
-          - CO
-          - OCO
-          - MTF
-          example: I
-        transaction_type:
-          type: string
-          description: Indicates whether its a buy(b) or sell(s) order
-          enum:
-          - BUY
-          - SELL
-          example: BUY
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity with which the position to convert
-          example: 1
-      required:
-      - instrument_token
-      - new_product
-      - old_product
-      - quantity
-      - transaction_type
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    ConvertPositionData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Status message for convert position request
-          example: complete
-          readOnly: true
     HoldingsData:
       type: object
       properties:
@@ -483,6 +395,44 @@ components:
           - NSCOM
           example: NSE
           readOnly: true
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GetPositionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for position details
+          items:
+            $ref: '#/components/schemas/PositionData'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
     GetHoldingsResponse:
       type: object
       properties:
@@ -497,12 +447,95 @@ components:
           description: Response data for holdings
           items:
             $ref: '#/components/schemas/HoldingsData'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     OrderMetadata:
       type: object
       properties:
         latency:
           type: integer
           format: int64
+    ConvertPositionData:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status message for convert position request
+          example: complete
+          readOnly: true
+    ConvertPositionResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ConvertPositionData'
+          description: Response data for convert position request
+        errors:
+          type: array
+          description: Error details for convert position request
+          items:
+            $ref: '#/components/schemas/Problem'
+    ConvertPositionRequest:
+      type: object
+      properties:
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: 151064324
+        new_product:
+          type: string
+          description: Indicates the new product to use for the convert positions
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+        old_product:
+          type: string
+          description: Indicates the old product to use for the convert positions
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: I
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy(b) or sell(s) order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the position to convert
+          example: 1
+      required:
+      - instrument_token
+      - new_product
+      - old_product
+      - quantity
+      - transaction_type
     PositionData:
       type: object
       properties:
@@ -685,39 +718,6 @@ components:
           description: Average price at which quantities were sold
           example: 102.0
           readOnly: true
-    ConvertPositionResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/ConvertPositionData'
-          description: Response data for convert position request
-        errors:
-          type: array
-          description: Error details for convert position request
-          items:
-            $ref: '#/components/schemas/Problem'
-    GetPositionResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for position details
-          items:
-            $ref: '#/components/schemas/PositionData'
-        metadata:
-          $ref: '#/components/schemas/OrderMetadata'
   securitySchemes:
     OAUTH2:
       type: oauth2

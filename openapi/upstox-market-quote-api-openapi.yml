@@ -240,23 +240,81 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    DepthMap:
+    Ohlc:
       type: object
       properties:
-        buy:
-          type: array
-          description: Bids
+        open:
+          type: number
+          format: double
+          description: The open price of the trading session
           example: 120.01
-          items:
-            $ref: '#/components/schemas/Depth'
           readOnly: true
-        sell:
-          type: array
-          description: Asks
-          example: 120.01
-          items:
-            $ref: '#/components/schemas/Depth'
+        high:
+          type: number
+          format: double
+          description: The high price of the trading session
+          example: 121.0
           readOnly: true
+        low:
+          type: number
+          format: double
+          description: The low price of the trading session
+          example: 119.0
+          readOnly: true
+        close:
+          type: number
+          format: double
+          description: The close price of the symbol from the previous session of trading
+          example: 120.0
+          readOnly: true
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GetMarketQuoteOHLCResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOHLC'
+    GetFullMarketQuoteResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbol'
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -294,28 +352,51 @@ components:
           readOnly: true
         instrument_token:
           type: string
-    Problem:
+    Depth:
       type: object
       properties:
-        errorCode:
+        quantity:
+          type: integer
+          format: int32
+          description: quantity
+        price:
+          type: number
+          format: double
+          description: price
+        orders:
+          type: integer
+          format: int32
+          description: orders
+    GetMarketQuoteLastTradedPriceResponse:
+      type: object
+      properties:
+        status:
           type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbolLtp'
+    DepthMap:
+      type: object
+      properties:
+        buy:
+          type: array
+          description: Bids
+          example: 120.01
+          items:
+            $ref: '#/components/schemas/Depth'
+          readOnly: true
+        sell:
+          type: array
+          description: Asks
+          example: 120.01
+          items:
+            $ref: '#/components/schemas/Depth'
+          readOnly: true
     MarketQuoteSymbol:
       type: object
       properties:
@@ -407,87 +488,6 @@ components:
           format: double
           example: 0
           readOnly: true
-    Ohlc:
-      type: object
-      properties:
-        open:
-          type: number
-          format: double
-          description: The open price of the trading session
-          example: 120.01
-          readOnly: true
-        high:
-          type: number
-          format: double
-          description: The high price of the trading session
-          example: 121.0
-          readOnly: true
-        low:
-          type: number
-          format: double
-          description: The low price of the trading session
-          example: 119.0
-          readOnly: true
-        close:
-          type: number
-          format: double
-          description: The close price of the symbol from the previous session of trading
-          example: 120.0
-          readOnly: true
-    GetMarketQuoteOHLCResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteOHLC'
-    GetMarketQuoteLastTradedPriceResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteSymbolLtp'
-    GetFullMarketQuoteResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteSymbol'
-    Depth:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          format: int32
-          description: quantity
-        price:
-          type: number
-          format: double
-          description: price
-        orders:
-          type: integer
-          format: int32
-          description: orders
   securitySchemes:
     OAUTH2:
       type: oauth2

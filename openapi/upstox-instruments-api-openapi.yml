@@ -132,36 +132,6 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    SearchInstrumentResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for search instrument request
-          items:
-            $ref: '#/components/schemas/InstrumentData'
-        meta_data:
-          $ref: '#/components/schemas/SearchMetaData'
-          description: Meta data for search instrument response
     InstrumentData:
       type: object
       properties:
@@ -252,11 +222,6 @@ components:
           type: string
         cas_eligible:
           type: boolean
-    SearchMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Pagination'
     Problem:
       type: object
       properties:
@@ -279,6 +244,24 @@ components:
         property_path:
           type: string
         invalid_value: {}
+    SearchMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     Pagination:
       type: object
       properties:
@@ -294,6 +277,23 @@ components:
         total_records:
           type: integer
           format: int32
+    SearchInstrumentResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for search instrument request
+          items:
+            $ref: '#/components/schemas/InstrumentData'
+        meta_data:
+          $ref: '#/components/schemas/SearchMetaData'
+          description: Meta data for search instrument response
   securitySchemes:
     OAUTH2:
       type: oauth2

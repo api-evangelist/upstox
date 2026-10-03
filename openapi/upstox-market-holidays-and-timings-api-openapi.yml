@@ -1067,45 +1067,6 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    GetMarketStatusResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/MarketStatusData'
-          description: Response data for market live status
-    GetExchangeTimingResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for exchange timing list
-          items:
-            $ref: '#/components/schemas/ExchangeTimingData'
     CasEligibleStatusData:
       type: object
       properties:
@@ -1127,6 +1088,18 @@ components:
           type: integer
           format: int64
           description: The timestamp (in milliseconds) when the CAS status was last updated.
+    GetMarketStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MarketStatusData'
+          description: Response data for market live status
     Problem:
       type: object
       properties:
@@ -1149,16 +1122,6 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    AnalyticsResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data: {}
     MarketStatusData:
       type: object
       properties:
@@ -1172,6 +1135,19 @@ components:
         cas_eligible_status:
           $ref: '#/components/schemas/CasEligibleStatusData'
           description: CAS (Closing Auction Session) status of the segment. Present only for segments where CAS exists (e.g. NSE_EQ); absent otherwise.
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     ExchangeTimingData:
       type: object
       properties:
@@ -1183,20 +1159,6 @@ components:
         end_time:
           type: integer
           format: int64
-    GetHolidayResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for holiday list
-          items:
-            $ref: '#/components/schemas/HolidayData'
     HolidayData:
       type: object
       properties:
@@ -1220,6 +1182,44 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExchangeTimingData'
+    GetExchangeTimingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for exchange timing list
+          items:
+            $ref: '#/components/schemas/ExchangeTimingData'
+    AnalyticsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data: {}
+    GetHolidayResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for holiday list
+          items:
+            $ref: '#/components/schemas/HolidayData'
   securitySchemes:
     OAUTH2:
       type: oauth2

@@ -304,24 +304,41 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    ApiGatewayErrorResponse:
+    MutualFundHoldingData:
       type: object
       properties:
-        status:
+        folio:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    MutualFundMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Pagination'
+          description: Folio number when available.
+        fund:
+          type: string
+          description: Fund display name when available.
+        pnl:
+          type: number
+          format: double
+          description: Unrealized P/L.
+        quantity:
+          type: number
+          format: double
+          description: Units held.
+        instrument_key:
+          type: string
+          description: ISIN of the fund, when available.
+        average_price:
+          type: number
+          format: double
+          description: Average cost per unit.
+        last_price:
+          type: number
+          format: double
+          description: Last available NAV.
+        last_price_date:
+          type: string
+          description: Date for which last NAV is available.
+        pledged_quantity:
+          type: number
+          format: double
+          description: Units pledged as collateral when applicable.
     Problem:
       type: object
       properties:
@@ -344,7 +361,7 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    GetMutualFundOrderDetailsResponse:
+    ApiGatewayErrorResponse:
       type: object
       properties:
         status:
@@ -353,9 +370,10 @@ components:
           - success
           - error
           - partial_success
-        data:
-          $ref: '#/components/schemas/MutualFundOrderData'
-          description: Mutual fund order details.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     GetMutualFundSipsResponse:
       type: object
       properties:
@@ -373,6 +391,101 @@ components:
         meta_data:
           $ref: '#/components/schemas/MutualFundMetaData'
           description: Meta data for mutual fund sips
+    GetMutualFundOrderDetailsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MutualFundOrderData'
+          description: Mutual fund order details.
+    MutualFundSipData:
+      type: object
+      properties:
+        fund:
+          type: string
+          description: Display name of the fund.
+        status:
+          type: string
+          description: ACTIVE, PAUSED, or CANCELLED.
+        created:
+          type: string
+          description: Timestamp when the SIP was registered.
+        frequency:
+          type: string
+          description: Frequency (e.g. monthly, weekly).
+        instalments:
+          type: integer
+          format: int64
+          description: Total number of instalments when applicable; -1 if open-ended.
+        sip_id:
+          type: string
+          description: Unique SIP identifier.
+        sip_reg_number:
+          type: string
+          description: SIP registration number when available.
+        instrument_key:
+          type: string
+          description: ISIN of the fund, when available.
+        dividend_type:
+          type: string
+          description: Dividend option when available (e.g. growth, idcw).
+        transaction_type:
+          type: string
+          description: BUY or SELL.
+        next_instalment:
+          type: string
+          description: Next instalment date.
+        instalment_amount:
+          type: number
+          format: double
+          description: Amount per instalment.
+        last_instalment:
+          type: string
+          description: Last triggered instalment timestamp.
+        pending_instalments:
+          type: integer
+          format: int64
+          description: Pending instalments when applicable.
+        instalment_day:
+          type: integer
+          format: int64
+          description: Day of month for monthly SIPs when applicable.
+        completed_instalments:
+          type: integer
+          format: int64
+          description: Completed instalment count when available.
+        trigger_price:
+          type: number
+          format: double
+          description: Trigger price when applicable.
+        sip_type:
+          type: string
+          description: SIP channel/type (e.g. sip, amc_sip).
+    Pagination:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+        records:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+    MutualFundMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
     GetMutualFundOrdersResponse:
       type: object
       properties:
@@ -455,119 +568,6 @@ components:
         last_price_date:
           type: string
           description: Date for which last NAV is available.
-    MutualFundHoldingData:
-      type: object
-      properties:
-        folio:
-          type: string
-          description: Folio number when available.
-        fund:
-          type: string
-          description: Fund display name when available.
-        pnl:
-          type: number
-          format: double
-          description: Unrealized P/L.
-        quantity:
-          type: number
-          format: double
-          description: Units held.
-        instrument_key:
-          type: string
-          description: ISIN of the fund, when available.
-        average_price:
-          type: number
-          format: double
-          description: Average cost per unit.
-        last_price:
-          type: number
-          format: double
-          description: Last available NAV.
-        last_price_date:
-          type: string
-          description: Date for which last NAV is available.
-        pledged_quantity:
-          type: number
-          format: double
-          description: Units pledged as collateral when applicable.
-    Pagination:
-      type: object
-      properties:
-        page_number:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-          format: int32
-        records:
-          type: integer
-          format: int32
-        total_records:
-          type: integer
-          format: int32
-    MutualFundSipData:
-      type: object
-      properties:
-        fund:
-          type: string
-          description: Display name of the fund.
-        status:
-          type: string
-          description: ACTIVE, PAUSED, or CANCELLED.
-        created:
-          type: string
-          description: Timestamp when the SIP was registered.
-        frequency:
-          type: string
-          description: Frequency (e.g. monthly, weekly).
-        instalments:
-          type: integer
-          format: int64
-          description: Total number of instalments when applicable; -1 if open-ended.
-        sip_id:
-          type: string
-          description: Unique SIP identifier.
-        sip_reg_number:
-          type: string
-          description: SIP registration number when available.
-        instrument_key:
-          type: string
-          description: ISIN of the fund, when available.
-        dividend_type:
-          type: string
-          description: Dividend option when available (e.g. growth, idcw).
-        transaction_type:
-          type: string
-          description: BUY or SELL.
-        next_instalment:
-          type: string
-          description: Next instalment date.
-        instalment_amount:
-          type: number
-          format: double
-          description: Amount per instalment.
-        last_instalment:
-          type: string
-          description: Last triggered instalment timestamp.
-        pending_instalments:
-          type: integer
-          format: int64
-          description: Pending instalments when applicable.
-        instalment_day:
-          type: integer
-          format: int64
-          description: Day of month for monthly SIPs when applicable.
-        completed_instalments:
-          type: integer
-          format: int64
-          description: Completed instalment count when available.
-        trigger_price:
-          type: number
-          format: double
-          description: Trigger price when applicable.
-        sip_type:
-          type: string
-          description: SIP channel/type (e.g. sip, amc_sip).
     GetMutualFundHoldingsResponse:
       type: object
       properties:

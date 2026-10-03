@@ -109,7 +109,7 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    ApiGatewayErrorResponse:
+    TradeHistoryResponse:
       type: object
       properties:
         status:
@@ -118,15 +118,12 @@ components:
           - success
           - error
           - partial_success
-        errors:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/Problem'
-    TradeHistoryResponseMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/TradeHistoryResponsePageData'
+            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
+        metaData:
+          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
     Problem:
       type: object
       properties:
@@ -149,6 +146,19 @@ components:
         property_path:
           type: string
         invalid_value: {}
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     TradeHistoryResponsePageData:
       type: object
       properties:
@@ -200,21 +210,11 @@ components:
           type: string
         instrument_token:
           type: string
-    TradeHistoryResponse:
+    TradeHistoryResponseMetaData:
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
-        metaData:
-          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
+        page:
+          $ref: '#/components/schemas/TradeHistoryResponsePageData'
   securitySchemes:
     OAUTH2:
       type: oauth2

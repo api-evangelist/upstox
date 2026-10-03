@@ -327,46 +327,73 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    GetOptionContractResponse:
+    ExpiredFutureData:
       type: object
       properties:
-        status:
+        name:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option contracts
-          items:
-            $ref: '#/components/schemas/InstrumentData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
+          description: Name of the instrument
+          example: NIFTY
+        segment:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    GetExpiredFuturesContractResponse:
-      type: object
-      properties:
-        status:
+          description: Segment of the instrument
+          example: NSE_FO
+        exchange:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpiredFutureData'
+          description: Exchange of the instrument
+          example: NSE
+        expiry:
+          type: string
+          description: Expiry date of the instrument
+          example: '2024-12-26'
+        instrument_key:
+          type: string
+          description: Unique key identifying the instrument
+          example: NSE_FO|35005
+        exchange_token:
+          type: string
+          description: Token assigned by the exchange
+          example: 35005
+        trading_symbol:
+          type: string
+          description: Symbol used for trading
+          example: NIFTY FUT 26 DEC 24
+        tick_size:
+          type: number
+          format: double
+          description: Minimum price movement
+          example: 5
+        lot_size:
+          type: integer
+          format: int64
+          description: Number of units per lot
+          example: 25
+        instrument_type:
+          type: string
+          description: Type of the instrument
+          example: FUT
+        freeze_quantity:
+          type: number
+          format: double
+          description: Maximum allowed quantity
+          example: 1800
+        underlying_key:
+          type: string
+          description: Key of the underlying asset
+          example: NSE_INDEX|Nifty 50
+        underlying_type:
+          type: string
+          description: Type of the underlying asset
+          example: INDEX
+        underlying_symbol:
+          type: string
+          description: Symbol of the underlying asset
+          example: NIFTY
+        minimum_lot:
+          type: integer
+          format: int64
+          description: Minimum lot size
+          example: 25
     InstrumentData:
       type: object
       properties:
@@ -457,73 +484,6 @@ components:
           type: string
         cas_eligible:
           type: boolean
-    ExpiredFutureData:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the instrument
-          example: NIFTY
-        segment:
-          type: string
-          description: Segment of the instrument
-          example: NSE_FO
-        exchange:
-          type: string
-          description: Exchange of the instrument
-          example: NSE
-        expiry:
-          type: string
-          description: Expiry date of the instrument
-          example: '2024-12-26'
-        instrument_key:
-          type: string
-          description: Unique key identifying the instrument
-          example: NSE_FO|35005
-        exchange_token:
-          type: string
-          description: Token assigned by the exchange
-          example: 35005
-        trading_symbol:
-          type: string
-          description: Symbol used for trading
-          example: NIFTY FUT 26 DEC 24
-        tick_size:
-          type: number
-          format: double
-          description: Minimum price movement
-          example: 5
-        lot_size:
-          type: integer
-          format: int64
-          description: Number of units per lot
-          example: 25
-        instrument_type:
-          type: string
-          description: Type of the instrument
-          example: FUT
-        freeze_quantity:
-          type: number
-          format: double
-          description: Maximum allowed quantity
-          example: 1800
-        underlying_key:
-          type: string
-          description: Key of the underlying asset
-          example: NSE_INDEX|Nifty 50
-        underlying_type:
-          type: string
-          description: Type of the underlying asset
-          example: INDEX
-        underlying_symbol:
-          type: string
-          description: Symbol of the underlying asset
-          example: NIFTY
-        minimum_lot:
-          type: integer
-          format: int64
-          description: Minimum lot size
-          example: 25
     Problem:
       type: object
       properties:
@@ -556,6 +516,32 @@ components:
             type: array
             items: {}
           readOnly: true
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    GetExpiredFuturesContractResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpiredFutureData'
     GetHistoricalCandleResponse:
       type: object
       properties:
@@ -568,6 +554,20 @@ components:
         data:
           $ref: '#/components/schemas/HistoricalCandleData'
           description: Get OHLC values for all instruments across various timeframes
+    GetOptionContractResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option contracts
+          items:
+            $ref: '#/components/schemas/InstrumentData'
     GetExpiriesResponse:
       type: object
       properties:

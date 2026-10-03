@@ -185,33 +185,6 @@ components:
         prev_oi:
           type: number
           format: double
-    GetOptionContractResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option contracts
-          items:
-            $ref: '#/components/schemas/InstrumentData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
     InstrumentData:
       type: object
       properties:
@@ -324,7 +297,29 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    GetOptionChainResponse:
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    PutCallOptionChainData:
+      type: object
+      properties:
+        instrument_key:
+          type: string
+        market_data:
+          $ref: '#/components/schemas/MarketData'
+        option_greeks:
+          $ref: '#/components/schemas/AnalyticsData'
+    GetOptionContractResponse:
       type: object
       properties:
         status:
@@ -335,39 +330,9 @@ components:
           - partial_success
         data:
           type: array
-          description: Response data for option chain data
+          description: Response data for option contracts
           items:
-            $ref: '#/components/schemas/OptionStrikeData'
-    PutCallOptionChainData:
-      type: object
-      properties:
-        instrument_key:
-          type: string
-        market_data:
-          $ref: '#/components/schemas/MarketData'
-        option_greeks:
-          $ref: '#/components/schemas/AnalyticsData'
-    OptionStrikeData:
-      type: object
-      properties:
-        expiry:
-          type: string
-          format: date-time
-        pcr:
-          type: number
-          format: double
-        strike_price:
-          type: number
-          format: double
-        underlying_key:
-          type: string
-        underlying_spot_price:
-          type: number
-          format: double
-        call_options:
-          $ref: '#/components/schemas/PutCallOptionChainData'
-        put_options:
-          $ref: '#/components/schemas/PutCallOptionChainData'
+            $ref: '#/components/schemas/InstrumentData'
     AnalyticsData:
       type: object
       properties:
@@ -389,6 +354,41 @@ components:
         pop:
           type: number
           format: double
+    OptionStrikeData:
+      type: object
+      properties:
+        expiry:
+          type: string
+          format: date-time
+        pcr:
+          type: number
+          format: double
+        strike_price:
+          type: number
+          format: double
+        underlying_key:
+          type: string
+        underlying_spot_price:
+          type: number
+          format: double
+        call_options:
+          $ref: '#/components/schemas/PutCallOptionChainData'
+        put_options:
+          $ref: '#/components/schemas/PutCallOptionChainData'
+    GetOptionChainResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option chain data
+          items:
+            $ref: '#/components/schemas/OptionStrikeData'
   securitySchemes:
     OAUTH2:
       type: oauth2
