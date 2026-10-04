@@ -93,6 +93,28 @@ components:
         property_path:
           type: string
         invalid_value: {}
+    EventResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     EventRequest:
       type: object
       properties:
@@ -108,28 +130,6 @@ components:
       required:
       - event
       - event_type
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    EventResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
   securitySchemes:
     OAUTH2:
       type: oauth2

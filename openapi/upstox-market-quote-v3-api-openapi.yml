@@ -216,41 +216,19 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    MarketQuoteOptionGreekV3:
+    GetMarketQuoteOHLCResponseV3:
       type: object
       properties:
-        last_price:
-          type: number
-          format: double
-        instrument_token:
+        status:
           type: string
-        ltq:
-          type: integer
-          format: int64
-        volume:
-          type: integer
-          format: int64
-        cp:
-          type: number
-          format: double
-        iv:
-          type: number
-          format: double
-        vega:
-          type: number
-          format: double
-        gamma:
-          type: number
-          format: double
-        theta:
-          type: number
-          format: double
-        delta:
-          type: number
-          format: double
-        oi:
-          type: number
-          format: double
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteOHLCV3'
     OhlcV3:
       type: object
       properties:
@@ -290,7 +268,22 @@ components:
           description: Starting timestamp of candle
           example: 1743750900000
           readOnly: true
-    GetMarketQuoteLastTradedPriceResponseV3:
+    MarketQuoteOHLCV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+          description: The last traded price of symbol
+          example: 120.01
+          readOnly: true
+        instrument_token:
+          type: string
+        prev_ohlc:
+          $ref: '#/components/schemas/OhlcV3'
+        live_ohlc:
+          $ref: '#/components/schemas/OhlcV3'
+    GetMarketQuoteOptionGreekResponseV3:
       type: object
       properties:
         status:
@@ -302,7 +295,37 @@ components:
         data:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteSymbolLtpV3'
+            $ref: '#/components/schemas/MarketQuoteOptionGreekV3'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    MarketQuoteSymbolLtpV3:
+      type: object
+      properties:
+        last_price:
+          type: number
+          format: double
+        instrument_token:
+          type: string
+        ltq:
+          type: integer
+          format: int64
+        volume:
+          type: integer
+          format: int64
+        cp:
+          type: number
+          format: double
     Problem:
       type: object
       properties:
@@ -325,7 +348,7 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    ApiGatewayErrorResponse:
+    GetMarketQuoteLastTradedPriceResponseV3:
       type: object
       properties:
         status:
@@ -334,26 +357,11 @@ components:
           - success
           - error
           - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    MarketQuoteOHLCV3:
-      type: object
-      properties:
-        last_price:
-          type: number
-          format: double
-          description: The last traded price of symbol
-          example: 120.01
-          readOnly: true
-        instrument_token:
-          type: string
-        prev_ohlc:
-          $ref: '#/components/schemas/OhlcV3'
-        live_ohlc:
-          $ref: '#/components/schemas/OhlcV3'
-    MarketQuoteSymbolLtpV3:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MarketQuoteSymbolLtpV3'
+    MarketQuoteOptionGreekV3:
       type: object
       properties:
         last_price:
@@ -370,32 +378,24 @@ components:
         cp:
           type: number
           format: double
-    GetMarketQuoteOptionGreekResponseV3:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteOptionGreekV3'
-    GetMarketQuoteOHLCResponseV3:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/MarketQuoteOHLCV3'
+        iv:
+          type: number
+          format: double
+        vega:
+          type: number
+          format: double
+        gamma:
+          type: number
+          format: double
+        theta:
+          type: number
+          format: double
+        delta:
+          type: number
+          format: double
+        oi:
+          type: number
+          format: double
   securitySchemes:
     OAUTH2:
       type: oauth2

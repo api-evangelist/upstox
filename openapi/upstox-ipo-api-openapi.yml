@@ -510,6 +510,39 @@ components:
           - partial_success
         data:
           $ref: '#/components/schemas/IpoCancelData'
+    IpoOrderBid:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Number of shares bid for
+          example: 30
+        price:
+          type: number
+          description: Bid price per share
+          example: 150.3
+        amount:
+          type: number
+          description: Value of the bid, quantity x price
+          example: 4509.0
+        message:
+          type: string
+          description: Message from the exchange for this bid, when one was returned
+          example: Bid accepted
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     IpoCancelData:
       type: object
       properties:
@@ -520,79 +553,6 @@ components:
         status:
           type: string
           description: Free-text message returned by the IPO service for the cancellation request
-    IpoApplyRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          description: IPO id (slug) to apply for, as returned in `id` by the IPO listing and details APIs
-          example: mandb-engineering-limited-ipo
-          minLength: 1
-        upi:
-          type: string
-          description: UPI id used to block the application amount
-          example: test@upi
-          minLength: 1
-        category:
-          type: string
-          description: Investor category to apply under. Must be one the issue accepts — see `investors[].category` in the IPO details API
-          enum:
-          - IND
-          - HNI
-          example: IND
-          minLength: 1
-        bids:
-          type: array
-          description: List of bids for the application (1 to 3 bids)
-          items:
-            $ref: '#/components/schemas/IpoBidRequest'
-          maxItems: 3
-          minItems: 0
-      required:
-      - bids
-      - category
-      - id
-      - upi
-    IpoDetailsResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/IpoDetailsData'
-    Pagination:
-      type: object
-      properties:
-        page_number:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-          format: int32
-        records:
-          type: integer
-          format: int32
-        total_records:
-          type: integer
-          format: int32
-    IpoInvestorType:
-      type: object
-      properties:
-        category:
-          type: string
-          description: Investor category the issue accepts. Pass this value as category when applying
-          enum:
-          - IND
-          - HNI
-          example: IND
-        description:
-          type: string
-          description: Human-readable name of the category; null when the IPO service does not provide one
-          example: Individual Investor
     IpoRegistrarInfo:
       type: object
       properties:
@@ -620,21 +580,35 @@ components:
           type: string
           description: SEBI registration number of the registrar
           example: INR000004058
-    IpoBidRequest:
+    IpoInvestorType:
       type: object
       properties:
-        quantity:
-          type: integer
-          format: int32
-          description: Number of shares bid for. Must be a multiple of the IPO's `lot_size` and at least its `minimum_quantity`
-          example: 20
-        price:
-          type: number
-          description: Bid price per share, in whole rupees — decimals are not accepted. Must sit within the IPO's price band, or equal its `cut_off_price`
-          example: 850
-      required:
-      - price
-      - quantity
+        category:
+          type: string
+          description: Investor category the issue accepts. Pass this value as category when applying
+          enum:
+          - IND
+          - HNI
+          example: IND
+        description:
+          type: string
+          description: Human-readable name of the category; null when the IPO service does not provide one
+          example: Individual Investor
+    IpoListingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpoListingData'
+        meta_data:
+          $ref: '#/components/schemas/IpoMetaData'
     IpoOrderResponse:
       type: object
       properties:
@@ -650,54 +624,28 @@ components:
             $ref: '#/components/schemas/IpoOrderData'
         meta_data:
           $ref: '#/components/schemas/IpoMetaData'
-    ApiGatewayErrorResponse:
+    Problem:
       type: object
       properties:
-        status:
+        errorCode:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    IpoTimeline:
-      type: object
-      properties:
-        pre_apply_start_date:
+          deprecated: true
+          description: Unique code for the error state
+        message:
           type: string
-          description: Date pre-apply opens, in yyyy-MM-dd
-          example: '2026-07-28'
-        application_start_date:
+          description: Verbose message for the error state
+        propertyPath:
           type: string
-          description: Date the issue opens for applications, in yyyy-MM-dd
-          example: '2026-10-08'
-        application_end_date:
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
           type: string
-          description: Date the issue closes for applications, in yyyy-MM-dd
-          example: '2026-10-10'
-        allotment_start_date:
+        property_path:
           type: string
-          description: Date allotment processing starts, in yyyy-MM-dd
-          example: '2026-10-13'
-        allotment_date:
-          type: string
-          description: Date allotment is finalised, in yyyy-MM-dd
-          example: '2026-10-14'
-        refund_initiation_date:
-          type: string
-          description: Date refunds are initiated for unallotted applications, in yyyy-MM-dd
-          example: '2026-10-15'
-        listing_date:
-          type: string
-          description: Date the share lists on the exchange, in yyyy-MM-dd
-          example: '2026-10-16'
-        mandate_end_date:
-          type: string
-          description: Last date the UPI mandate can be approved, in yyyy-MM-dd
-          example: '2026-10-11'
+        invalid_value: {}
     IpoDetailsData:
       type: object
       properties:
@@ -836,28 +784,209 @@ components:
           - partial_success
         data:
           $ref: '#/components/schemas/IpoApplyData'
-    Problem:
+    IpoOrderDetailResponse:
       type: object
       properties:
-        errorCode:
+        status:
           type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IpoOrderData'
+    IpoDetailsResponse:
+      type: object
+      properties:
+        status:
           type: string
-          description: Verbose message for the error state
-        propertyPath:
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/IpoDetailsData'
+    IpoListingData:
+      type: object
+      properties:
+        id:
           type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
+          description: IPO id (slug). Pass this as the id to the IPO details and apply APIs
+          example: mandb-engineering-limited-ipo
+        symbol:
           type: string
-        property_path:
+          description: Trading symbol of the issuer
+          example: MANDB
+        name:
           type: string
-        invalid_value: {}
+          description: Name of the issuer
+          example: M and B Engineering Limited
+        status:
+          type: string
+          description: Current stage of the IPO
+          enum:
+          - open
+          - closed
+          - listed
+          - upcoming
+          example: open
+        isin:
+          type: string
+          description: ISIN of the issue
+          example: INE0S5T01015
+        issue_type:
+          type: string
+          description: Issue type of the IPO. `regular` is a mainboard issue
+          enum:
+          - regular
+          - sme
+          example: regular
+        issue_size:
+          type: number
+          format: double
+          description: Total issue size in crores
+          example: 650.0
+        industry:
+          type: string
+          description: Industry the issuer operates in
+          example: Capital Goods
+        minimum_price:
+          type: number
+          format: double
+          description: Lower end of the price band, per share
+          example: 366.0
+        maximum_price:
+          type: number
+          format: double
+          description: Upper end of the price band, per share
+          example: 385.0
+        bidding_start_date:
+          type: string
+          description: Date bidding opens, in yyyy-MM-dd
+          example: '2026-10-08'
+        bidding_end_date:
+          type: string
+          description: Date bidding closes, in yyyy-MM-dd
+          example: '2026-10-10'
+        total_subscription:
+          type: string
+          description: Overall subscription so far; null until the issue opens
+          example: 2.5x
+        investors:
+          type: array
+          description: Investor categories the issue accepts. Empty when the listing data carries none — the IPO details API is the authoritative source
+          items:
+            $ref: '#/components/schemas/IpoInvestorType'
+    IpoApplyData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Application id created for this IPO application. Pass this as order_id to the get-order and cancel-order APIs
+          example: UPCHK500000020
+    IpoTimeline:
+      type: object
+      properties:
+        pre_apply_start_date:
+          type: string
+          description: Date pre-apply opens, in yyyy-MM-dd
+          example: '2026-07-28'
+        application_start_date:
+          type: string
+          description: Date the issue opens for applications, in yyyy-MM-dd
+          example: '2026-10-08'
+        application_end_date:
+          type: string
+          description: Date the issue closes for applications, in yyyy-MM-dd
+          example: '2026-10-10'
+        allotment_start_date:
+          type: string
+          description: Date allotment processing starts, in yyyy-MM-dd
+          example: '2026-10-13'
+        allotment_date:
+          type: string
+          description: Date allotment is finalised, in yyyy-MM-dd
+          example: '2026-10-14'
+        refund_initiation_date:
+          type: string
+          description: Date refunds are initiated for unallotted applications, in yyyy-MM-dd
+          example: '2026-10-15'
+        listing_date:
+          type: string
+          description: Date the share lists on the exchange, in yyyy-MM-dd
+          example: '2026-10-16'
+        mandate_end_date:
+          type: string
+          description: Last date the UPI mandate can be approved, in yyyy-MM-dd
+          example: '2026-10-11'
+    IpoApplyRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: IPO id (slug) to apply for, as returned in `id` by the IPO listing and details APIs
+          example: mandb-engineering-limited-ipo
+          minLength: 1
+        upi:
+          type: string
+          description: UPI id used to block the application amount
+          example: test@upi
+          minLength: 1
+        category:
+          type: string
+          description: Investor category to apply under. Must be one the issue accepts — see `investors[].category` in the IPO details API
+          enum:
+          - IND
+          - HNI
+          example: IND
+          minLength: 1
+        bids:
+          type: array
+          description: List of bids for the application (1 to 3 bids)
+          items:
+            $ref: '#/components/schemas/IpoBidRequest'
+          maxItems: 3
+          minItems: 0
+      required:
+      - bids
+      - category
+      - id
+      - upi
+    IpoMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
+        records:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+    IpoBidRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Number of shares bid for. Must be a multiple of the IPO's `lot_size` and at least its `minimum_quantity`
+          example: 20
+        price:
+          type: number
+          description: Bid price per share, in whole rupees — decimals are not accepted. Must sit within the IPO's price band, or equal its `cut_off_price`
+          example: 850
+      required:
+      - price
+      - quantity
     IpoOrderData:
       type: object
       properties:
@@ -962,135 +1091,6 @@ components:
           type: string
           description: When the application was last updated, in yyyy-MM-dd'T'HH:mm:ss
           example: '2026-06-30T17:36:36'
-    IpoOrderBid:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          format: int32
-          description: Number of shares bid for
-          example: 30
-        price:
-          type: number
-          description: Bid price per share
-          example: 150.3
-        amount:
-          type: number
-          description: Value of the bid, quantity x price
-          example: 4509.0
-        message:
-          type: string
-          description: Message from the exchange for this bid, when one was returned
-          example: Bid accepted
-    IpoListingResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/IpoListingData'
-        meta_data:
-          $ref: '#/components/schemas/IpoMetaData'
-    IpoMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Pagination'
-    IpoOrderDetailResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/IpoOrderData'
-    IpoApplyData:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: Application id created for this IPO application. Pass this as order_id to the get-order and cancel-order APIs
-          example: UPCHK500000020
-    IpoListingData:
-      type: object
-      properties:
-        id:
-          type: string
-          description: IPO id (slug). Pass this as the id to the IPO details and apply APIs
-          example: mandb-engineering-limited-ipo
-        symbol:
-          type: string
-          description: Trading symbol of the issuer
-          example: MANDB
-        name:
-          type: string
-          description: Name of the issuer
-          example: M and B Engineering Limited
-        status:
-          type: string
-          description: Current stage of the IPO
-          enum:
-          - open
-          - closed
-          - listed
-          - upcoming
-          example: open
-        isin:
-          type: string
-          description: ISIN of the issue
-          example: INE0S5T01015
-        issue_type:
-          type: string
-          description: Issue type of the IPO. `regular` is a mainboard issue
-          enum:
-          - regular
-          - sme
-          example: regular
-        issue_size:
-          type: number
-          format: double
-          description: Total issue size in crores
-          example: 650.0
-        industry:
-          type: string
-          description: Industry the issuer operates in
-          example: Capital Goods
-        minimum_price:
-          type: number
-          format: double
-          description: Lower end of the price band, per share
-          example: 366.0
-        maximum_price:
-          type: number
-          format: double
-          description: Upper end of the price band, per share
-          example: 385.0
-        bidding_start_date:
-          type: string
-          description: Date bidding opens, in yyyy-MM-dd
-          example: '2026-10-08'
-        bidding_end_date:
-          type: string
-          description: Date bidding closes, in yyyy-MM-dd
-          example: '2026-10-10'
-        total_subscription:
-          type: string
-          description: Overall subscription so far; null until the issue opens
-          example: 2.5x
-        investors:
-          type: array
-          description: Investor categories the issue accepts. Empty when the listing data carries none — the IPO details API is the authoritative source
-          items:
-            $ref: '#/components/schemas/IpoInvestorType'
   securitySchemes:
     OAUTH2:
       type: oauth2

@@ -127,11 +127,19 @@ components:
               $ref: '#/components/schemas/NewsItemData'
         metadata:
           $ref: '#/components/schemas/NewsResponseMetaData'
-    NewsResponseMetaData:
+    ApiGatewayErrorResponse:
       type: object
       properties:
-        page:
-          $ref: '#/components/schemas/NewsResponsePageData'
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     Problem:
       type: object
       properties:
@@ -154,19 +162,11 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    ApiGatewayErrorResponse:
+    NewsResponseMetaData:
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
+        page:
+          $ref: '#/components/schemas/NewsResponsePageData'
     NewsResponsePageData:
       type: object
       properties:

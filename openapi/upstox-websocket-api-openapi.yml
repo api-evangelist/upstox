@@ -273,18 +273,14 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    WebsocketAuthRedirectResponse:
+    WebsocketAuthRedirectResponseData:
       type: object
       properties:
-        status:
+        authorizedRedirectUri:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/WebsocketAuthRedirectResponseData'
-          description: Response data for WebsocketAuthRedirectResponse
+          deprecated: true
+        authorized_redirect_uri:
+          type: string
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -298,14 +294,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Problem'
-    WebsocketAuthRedirectResponseData:
+    WebsocketAuthRedirectResponse:
       type: object
       properties:
-        authorizedRedirectUri:
+        status:
           type: string
-          deprecated: true
-        authorized_redirect_uri:
-          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/WebsocketAuthRedirectResponseData'
+          description: Response data for WebsocketAuthRedirectResponse
   securitySchemes:
     OAUTH2:
       type: oauth2

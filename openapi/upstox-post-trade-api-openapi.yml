@@ -124,28 +124,11 @@ components:
             $ref: '#/components/schemas/TradeHistoryResponseTradeData'
         metaData:
           $ref: '#/components/schemas/TradeHistoryResponseMetaData'
-    Problem:
+    TradeHistoryResponseMetaData:
       type: object
       properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
+        page:
+          $ref: '#/components/schemas/TradeHistoryResponsePageData'
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -210,11 +193,28 @@ components:
           type: string
         instrument_token:
           type: string
-    TradeHistoryResponseMetaData:
+    Problem:
       type: object
       properties:
-        page:
-          $ref: '#/components/schemas/TradeHistoryResponsePageData'
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
   securitySchemes:
     OAUTH2:
       type: oauth2

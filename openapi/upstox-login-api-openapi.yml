@@ -296,40 +296,49 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    Problem:
+    TokenRequest:
       type: object
       properties:
-        errorCode:
+        code:
           type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
+          minLength: 1
+        client_id:
           type: string
-          description: Verbose message for the error state
-        propertyPath:
+          description: OAuth API key that is a public identifier for app
+          minLength: 1
+        client_secret:
           type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
+          description: OAuth client secret that is a private secret known only to app and authorization server
+          minLength: 1
+        redirect_uri:
           type: string
-        property_path:
+          description: Authorization server will redirect the user back to the application via redirect url
+          minLength: 1
+        grant_type:
           type: string
-        invalid_value: {}
-    LogoutResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
+          description: Type of grant used to get an access token
+          minLength: 1
+        refresh_extended_token:
           type: boolean
-          description: Logout status
+          description: Whether to refresh (regenerate) the extended access token. Defaults to false when absent. Set to true to refresh; false or omit to reuse an existing extended token when available.
+      required:
+      - client_id
+      - client_secret
+      - code
+      - grant_type
+      - redirect_uri
+    IndieUserTokenRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: OAuth API key that is a public identifier for app
+        client_secret:
+          type: string
+          description: OAuth client secret that is a private secret known only to app and authorization server
+        otp_verification_disabled:
+          type: boolean
+          description: To enable/disable otp auth flow
     OAuthClientException:
       type: object
       properties:
@@ -419,18 +428,6 @@ components:
                 type: string
         localizedMessage:
           type: string
-    IndieUserTokenRequest:
-      type: object
-      properties:
-        client_id:
-          type: string
-          description: OAuth API key that is a public identifier for app
-        client_secret:
-          type: string
-          description: OAuth client secret that is a private secret known only to app and authorization server
-        otp_verification_disabled:
-          type: boolean
-          description: To enable/disable otp auth flow
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -554,37 +551,40 @@ components:
           format: int32
           description: The number of seconds until the refresh token expires
           readOnly: true
-    TokenRequest:
+    Problem:
       type: object
       properties:
-        code:
+        errorCode:
           type: string
-          minLength: 1
-        client_id:
+          deprecated: true
+          description: Unique code for the error state
+        message:
           type: string
-          description: OAuth API key that is a public identifier for app
-          minLength: 1
-        client_secret:
+          description: Verbose message for the error state
+        propertyPath:
           type: string
-          description: OAuth client secret that is a private secret known only to app and authorization server
-          minLength: 1
-        redirect_uri:
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
           type: string
-          description: Authorization server will redirect the user back to the application via redirect url
-          minLength: 1
-        grant_type:
+        property_path:
           type: string
-          description: Type of grant used to get an access token
-          minLength: 1
-        refresh_extended_token:
+        invalid_value: {}
+    LogoutResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
           type: boolean
-          description: Whether to refresh (regenerate) the extended access token. Defaults to false when absent. Set to true to refresh; false or omit to reuse an existing extended token when available.
-      required:
-      - client_id
-      - client_secret
-      - code
-      - grant_type
-      - redirect_uri
+          description: Logout status
   securitySchemes:
     OAUTH2:
       type: oauth2

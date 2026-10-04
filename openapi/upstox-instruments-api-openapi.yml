@@ -132,6 +132,11 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    SearchMetaData:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Pagination'
     InstrumentData:
       type: object
       properties:
@@ -222,33 +227,6 @@ components:
           type: string
         cas_eligible:
           type: boolean
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    SearchMetaData:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Pagination'
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -277,6 +255,28 @@ components:
         total_records:
           type: integer
           format: int32
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
     SearchInstrumentResponse:
       type: object
       properties:

@@ -172,6 +172,49 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    GetBrokerageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/BrokerageWrapperData'
+          description: Response data for brokerage
+    BrokerageData:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+          description: Total charges for the order
+          readOnly: true
+        brokerage:
+          type: number
+          format: float
+          description: Brokerage charges for the order
+          readOnly: true
+        taxes:
+          $ref: '#/components/schemas/BrokerageTaxes'
+          description: Taxes levied on order
+          readOnly: true
+        otherTaxes:
+          $ref: '#/components/schemas/OtherTaxes'
+          deprecated: true
+          description: Other charges levied
+          readOnly: true
+        dpPlan:
+          $ref: '#/components/schemas/DpPlan'
+          deprecated: true
+          description: DP charges related information
+          readOnly: true
+        other_charges:
+          $ref: '#/components/schemas/OtherTaxes'
+        dp_plan:
+          $ref: '#/components/schemas/DpPlan'
     MarginRequest:
       type: object
       properties:
@@ -191,28 +234,6 @@ components:
             $ref: '#/components/schemas/Instrument'
       required:
       - instruments
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
     OtherTaxes:
       type: object
       properties:
@@ -232,6 +253,27 @@ components:
           type: number
           format: float
           description: SEBI turnover charges
+    BrokerageTaxes:
+      type: object
+      properties:
+        gst:
+          type: number
+          format: float
+          description: GST charges
+        stt:
+          type: number
+          format: float
+          description: STT charges
+        stamp_duty:
+          type: number
+          format: float
+          description: Stamp duty charges
+    BrokerageWrapperData:
+      type: object
+      properties:
+        charges:
+          $ref: '#/components/schemas/BrokerageData'
+          description: Response data for charges details
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -257,70 +299,6 @@ components:
         data:
           $ref: '#/components/schemas/MarginData'
           description: Response data for margin
-    BrokerageWrapperData:
-      type: object
-      properties:
-        charges:
-          $ref: '#/components/schemas/BrokerageData'
-          description: Response data for charges details
-    Instrument:
-      type: object
-      properties:
-        instrument_key:
-          type: string
-          description: Instrument Key of the Instrument
-          example: NSE_EQ|INE848E01016
-          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity of the instrument to buy or sell for margin calculation
-          example: 1
-          minimum: 1
-        product:
-          type: string
-          description: Product with which the order is to be placed
-          example: D
-        transaction_type:
-          type: string
-          description: Indicates whether its a BUY or SELL order
-          example: BUY
-        price:
-          type: number
-          format: double
-          description: price
-          example: 123.9
-          minimum: 0
-      required:
-      - instrument_key
-      - product
-      - quantity
-      - transaction_type
-    BrokerageTaxes:
-      type: object
-      properties:
-        gst:
-          type: number
-          format: float
-          description: GST charges
-        stt:
-          type: number
-          format: float
-          description: STT charges
-        stamp_duty:
-          type: number
-          format: float
-          description: Stamp duty charges
-    DpPlan:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name
-        min_expense:
-          type: number
-          format: float
-          description: Minimum expense charges
     Margin:
       type: object
       properties:
@@ -359,37 +337,28 @@ components:
           format: double
           description: Tender margin
           readOnly: true
-    BrokerageData:
+    Problem:
       type: object
       properties:
-        total:
-          type: number
-          format: float
-          description: Total charges for the order
-          readOnly: true
-        brokerage:
-          type: number
-          format: float
-          description: Brokerage charges for the order
-          readOnly: true
-        taxes:
-          $ref: '#/components/schemas/BrokerageTaxes'
-          description: Taxes levied on order
-          readOnly: true
-        otherTaxes:
-          $ref: '#/components/schemas/OtherTaxes'
+        errorCode:
+          type: string
           deprecated: true
-          description: Other charges levied
-          readOnly: true
-        dpPlan:
-          $ref: '#/components/schemas/DpPlan'
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
           deprecated: true
-          description: DP charges related information
-          readOnly: true
-        other_charges:
-          $ref: '#/components/schemas/OtherTaxes'
-        dp_plan:
-          $ref: '#/components/schemas/DpPlan'
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
     MarginData:
       type: object
       properties:
@@ -409,18 +378,49 @@ components:
           format: double
           description: Total margin after margin benefit
           readOnly: true
-    GetBrokerageResponse:
+    Instrument:
       type: object
       properties:
-        status:
+        instrument_key:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/BrokerageWrapperData'
-          description: Response data for brokerage
+          description: Instrument Key of the Instrument
+          example: NSE_EQ|INE848E01016
+          pattern: ^(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+(,(?:NSE_EQ|NSE_FO|NCD_FO|BSE_EQ|BSE_FO|BCD_FO|MCX_FO|NSE_INDEX|BSE_INDEX|MCX_INDEX|NSE_COM|GLOBAL_INDEX|GLOBAL_INDICATOR)\|[\w ^]+)*?$
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity of the instrument to buy or sell for margin calculation
+          example: 1
+          minimum: 1
+        product:
+          type: string
+          description: Product with which the order is to be placed
+          example: D
+        transaction_type:
+          type: string
+          description: Indicates whether its a BUY or SELL order
+          example: BUY
+        price:
+          type: number
+          format: double
+          description: price
+          example: 123.9
+          minimum: 0
+      required:
+      - instrument_key
+      - product
+      - quantity
+      - transaction_type
+    DpPlan:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name
+        min_expense:
+          type: number
+          format: float
+          description: Minimum expense charges
   securitySchemes:
     OAUTH2:
       type: oauth2

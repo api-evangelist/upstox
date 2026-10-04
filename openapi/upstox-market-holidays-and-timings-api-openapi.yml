@@ -1067,6 +1067,31 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    GetExchangeTimingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for exchange timing list
+          items:
+            $ref: '#/components/schemas/ExchangeTimingData'
+    ExchangeTimingData:
+      type: object
+      properties:
+        exchange:
+          type: string
+        start_time:
+          type: integer
+          format: int64
+        end_time:
+          type: integer
+          format: int64
     CasEligibleStatusData:
       type: object
       properties:
@@ -1088,77 +1113,6 @@ components:
           type: integer
           format: int64
           description: The timestamp (in milliseconds) when the CAS status was last updated.
-    GetMarketStatusResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/MarketStatusData'
-          description: Response data for market live status
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    MarketStatusData:
-      type: object
-      properties:
-        exchange:
-          type: string
-        status:
-          type: string
-        last_updated:
-          type: integer
-          format: int64
-        cas_eligible_status:
-          $ref: '#/components/schemas/CasEligibleStatusData'
-          description: CAS (Closing Auction Session) status of the segment. Present only for segments where CAS exists (e.g. NSE_EQ); absent otherwise.
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    ExchangeTimingData:
-      type: object
-      properties:
-        exchange:
-          type: string
-        start_time:
-          type: integer
-          format: int64
-        end_time:
-          type: integer
-          format: int64
     HolidayData:
       type: object
       properties:
@@ -1182,7 +1136,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExchangeTimingData'
-    GetExchangeTimingResponse:
+    ApiGatewayErrorResponse:
       type: object
       properties:
         status:
@@ -1191,11 +1145,45 @@ components:
           - success
           - error
           - partial_success
-        data:
+        errors:
           type: array
-          description: Response data for exchange timing list
           items:
-            $ref: '#/components/schemas/ExchangeTimingData'
+            $ref: '#/components/schemas/Problem'
+    MarketStatusData:
+      type: object
+      properties:
+        exchange:
+          type: string
+        status:
+          type: string
+        last_updated:
+          type: integer
+          format: int64
+        cas_eligible_status:
+          $ref: '#/components/schemas/CasEligibleStatusData'
+          description: CAS (Closing Auction Session) status of the segment. Present only for segments where CAS exists (e.g. NSE_EQ); absent otherwise.
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
     AnalyticsResponse:
       type: object
       properties:
@@ -1206,6 +1194,18 @@ components:
           - error
           - partial_success
         data: {}
+    GetMarketStatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/MarketStatusData'
+          description: Response data for market live status
     GetHolidayResponse:
       type: object
       properties:

@@ -271,152 +271,6 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    HoldingsData:
-      type: object
-      properties:
-        isin:
-          type: string
-          description: The standard ISIN representing stocks listed on multiple exchanges
-          example: INE118H01025
-          readOnly: true
-        cnc_used_quantity:
-          type: integer
-          format: int32
-          description: Quantity either blocked towards open or completed order
-          example: 0
-          readOnly: true
-        collateral_type:
-          type: string
-          description: Category of collateral assigned by RMS
-          example: WC
-          readOnly: true
-        company_name:
-          type: string
-          description: Name of the company
-          example: BSE LIM
-          readOnly: true
-        haircut:
-          type: number
-          format: float
-          description: This is the haircut percentage applied from RMS (applicable incase of collateral)
-          example: 0.23
-          readOnly: true
-        product:
-          type: string
-          description: Shows if the order was either Intraday, Delivery, CO or OCO
-          example: D
-          readOnly: true
-        quantity:
-          type: integer
-          format: int32
-          description: The total holding qty
-          example: 1
-          readOnly: true
-        tradingsymbol:
-          type: string
-          deprecated: true
-          description: Shows the trading symbol of the instrument
-          example: BSE
-          readOnly: true
-        last_price:
-          type: number
-          format: float
-          description: The last traded price of the instrument
-          example: 120.01
-          readOnly: true
-        close_price:
-          type: number
-          format: float
-          description: Closing price of the instrument from the last trading day
-          example: 120.01
-          readOnly: true
-        pnl:
-          type: number
-          format: float
-          description: Profit and Loss
-          example: 120.01
-          readOnly: true
-        day_change:
-          type: number
-          format: float
-          description: Day's change in absolute value for the stock
-          example: 0
-          readOnly: true
-        day_change_percentage:
-          type: number
-          format: float
-          description: Day's change in percentage for the stock
-          example: 0
-          readOnly: true
-        instrument_token:
-          type: string
-          description: Key issued by Upstox for the instrument
-          example: 151064324
-          readOnly: true
-        average_price:
-          type: number
-          format: float
-          description: Average price at which the net holding quantity was acquired
-          example: 120.01
-          readOnly: true
-        collateral_quantity:
-          type: integer
-          format: int32
-          description: Quantity marked as collateral by RMS on users request
-          example: 0
-          readOnly: true
-        collateral_update_quantity:
-          type: integer
-          format: int32
-          example: 0
-          readOnly: true
-        trading_symbol:
-          type: string
-          description: Shows the trading symbol of the instrument
-          example: BSE
-          readOnly: true
-        t1_quantity:
-          type: integer
-          format: int32
-          description: Quantity on T+1 day after order execution
-          example: 0
-          readOnly: true
-        exchange:
-          type: string
-          description: Exchange of the trading symbol
-          enum:
-          - NSE
-          - NFO
-          - CDS
-          - BSE
-          - BFO
-          - BCD
-          - MCX
-          - NSCOM
-          example: NSE
-          readOnly: true
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
     GetPositionResponse:
       type: object
       properties:
@@ -447,19 +301,6 @@ components:
           description: Response data for holdings
           items:
             $ref: '#/components/schemas/HoldingsData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
     OrderMetadata:
       type: object
       properties:
@@ -474,6 +315,19 @@ components:
           description: Status message for convert position request
           example: complete
           readOnly: true
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     ConvertPositionResponse:
       type: object
       properties:
@@ -491,51 +345,6 @@ components:
           description: Error details for convert position request
           items:
             $ref: '#/components/schemas/Problem'
-    ConvertPositionRequest:
-      type: object
-      properties:
-        instrument_token:
-          type: string
-          description: Key of the instrument
-          example: 151064324
-        new_product:
-          type: string
-          description: Indicates the new product to use for the convert positions
-          enum:
-          - I
-          - D
-          - CO
-          - OCO
-          - MTF
-          example: D
-        old_product:
-          type: string
-          description: Indicates the old product to use for the convert positions
-          enum:
-          - I
-          - D
-          - CO
-          - OCO
-          - MTF
-          example: I
-        transaction_type:
-          type: string
-          description: Indicates whether its a buy(b) or sell(s) order
-          enum:
-          - BUY
-          - SELL
-          example: BUY
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity with which the position to convert
-          example: 1
-      required:
-      - instrument_token
-      - new_product
-      - old_product
-      - quantity
-      - transaction_type
     PositionData:
       type: object
       properties:
@@ -717,6 +526,197 @@ components:
           format: float
           description: Average price at which quantities were sold
           example: 102.0
+          readOnly: true
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    ConvertPositionRequest:
+      type: object
+      properties:
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: 151064324
+        new_product:
+          type: string
+          description: Indicates the new product to use for the convert positions
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+        old_product:
+          type: string
+          description: Indicates the old product to use for the convert positions
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: I
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy(b) or sell(s) order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the position to convert
+          example: 1
+      required:
+      - instrument_token
+      - new_product
+      - old_product
+      - quantity
+      - transaction_type
+    HoldingsData:
+      type: object
+      properties:
+        isin:
+          type: string
+          description: The standard ISIN representing stocks listed on multiple exchanges
+          example: INE118H01025
+          readOnly: true
+        cnc_used_quantity:
+          type: integer
+          format: int32
+          description: Quantity either blocked towards open or completed order
+          example: 0
+          readOnly: true
+        collateral_type:
+          type: string
+          description: Category of collateral assigned by RMS
+          example: WC
+          readOnly: true
+        company_name:
+          type: string
+          description: Name of the company
+          example: BSE LIM
+          readOnly: true
+        haircut:
+          type: number
+          format: float
+          description: This is the haircut percentage applied from RMS (applicable incase of collateral)
+          example: 0.23
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CO or OCO
+          example: D
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: The total holding qty
+          example: 1
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol of the instrument
+          example: BSE
+          readOnly: true
+        last_price:
+          type: number
+          format: float
+          description: The last traded price of the instrument
+          example: 120.01
+          readOnly: true
+        close_price:
+          type: number
+          format: float
+          description: Closing price of the instrument from the last trading day
+          example: 120.01
+          readOnly: true
+        pnl:
+          type: number
+          format: float
+          description: Profit and Loss
+          example: 120.01
+          readOnly: true
+        day_change:
+          type: number
+          format: float
+          description: Day's change in absolute value for the stock
+          example: 0
+          readOnly: true
+        day_change_percentage:
+          type: number
+          format: float
+          description: Day's change in percentage for the stock
+          example: 0
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Key issued by Upstox for the instrument
+          example: 151064324
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Average price at which the net holding quantity was acquired
+          example: 120.01
+          readOnly: true
+        collateral_quantity:
+          type: integer
+          format: int32
+          description: Quantity marked as collateral by RMS on users request
+          example: 0
+          readOnly: true
+        collateral_update_quantity:
+          type: integer
+          format: int32
+          example: 0
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: BSE
+          readOnly: true
+        t1_quantity:
+          type: integer
+          format: int32
+          description: Quantity on T+1 day after order execution
+          example: 0
+          readOnly: true
+        exchange:
+          type: string
+          description: Exchange of the trading symbol
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
           readOnly: true
   securitySchemes:
     OAUTH2:

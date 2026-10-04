@@ -155,36 +155,29 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    MarketData:
+    GetOptionContractResponse:
       type: object
       properties:
-        ltp:
-          type: number
-          format: double
-        volume:
-          type: integer
-          format: int64
-        oi:
-          type: number
-          format: double
-        close_price:
-          type: number
-          format: double
-        bid_price:
-          type: number
-          format: double
-        bid_qty:
-          type: integer
-          format: int32
-        ask_price:
-          type: number
-          format: double
-        ask_qty:
-          type: integer
-          format: int32
-        prev_oi:
-          type: number
-          format: double
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option contracts
+          items:
+            $ref: '#/components/schemas/InstrumentData'
+    PutCallOptionChainData:
+      type: object
+      properties:
+        instrument_key:
+          type: string
+        market_data:
+          $ref: '#/components/schemas/MarketData'
+        option_greeks:
+          $ref: '#/components/schemas/AnalyticsData'
     InstrumentData:
       type: object
       properties:
@@ -275,6 +268,19 @@ components:
           type: string
         cas_eligible:
           type: boolean
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     Problem:
       type: object
       properties:
@@ -297,42 +303,36 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    ApiGatewayErrorResponse:
+    MarketData:
       type: object
       properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    PutCallOptionChainData:
-      type: object
-      properties:
-        instrument_key:
-          type: string
-        market_data:
-          $ref: '#/components/schemas/MarketData'
-        option_greeks:
-          $ref: '#/components/schemas/AnalyticsData'
-    GetOptionContractResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option contracts
-          items:
-            $ref: '#/components/schemas/InstrumentData'
+        ltp:
+          type: number
+          format: double
+        volume:
+          type: integer
+          format: int64
+        oi:
+          type: number
+          format: double
+        close_price:
+          type: number
+          format: double
+        bid_price:
+          type: number
+          format: double
+        bid_qty:
+          type: integer
+          format: int32
+        ask_price:
+          type: number
+          format: double
+        ask_qty:
+          type: integer
+          format: int32
+        prev_oi:
+          type: number
+          format: double
     AnalyticsData:
       type: object
       properties:

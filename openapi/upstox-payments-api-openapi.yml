@@ -383,84 +383,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PayoutDetails:
-      type: object
-      properties:
-        status:
-          type: string
-        mode:
-          type: string
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        eta:
-          type: string
-        message:
-          type: string
-        transaction_id:
-          type: string
-        created_at:
-          type: string
-        bank_name:
-          type: string
-        transaction_fee:
-          type: string
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    PayoutModesData: {}
-    InitiatePayoutRequest:
-      type: object
-      properties:
-        mode:
-          type: string
-          description: Withdrawal mode. NEFT or IMPS
-          example: NEFT
-          minLength: 1
-          pattern: ^(NEFT|IMPS)$
-        amount:
-          type: number
-          format: double
-          description: Withdrawal amount in INR
-          example: 5000.0
-          minimum: 100.0
-      required:
-      - amount
-      - mode
     ModifyPayoutRequest:
       type: object
       properties:
@@ -501,6 +423,24 @@ components:
           type: string
         created_at:
           type: string
+    InitiatePayoutRequest:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: Withdrawal mode. NEFT or IMPS
+          example: NEFT
+          minLength: 1
+          pattern: ^(NEFT|IMPS)$
+        amount:
+          type: number
+          format: double
+          description: Withdrawal amount in INR
+          example: 5000.0
+          minimum: 100.0
+      required:
+      - amount
+      - mode
     PaymentHistoryResponse:
       type: object
       properties:
@@ -515,6 +455,19 @@ components:
           description: List of payment history records
           items:
             $ref: '#/components/schemas/PaymentHistoryData'
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     PayoutModesResponse:
       type: object
       properties:
@@ -527,6 +480,53 @@ components:
         data:
           $ref: '#/components/schemas/PayoutModesData'
           description: Available payout modes with eligibility details
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    PayoutDetails:
+      type: object
+      properties:
+        status:
+          type: string
+        mode:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        eta:
+          type: string
+        message:
+          type: string
+        transaction_id:
+          type: string
+        created_at:
+          type: string
+        bank_name:
+          type: string
+        transaction_fee:
+          type: string
+    PayoutModesData: {}
     PayoutDetailsResponse:
       type: object
       properties:
