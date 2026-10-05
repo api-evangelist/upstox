@@ -1,0 +1,12 @@
+{
+ "url": "https://api-v2.upstox.com/api-docs",
+ "requested_url": "https://api-v2.upstox.com/api-docs",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 300718,
+ "sha256": "bc2ec542d1439747d47a8683910794cd59e1cf57b1f3efc5107f69781282bacd",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.981), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
