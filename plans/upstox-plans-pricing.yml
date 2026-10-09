@@ -62,3 +62,29 @@ notes:
     Zero-brokerage API trading was discontinued on 31 August 2024; new Upstox API users from 1 September
     2024 got 90 days of zero brokerage instead
     (https://upstox.com/developer/api-documentation/announcements/update-zero-brokerage).
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - metered
+  units: []
+  plans:
+  - name: Developer API access
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: API order brokerage (promotional)
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods: []
+  - name: Upstox Plus
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
