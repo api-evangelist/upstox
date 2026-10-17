@@ -1067,7 +1067,7 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    GetExchangeTimingResponse:
+    GetMarketStatusResponse:
       type: object
       properties:
         status:
@@ -1077,78 +1077,8 @@ components:
           - error
           - partial_success
         data:
-          type: array
-          description: Response data for exchange timing list
-          items:
-            $ref: '#/components/schemas/ExchangeTimingData'
-    ExchangeTimingData:
-      type: object
-      properties:
-        exchange:
-          type: string
-        start_time:
-          type: integer
-          format: int64
-        end_time:
-          type: integer
-          format: int64
-    CasEligibleStatusData:
-      type: object
-      properties:
-        status:
-          type: string
-          description: The CAS (Collateral Auction Session / Closing Auction Session) status of the segment.
-          enum:
-          - NORMAL_OPEN
-          - NORMAL_CLOSE
-          - PRE_OPEN_START
-          - PRE_OPEN_END
-          - CLOSING_START
-          - CLOSING_END
-          - CTS_CLOSE
-          - CAS_LM_START
-          - CAS_M_STOP
-          - CAS_STOP
-        last_updated:
-          type: integer
-          format: int64
-          description: The timestamp (in milliseconds) when the CAS status was last updated.
-    HolidayData:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        description:
-          type: string
-        holiday_type:
-          type: string
-          enum:
-          - ALL
-          - SETTLEMENT_HOLIDAY
-          - TRADING_HOLIDAY
-          - SPECIAL_TIMING
-        closed_exchanges:
-          type: array
-          items:
-            type: string
-        open_exchanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExchangeTimingData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
+          $ref: '#/components/schemas/MarketStatusData'
+          description: Response data for market live status
     MarketStatusData:
       type: object
       properties:
@@ -1184,28 +1114,27 @@ components:
         property_path:
           type: string
         invalid_value: {}
-    AnalyticsResponse:
+    CasEligibleStatusData:
       type: object
       properties:
         status:
           type: string
+          description: The CAS (Collateral Auction Session / Closing Auction Session) status of the segment.
           enum:
-          - success
-          - error
-          - partial_success
-        data: {}
-    GetMarketStatusResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/MarketStatusData'
-          description: Response data for market live status
+          - NORMAL_OPEN
+          - NORMAL_CLOSE
+          - PRE_OPEN_START
+          - PRE_OPEN_END
+          - CLOSING_START
+          - CLOSING_END
+          - CTS_CLOSE
+          - CAS_LM_START
+          - CAS_M_STOP
+          - CAS_STOP
+        last_updated:
+          type: integer
+          format: int64
+          description: The timestamp (in milliseconds) when the CAS status was last updated.
     GetHolidayResponse:
       type: object
       properties:
@@ -1220,6 +1149,77 @@ components:
           description: Response data for holiday list
           items:
             $ref: '#/components/schemas/HolidayData'
+    GetExchangeTimingResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for exchange timing list
+          items:
+            $ref: '#/components/schemas/ExchangeTimingData'
+    AnalyticsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data: {}
+    ExchangeTimingData:
+      type: object
+      properties:
+        exchange:
+          type: string
+        start_time:
+          type: integer
+          format: int64
+        end_time:
+          type: integer
+          format: int64
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    HolidayData:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        holiday_type:
+          type: string
+          enum:
+          - ALL
+          - SETTLEMENT_HOLIDAY
+          - TRADING_HOLIDAY
+          - SPECIAL_TIMING
+        closed_exchanges:
+          type: array
+          items:
+            type: string
+        open_exchanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExchangeTimingData'
   securitySchemes:
     OAUTH2:
       type: oauth2

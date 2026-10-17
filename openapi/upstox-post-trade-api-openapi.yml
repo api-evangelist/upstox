@@ -109,54 +109,33 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    TradeHistoryResponse:
+    Problem:
       type: object
       properties:
-        status:
+        errorCode:
           type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
-        metaData:
-          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
     TradeHistoryResponseMetaData:
       type: object
       properties:
         page:
           $ref: '#/components/schemas/TradeHistoryResponsePageData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    TradeHistoryResponsePageData:
-      type: object
-      properties:
-        page_number:
-          type: integer
-          format: int32
-        page_size:
-          type: integer
-          format: int32
-        total_records:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-          format: int32
     TradeHistoryResponseTradeData:
       type: object
       properties:
@@ -193,28 +172,49 @@ components:
           type: string
         instrument_token:
           type: string
-    Problem:
+    ApiGatewayErrorResponse:
       type: object
       properties:
-        errorCode:
+        status:
           type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    TradeHistoryResponse:
+      type: object
+      properties:
+        status:
           type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeHistoryResponseTradeData'
+        metaData:
+          $ref: '#/components/schemas/TradeHistoryResponseMetaData'
+    TradeHistoryResponsePageData:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+        page_size:
+          type: integer
+          format: int32
+        total_records:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+          format: int32
   securitySchemes:
     OAUTH2:
       type: oauth2

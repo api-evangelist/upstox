@@ -127,19 +127,6 @@ components:
               $ref: '#/components/schemas/NewsItemData'
         metadata:
           $ref: '#/components/schemas/NewsResponseMetaData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
     Problem:
       type: object
       properties:
@@ -167,6 +154,33 @@ components:
       properties:
         page:
           $ref: '#/components/schemas/NewsResponsePageData'
+    NewsItemData:
+      type: object
+      properties:
+        heading:
+          type: string
+        summary:
+          type: string
+        thumbnail:
+          type: string
+        article_link:
+          type: string
+        published_time:
+          type: integer
+          format: int64
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
     NewsResponsePageData:
       type: object
       properties:
@@ -182,20 +196,6 @@ components:
         total_pages:
           type: integer
           format: int32
-    NewsItemData:
-      type: object
-      properties:
-        heading:
-          type: string
-        summary:
-          type: string
-        thumbnail:
-          type: string
-        article_link:
-          type: string
-        published_time:
-          type: integer
-          format: int64
   securitySchemes:
     OAUTH2:
       type: oauth2

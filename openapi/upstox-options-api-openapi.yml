@@ -155,6 +155,42 @@ paths:
       - OAUTH2: []
 components:
   schemas:
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GetOptionChainResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for option chain data
+          items:
+            $ref: '#/components/schemas/OptionStrikeData'
     GetOptionContractResponse:
       type: object
       properties:
@@ -169,15 +205,6 @@ components:
           description: Response data for option contracts
           items:
             $ref: '#/components/schemas/InstrumentData'
-    PutCallOptionChainData:
-      type: object
-      properties:
-        instrument_key:
-          type: string
-        market_data:
-          $ref: '#/components/schemas/MarketData'
-        option_greeks:
-          $ref: '#/components/schemas/AnalyticsData'
     InstrumentData:
       type: object
       properties:
@@ -268,6 +295,48 @@ components:
           type: string
         cas_eligible:
           type: boolean
+    OptionStrikeData:
+      type: object
+      properties:
+        expiry:
+          type: string
+          format: date-time
+        pcr:
+          type: number
+          format: double
+        strike_price:
+          type: number
+          format: double
+        underlying_key:
+          type: string
+        underlying_spot_price:
+          type: number
+          format: double
+        call_options:
+          $ref: '#/components/schemas/PutCallOptionChainData'
+        put_options:
+          $ref: '#/components/schemas/PutCallOptionChainData'
+    AnalyticsData:
+      type: object
+      properties:
+        vega:
+          type: number
+          format: double
+        theta:
+          type: number
+          format: double
+        gamma:
+          type: number
+          format: double
+        delta:
+          type: number
+          format: double
+        iv:
+          type: number
+          format: double
+        pop:
+          type: number
+          format: double
     ApiGatewayErrorResponse:
       type: object
       properties:
@@ -281,28 +350,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Problem'
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
     MarketData:
       type: object
       properties:
@@ -333,62 +380,15 @@ components:
         prev_oi:
           type: number
           format: double
-    AnalyticsData:
+    PutCallOptionChainData:
       type: object
       properties:
-        vega:
-          type: number
-          format: double
-        theta:
-          type: number
-          format: double
-        gamma:
-          type: number
-          format: double
-        delta:
-          type: number
-          format: double
-        iv:
-          type: number
-          format: double
-        pop:
-          type: number
-          format: double
-    OptionStrikeData:
-      type: object
-      properties:
-        expiry:
+        instrument_key:
           type: string
-          format: date-time
-        pcr:
-          type: number
-          format: double
-        strike_price:
-          type: number
-          format: double
-        underlying_key:
-          type: string
-        underlying_spot_price:
-          type: number
-          format: double
-        call_options:
-          $ref: '#/components/schemas/PutCallOptionChainData'
-        put_options:
-          $ref: '#/components/schemas/PutCallOptionChainData'
-    GetOptionChainResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for option chain data
-          items:
-            $ref: '#/components/schemas/OptionStrikeData'
+        market_data:
+          $ref: '#/components/schemas/MarketData'
+        option_greeks:
+          $ref: '#/components/schemas/AnalyticsData'
   securitySchemes:
     OAUTH2:
       type: oauth2

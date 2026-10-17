@@ -1228,15 +1228,7 @@ paths:
       - OAUTH2: []
 components:
   schemas:
-    PlaceOrderData:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: An order ID for the order request placed
-          example: 1644490272000
-          readOnly: true
-    GetGttOrderResponse:
+    PlaceOrderV3Response:
       type: object
       properties:
         status:
@@ -1246,316 +1238,9 @@ components:
           - error
           - partial_success
         data:
-          type: array
-          description: Response data for order details
-          items:
-            $ref: '#/components/schemas/GttOrderDetails'
+          $ref: '#/components/schemas/MultiOrderV3Data'
         metadata:
           $ref: '#/components/schemas/OrderMetadata'
-    ModifyOrderResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/ModifyOrderData'
-          description: Response data for modify order request
-    PlaceOrderResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/PlaceOrderData'
-          description: Response data for place order request
-    PlaceOrderRequest:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity with which the order is to be placed
-          example: 1
-        product:
-          type: string
-          description: Signifies if the order was either Intraday, Delivery, CO or OCO
-          enum:
-          - I
-          - D
-          example: D
-        validity:
-          type: string
-          description: It can be one of the following - DAY(default), IOC
-          enum:
-          - DAY
-          - IOC
-          example: DAY
-        price:
-          type: number
-          format: float
-          description: Price at which the order will be placed
-          example: 0
-        tag:
-          type: string
-          description: Tag for a particular order
-        instrument_token:
-          type: string
-          description: Key of the instrument
-          example: NSE_EQ|INE848E01016
-        order_type:
-          type: string
-          description: 'Type of order. It can be one of the following
-
-            MARKET refers to market order
-
-            LIMIT refers to Limit Order
-
-            SL refers to Stop Loss Limit
-
-            SL-M refers to Stop Loss Market'
-          enum:
-          - MARKET
-          - LIMIT
-          - SL
-          - SL-M
-          example: MARKET
-        transaction_type:
-          type: string
-          description: Indicates whether its a buy or sell order
-          enum:
-          - BUY
-          - SELL
-          example: BUY
-        disclosed_quantity:
-          type: integer
-          format: int32
-          description: The quantity that should be disclosed in the market depth
-          example: 0
-        trigger_price:
-          type: number
-          format: float
-          description: If the order is a stop loss order then the trigger price to be set is mentioned here
-          example: 0
-        is_amo:
-          type: boolean
-          description: Signifies if the order is an After Market Order
-          example: false
-      required:
-      - disclosed_quantity
-      - instrument_token
-      - is_amo
-      - order_type
-      - price
-      - product
-      - quantity
-      - transaction_type
-      - trigger_price
-      - validity
-    GetOrderBookResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for order Book
-          items:
-            $ref: '#/components/schemas/OrderBookData'
-    ApiGatewayErrorResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Problem'
-    GetTradeResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          type: array
-          description: Response data for trades
-          items:
-            $ref: '#/components/schemas/TradeData'
-    TradeData:
-      type: object
-      properties:
-        exchange:
-          type: string
-          description: Exchange to which the order is associated
-          enum:
-          - NSE
-          - NFO
-          - CDS
-          - BSE
-          - BFO
-          - BCD
-          - MCX
-          - NSCOM
-          example: NSE
-          readOnly: true
-        product:
-          type: string
-          description: Shows if the order was either Intraday, Delivery, CO or OCO
-          enum:
-          - I
-          - D
-          - CO
-          - OCO
-          - MTF
-          example: D
-          readOnly: true
-        tradingsymbol:
-          type: string
-          deprecated: true
-          description: Shows the trading symbol which could be a combination of symbol name, instrument, expiry date etc
-          example: GMRINFRA-EQ
-          readOnly: true
-        trading_symbol:
-          type: string
-          description: Shows the trading symbol which could be a combination of symbol name, instrument, expiry date etc
-          example: GMRINFRA-EQ
-          readOnly: true
-        instrument_token:
-          type: string
-          description: Identifier issued by Upstox used for subscribing to live market quotes
-          example: 151064324
-          readOnly: true
-        order_type:
-          type: string
-          description: 'Type of order. It can be one of the following
-
-            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
-          enum:
-          - MARKET
-          - LIMIT
-          - SL
-          - SL-M
-          example: MARKET
-          readOnly: true
-        transaction_type:
-          type: string
-          description: Indicates whether the order was a buy or sell order
-          enum:
-          - BUY
-          - SELL
-          example: BUY
-          readOnly: true
-        quantity:
-          type: integer
-          format: int32
-          description: The total quantity traded from this particular order
-          example: 1
-          readOnly: true
-        exchange_order_id:
-          type: string
-          description: Unique order ID assigned by the exchange for the order placed
-          example: 221013001021540
-          readOnly: true
-        order_id:
-          type: string
-          description: Unique order ID assigned internally for the order placed
-          example: 221013001021539
-          readOnly: true
-        exchange_timestamp:
-          type: string
-          description: User readable time at when the trade occurred
-          example: 03-Aug-2017 15:03:42
-          readOnly: true
-        average_price:
-          type: number
-          format: float
-          description: Price at which the traded quantity is traded
-          example: 299.4
-          readOnly: true
-        trade_id:
-          type: string
-          description: Trade ID generated from exchange towards traded transaction
-          example: 50091502
-          readOnly: true
-        order_ref_id:
-          type: string
-          description: The order reference ID for which the order must be modified
-          example: udapi-aqwsed14356
-          readOnly: true
-        order_timestamp:
-          type: string
-          description: User readable timestamp at which the order was placed
-          example: 23-Apr-2021 14:22:06
-          readOnly: true
-    GttPlaceOrderRequest:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'Type of GTT order. It can be one of the following:
-
-            SINGLE refers to a single-leg GTT order
-
-            MULTIPLE refers to a multi-leg GTT order'
-          enum:
-          - SINGLE
-          - MULTIPLE
-          example: SINGLE
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity with which the order is to be placed
-          example: 1
-        product:
-          type: string
-          description: Signifies if the order was either Intraday, Delivery or MTF
-          enum:
-          - I
-          - D
-          - MTF
-          example: D
-        rules:
-          type: array
-          description: List of rules defining the conditions for each leg in the GTT order
-          items:
-            $ref: '#/components/schemas/GttRule'
-        instrument_token:
-          type: string
-          description: Key of the instrument
-          example: NSE_EQ|INE848E01016
-        transaction_type:
-          type: string
-          description: Indicates whether its a buy or sell order
-          enum:
-          - BUY
-          - SELL
-          example: BUY
-      required:
-      - instrument_token
-      - product
-      - quantity
-      - rules
-      - transaction_type
-      - type
     PlaceOrderV3Request:
       type: object
       properties:
@@ -1642,6 +1327,120 @@ components:
       - transaction_type
       - trigger_price
       - validity
+    MultiOrderSummary:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of order lines present in the payload.
+          example: 3
+          readOnly: true
+        success:
+          type: integer
+          format: int32
+          description: The number of order lines that were successfully placed without any errors.
+          example: 2
+          readOnly: true
+        error:
+          type: integer
+          format: int32
+          description: The number of order lines that encountered errors during processing, despite their payloads being valid.
+          example: 1
+          readOnly: true
+        payload_error:
+          type: integer
+          format: int32
+          description: 'The number of order lines with payload errors, indicating formatting or data validity issues.<br/><br/><b>Note</b>: Orders are processed only if the entire batch is free of payload_error, ensuring error-free transactions.'
+          example: 0
+          readOnly: true
+    CancelOrExitOrderErrorData:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+        instrument_key:
+          type: string
+          description: Key of instrument
+          example: NSE_EQ|INE002A01018
+          readOnly: true
+        order_id:
+          type: string
+          description: Reference order ID
+          example: 1644490272000
+          readOnly: true
+    ModifyOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ModifyOrderData'
+          description: Response data for modify order request
+    OrderMetadata:
+      type: object
+      properties:
+        latency:
+          type: integer
+          format: int64
+    CancelOrderV3Response:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CancelOrderData'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    GttCancelOrderRequest:
+      type: object
+      properties:
+        gtt_order_id:
+          type: string
+          description: Unique identifier of the GTT order to be cancelled
+          example: GTT-12345678
+          pattern: ^GTT-.+$
+      required:
+      - gtt_order_id
+    GetOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for order details
+          items:
+            $ref: '#/components/schemas/OrderData'
     GetOrderDetailsResponse:
       type: object
       properties:
@@ -1654,6 +1453,62 @@ components:
         data:
           $ref: '#/components/schemas/OrderBookData'
           description: Response data for order details
+    Problem:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+    GttModifyOrderRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Type of GTT order. It can be one of the following:
+
+            SINGLE refers to a single-leg GTT order
+
+            MULTIPLE refers to a multi-leg GTT order'
+          enum:
+          - SINGLE
+          - MULTIPLE
+          example: SINGLE
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        rules:
+          type: array
+          description: List of rules defining the conditions for each leg in the GTT order
+          items:
+            $ref: '#/components/schemas/GttRule'
+        gtt_order_id:
+          type: string
+          description: Unique identifier of the GTT order to be modified
+          example: GTT-12345678
+          pattern: ^GTT-.+$
+      required:
+      - gtt_order_id
+      - quantity
+      - rules
+      - type
     GttTriggerOrderResponse:
       type: object
       properties:
@@ -1668,6 +1523,70 @@ components:
           description: Response data for GTT order request
         metadata:
           $ref: '#/components/schemas/OrderMetadata'
+    MultiOrderError:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          deprecated: true
+          description: Unique code for the error state
+        message:
+          type: string
+          description: Verbose message for the error state
+        propertyPath:
+          type: string
+          deprecated: true
+          description: Path to property failing validation
+        invalidValue:
+          deprecated: true
+          description: Invalid value for the property failing validation
+        error_code:
+          type: string
+        property_path:
+          type: string
+        invalid_value: {}
+        correlation_id:
+          type: string
+          description: A unique identifier for tracking individual orders within the batch
+          example: 213fsf2324
+          readOnly: true
+    GetGttOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          type: array
+          description: Response data for order details
+          items:
+            $ref: '#/components/schemas/GttOrderDetails'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    BatchExecutionSummary:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of order lines present in the payload.
+          example: 3
+          readOnly: true
+        success:
+          type: integer
+          format: int32
+          description: The number of order lines that were successfully placed without any errors.
+          example: 2
+          readOnly: true
+        error:
+          type: integer
+          format: int32
+          description: The number of order lines that encountered errors during processing, despite their payloads being valid.
+          example: 1
+          readOnly: true
     MultiOrderResponse:
       type: object
       properties:
@@ -1690,6 +1609,19 @@ components:
         summary:
           $ref: '#/components/schemas/MultiOrderSummary'
           description: Execution summary for multi order request
+    MultiOrderData:
+      type: object
+      properties:
+        correlation_id:
+          type: string
+          description: A unique identifier for tracking individual orders within the batch
+          example: 213fsf2324
+          readOnly: true
+        order_id:
+          type: string
+          description: An order ID for the order request placed
+          example: 1644490272000
+          readOnly: true
     CancelOrderResponse:
       type: object
       properties:
@@ -1702,109 +1634,173 @@ components:
         data:
           $ref: '#/components/schemas/CancelOrderData'
           description: Response data for Cancel order request
-    MultiOrderRequest:
+    OrderData:
       type: object
       properties:
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity with which the order is to be placed
-          example: 1
-        product:
+        exchange:
           type: string
-          description: Signifies if the order was either Intraday, Delivery, CO or OCO
+          description: Exchange to which the order is associated
           enum:
-          - I
-          - D
-          example: D
-        validity:
-          type: string
-          description: It can be one of the following - DAY(default), IOC
-          enum:
-          - DAY
-          - IOC
-          example: DAY
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
         price:
           type: number
           format: float
-          description: Price at which the order will be placed
-          example: 0
+          description: Price at which the order was placed
+          example: 120.01
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CoverOrder or OneCancelsOther
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order was placed
+          example: 1
+          readOnly: true
+        status:
+          type: string
+          description: Indicates the current status of the order. Valid order status’ are outlined in the table below
+          example: complete
+          readOnly: true
         tag:
           type: string
-          maxLength: 40
-          minLength: 0
-        slice:
-          type: boolean
-          description: To divide the order line based on predefined exchange definitions
-          example: false
+          description: Tag to uniquely identify an order
+          readOnly: true
+        validity:
+          type: string
+          description: Order validity (DAY- Day and IOC- Immediate or Cancel (IOC) order)
+          enum:
+          - DAY
+          - IOC
+          - EOS
+          example: DAY
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Average price at which the qty got traded
+          example: 120.01
+          readOnly: true
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 1
+          readOnly: true
+        exchange_order_id:
+          type: string
+          description: Unique order ID assigned by the exchange for the order placed
+          example: 221013001021540
+          readOnly: true
+        exchange_timestamp:
+          type: string
+          description: User readable time at which the order was placed or updated
+          example: 03-Aug-2017 15:03:42
+          readOnly: true
         instrument_token:
           type: string
-          description: Key of the instrument
-          example: NSE_EQ|INE848E01016
+          description: Identifier issued by Upstox used for subscribing to live market quotes
+          example: 151064324
+          readOnly: true
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+          readOnly: true
+        status_message:
+          type: string
+          description: Indicates the reason when any order is rejected, not modified or cancelled
+          readOnly: true
+        order_id:
+          type: string
+          description: Unique order ID assigned internally for the order placed
+          example: 221013001021541
+          readOnly: true
+        order_request_id:
+          type: string
+          description: Apart from 1st order it shows the count of how many requests were sent
+          example: 221013001021542
+          readOnly: true
         order_type:
           type: string
           description: 'Type of order. It can be one of the following
 
-            MARKET refers to market order
-
-            LIMIT refers to Limit Order
-
-            SL refers to Stop Loss Limit
-
-            SL-M refers to Stop Loss Market'
+            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
           enum:
           - MARKET
           - LIMIT
           - SL
           - SL-M
           example: MARKET
+          readOnly: true
+        parent_order_id:
+          type: string
+          description: In case the order is part of the second or third leg of a CO or OCO, the parent order ID is indicated here
+          example: 221013001021543
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol of the instrument
+          example: GMR
+          readOnly: true
+        order_timestamp:
+          type: string
+          description: User readable timestamp at which the order was placed
+          example: 23-Apr-2021 14:22:06
+          readOnly: true
+        filled_quantity:
+          type: integer
+          format: int32
+          description: The total quantity traded from this particular order
+          example: 1
+          readOnly: true
         transaction_type:
           type: string
-          description: Indicates whether its a buy or sell order
+          description: Indicates whether the order was a buy or sell order
           enum:
           - BUY
           - SELL
           example: BUY
-        disclosed_quantity:
-          type: integer
-          format: int32
-          description: The quantity that should be disclosed in the market depth
-          example: 0
+          readOnly: true
         trigger_price:
           type: number
           format: float
-          description: If the order is a stop loss order then the trigger price to be set is mentioned here
-          example: 0
-        is_amo:
-          type: boolean
-          description: Signifies if the order is an After Market Order
-          example: false
-        correlation_id:
+          description: If the order was a stop loss order then the trigger price set is mentioned here
+          example: 120.01
+          readOnly: true
+        placed_by:
           type: string
-          description: A unique identifier for tracking individual orders within the batch
-          example: 12345678
-          maxLength: 20
-          minLength: 1
-        market_protection:
-          type: number
-          format: float
-          description: Optional parameter defining the market protection percentage for the multi order
-          example: 3
-          maximum: 25
-          minimum: -1
-      required:
-      - correlation_id
-      - disclosed_quantity
-      - instrument_token
-      - is_amo
-      - order_type
-      - price
-      - product
-      - quantity
-      - slice
-      - transaction_type
-      - trigger_price
-      - validity
+          description: Uniquely identifies the user
+          example: 200123
+          readOnly: true
+        variety:
+          type: string
+          description: Order complexity
+          example: SIMPLE
+          readOnly: true
     OrderBookData:
       type: object
       properties:
@@ -1990,205 +1986,6 @@ components:
           description: The order reference ID for which the order must be modified
           example: udapi-12345abcd
           readOnly: true
-    OrderData:
-      type: object
-      properties:
-        exchange:
-          type: string
-          description: Exchange to which the order is associated
-          enum:
-          - NSE
-          - NFO
-          - CDS
-          - BSE
-          - BFO
-          - BCD
-          - MCX
-          - NSCOM
-          example: NSE
-          readOnly: true
-        price:
-          type: number
-          format: float
-          description: Price at which the order was placed
-          example: 120.01
-          readOnly: true
-        product:
-          type: string
-          description: Shows if the order was either Intraday, Delivery, CoverOrder or OneCancelsOther
-          enum:
-          - I
-          - D
-          - CO
-          - OCO
-          - MTF
-          example: D
-          readOnly: true
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity with which the order was placed
-          example: 1
-          readOnly: true
-        status:
-          type: string
-          description: Indicates the current status of the order. Valid order status’ are outlined in the table below
-          example: complete
-          readOnly: true
-        tag:
-          type: string
-          description: Tag to uniquely identify an order
-          readOnly: true
-        validity:
-          type: string
-          description: Order validity (DAY- Day and IOC- Immediate or Cancel (IOC) order)
-          enum:
-          - DAY
-          - IOC
-          - EOS
-          example: DAY
-          readOnly: true
-        average_price:
-          type: number
-          format: float
-          description: Average price at which the qty got traded
-          example: 120.01
-          readOnly: true
-        disclosed_quantity:
-          type: integer
-          format: int32
-          description: The quantity that should be disclosed in the market depth
-          example: 1
-          readOnly: true
-        exchange_order_id:
-          type: string
-          description: Unique order ID assigned by the exchange for the order placed
-          example: 221013001021540
-          readOnly: true
-        exchange_timestamp:
-          type: string
-          description: User readable time at which the order was placed or updated
-          example: 03-Aug-2017 15:03:42
-          readOnly: true
-        instrument_token:
-          type: string
-          description: Identifier issued by Upstox used for subscribing to live market quotes
-          example: 151064324
-          readOnly: true
-        is_amo:
-          type: boolean
-          description: Signifies if the order is an After Market Order
-          example: false
-          readOnly: true
-        status_message:
-          type: string
-          description: Indicates the reason when any order is rejected, not modified or cancelled
-          readOnly: true
-        order_id:
-          type: string
-          description: Unique order ID assigned internally for the order placed
-          example: 221013001021541
-          readOnly: true
-        order_request_id:
-          type: string
-          description: Apart from 1st order it shows the count of how many requests were sent
-          example: 221013001021542
-          readOnly: true
-        order_type:
-          type: string
-          description: 'Type of order. It can be one of the following
-
-            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
-          enum:
-          - MARKET
-          - LIMIT
-          - SL
-          - SL-M
-          example: MARKET
-          readOnly: true
-        parent_order_id:
-          type: string
-          description: In case the order is part of the second or third leg of a CO or OCO, the parent order ID is indicated here
-          example: 221013001021543
-          readOnly: true
-        tradingsymbol:
-          type: string
-          deprecated: true
-          description: Shows the trading symbol of the instrument
-          example: GMR
-          readOnly: true
-        trading_symbol:
-          type: string
-          description: Shows the trading symbol of the instrument
-          example: GMR
-          readOnly: true
-        order_timestamp:
-          type: string
-          description: User readable timestamp at which the order was placed
-          example: 23-Apr-2021 14:22:06
-          readOnly: true
-        filled_quantity:
-          type: integer
-          format: int32
-          description: The total quantity traded from this particular order
-          example: 1
-          readOnly: true
-        transaction_type:
-          type: string
-          description: Indicates whether the order was a buy or sell order
-          enum:
-          - BUY
-          - SELL
-          example: BUY
-          readOnly: true
-        trigger_price:
-          type: number
-          format: float
-          description: If the order was a stop loss order then the trigger price set is mentioned here
-          example: 120.01
-          readOnly: true
-        placed_by:
-          type: string
-          description: Uniquely identifies the user
-          example: 200123
-          readOnly: true
-        variety:
-          type: string
-          description: Order complexity
-          example: SIMPLE
-          readOnly: true
-    Problem:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-    GttOrderData:
-      type: object
-      properties:
-        gtt_order_ids:
-          type: array
-          description: Order ID for the placed GTT order
-          example: GTT-221130000253265
-          items:
-            type: string
-          readOnly: true
     MultiOrderV3Data:
       type: object
       properties:
@@ -2196,27 +1993,7 @@ components:
           type: array
           items:
             type: string
-    CancelOrExitMultiOrderResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/CancelOrExitMultiOrderData'
-          description: Response data for cancel or exit order request
-        errors:
-          type: array
-          description: Error data for cancel or exit order request
-          items:
-            $ref: '#/components/schemas/CancelOrExitOrderErrorData'
-        summary:
-          $ref: '#/components/schemas/BatchExecutionSummary'
-          description: Execution summary for cancel or exit order request
-    GttModifyOrderRequest:
+    GttPlaceOrderRequest:
       type: object
       properties:
         type:
@@ -2235,75 +2012,37 @@ components:
           format: int32
           description: Quantity with which the order is to be placed
           example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery or MTF
+          enum:
+          - I
+          - D
+          - MTF
+          example: D
         rules:
           type: array
           description: List of rules defining the conditions for each leg in the GTT order
           items:
             $ref: '#/components/schemas/GttRule'
-        gtt_order_id:
+        instrument_token:
           type: string
-          description: Unique identifier of the GTT order to be modified
-          example: GTT-12345678
-          pattern: ^GTT-.+$
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
       required:
-      - gtt_order_id
+      - instrument_token
+      - product
       - quantity
       - rules
+      - transaction_type
       - type
-    GttRule:
-      type: object
-      properties:
-        strategy:
-          type: string
-          description: 'Defines the strategy for the GTT order leg:
-
-            ENTRY - First leg order
-
-            STOPLOSS - Stop-loss order
-
-            TARGET - Target order'
-          enum:
-          - ENTRY
-          - STOPLOSS
-          - TARGET
-          example: ENTRY
-        trigger_type:
-          type: string
-          description: Trigger type for each leg of the order
-          enum:
-          - ABOVE
-          - BELOW
-          - IMMEDIATE
-          example: ABOVE
-        trigger_price:
-          type: number
-          format: double
-          description: Trigger price for the GTT order leg
-          example: 1500.5
-        trailing_gap:
-          type: number
-          format: double
-          description: Optional parameter defining the trailing gap for the GTT order
-          example: 0.5
-        market_protection:
-          type: number
-          format: double
-          description: Optional parameter defining the market protection percentage for the GTT order
-          example: 3
-          maximum: 25
-          minimum: -1
-      required:
-      - strategy
-      - trigger_price
-      - trigger_type
-    ModifyOrderData:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: Order ID
-          example: 1644490272000
-          readOnly: true
     Rule:
       type: object
       properties:
@@ -2325,7 +2064,15 @@ components:
         trailing_gap:
           type: number
           format: double
-    ModifyOrderV3Response:
+    CancelOrderData:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Reference order ID
+          example: 1644490272000
+          readOnly: true
+    GetTradeResponse:
       type: object
       properties:
         status:
@@ -2335,46 +2082,30 @@ components:
           - error
           - partial_success
         data:
-          $ref: '#/components/schemas/ModifyOrderData'
-        metadata:
-          $ref: '#/components/schemas/OrderMetadata'
-    CancelOrExitMultiOrderData:
-      type: object
-      properties:
-        order_ids:
           type: array
-          description: Reference order IDs
-          example: '[''1644490272000'']'
+          description: Response data for trades
           items:
-            type: string
-          readOnly: true
-    MultiOrderSummary:
+            $ref: '#/components/schemas/TradeData'
+    CancelOrExitMultiOrderResponse:
       type: object
       properties:
-        total:
-          type: integer
-          format: int32
-          description: The total number of order lines present in the payload.
-          example: 3
-          readOnly: true
-        success:
-          type: integer
-          format: int32
-          description: The number of order lines that were successfully placed without any errors.
-          example: 2
-          readOnly: true
-        error:
-          type: integer
-          format: int32
-          description: The number of order lines that encountered errors during processing, despite their payloads being valid.
-          example: 1
-          readOnly: true
-        payload_error:
-          type: integer
-          format: int32
-          description: 'The number of order lines with payload errors, indicating formatting or data validity issues.<br/><br/><b>Note</b>: Orders are processed only if the entire batch is free of payload_error, ensuring error-free transactions.'
-          example: 0
-          readOnly: true
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/CancelOrExitMultiOrderData'
+          description: Response data for cancel or exit order request
+        errors:
+          type: array
+          description: Error data for cancel or exit order request
+          items:
+            $ref: '#/components/schemas/CancelOrExitOrderErrorData'
+        summary:
+          $ref: '#/components/schemas/BatchExecutionSummary'
+          description: Execution summary for cancel or exit order request
     GttOrderDetails:
       type: object
       properties:
@@ -2403,19 +2134,316 @@ components:
         created_at:
           type: integer
           format: int64
-    CancelOrderV3Response:
+    ModifyOrderData:
       type: object
       properties:
-        status:
+        order_id:
           type: string
+          description: Order ID
+          example: 1644490272000
+          readOnly: true
+    GttOrderData:
+      type: object
+      properties:
+        gtt_order_ids:
+          type: array
+          description: Order ID for the placed GTT order
+          example: GTT-221130000253265
+          items:
+            type: string
+          readOnly: true
+    MultiOrderRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery, CO or OCO
           enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/CancelOrderData'
-        metadata:
-          $ref: '#/components/schemas/OrderMetadata'
+          - I
+          - D
+          example: D
+        validity:
+          type: string
+          description: It can be one of the following - DAY(default), IOC
+          enum:
+          - DAY
+          - IOC
+          example: DAY
+        price:
+          type: number
+          format: float
+          description: Price at which the order will be placed
+          example: 0
+        tag:
+          type: string
+          maxLength: 40
+          minLength: 0
+        slice:
+          type: boolean
+          description: To divide the order line based on predefined exchange definitions
+          example: false
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order
+
+            LIMIT refers to Limit Order
+
+            SL refers to Stop Loss Limit
+
+            SL-M refers to Stop Loss Market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 0
+        trigger_price:
+          type: number
+          format: float
+          description: If the order is a stop loss order then the trigger price to be set is mentioned here
+          example: 0
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+        correlation_id:
+          type: string
+          description: A unique identifier for tracking individual orders within the batch
+          example: 12345678
+          maxLength: 20
+          minLength: 1
+        market_protection:
+          type: number
+          format: float
+          description: Optional parameter defining the market protection percentage for the multi order
+          example: 3
+          maximum: 25
+          minimum: -1
+      required:
+      - correlation_id
+      - disclosed_quantity
+      - instrument_token
+      - is_amo
+      - order_type
+      - price
+      - product
+      - quantity
+      - slice
+      - transaction_type
+      - trigger_price
+      - validity
+    TradeData:
+      type: object
+      properties:
+        exchange:
+          type: string
+          description: Exchange to which the order is associated
+          enum:
+          - NSE
+          - NFO
+          - CDS
+          - BSE
+          - BFO
+          - BCD
+          - MCX
+          - NSCOM
+          example: NSE
+          readOnly: true
+        product:
+          type: string
+          description: Shows if the order was either Intraday, Delivery, CO or OCO
+          enum:
+          - I
+          - D
+          - CO
+          - OCO
+          - MTF
+          example: D
+          readOnly: true
+        tradingsymbol:
+          type: string
+          deprecated: true
+          description: Shows the trading symbol which could be a combination of symbol name, instrument, expiry date etc
+          example: GMRINFRA-EQ
+          readOnly: true
+        trading_symbol:
+          type: string
+          description: Shows the trading symbol which could be a combination of symbol name, instrument, expiry date etc
+          example: GMRINFRA-EQ
+          readOnly: true
+        instrument_token:
+          type: string
+          description: Identifier issued by Upstox used for subscribing to live market quotes
+          example: 151064324
+          readOnly: true
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order<br>LIMIT refers to Limit Order<br>SL refers to Stop Loss Limit<br>SL-M refers to Stop loss market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+          readOnly: true
+        transaction_type:
+          type: string
+          description: Indicates whether the order was a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+          readOnly: true
+        quantity:
+          type: integer
+          format: int32
+          description: The total quantity traded from this particular order
+          example: 1
+          readOnly: true
+        exchange_order_id:
+          type: string
+          description: Unique order ID assigned by the exchange for the order placed
+          example: 221013001021540
+          readOnly: true
+        order_id:
+          type: string
+          description: Unique order ID assigned internally for the order placed
+          example: 221013001021539
+          readOnly: true
+        exchange_timestamp:
+          type: string
+          description: User readable time at when the trade occurred
+          example: 03-Aug-2017 15:03:42
+          readOnly: true
+        average_price:
+          type: number
+          format: float
+          description: Price at which the traded quantity is traded
+          example: 299.4
+          readOnly: true
+        trade_id:
+          type: string
+          description: Trade ID generated from exchange towards traded transaction
+          example: 50091502
+          readOnly: true
+        order_ref_id:
+          type: string
+          description: The order reference ID for which the order must be modified
+          example: udapi-aqwsed14356
+          readOnly: true
+        order_timestamp:
+          type: string
+          description: User readable timestamp at which the order was placed
+          example: 23-Apr-2021 14:22:06
+          readOnly: true
+    PlaceOrderRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity with which the order is to be placed
+          example: 1
+        product:
+          type: string
+          description: Signifies if the order was either Intraday, Delivery, CO or OCO
+          enum:
+          - I
+          - D
+          example: D
+        validity:
+          type: string
+          description: It can be one of the following - DAY(default), IOC
+          enum:
+          - DAY
+          - IOC
+          example: DAY
+        price:
+          type: number
+          format: float
+          description: Price at which the order will be placed
+          example: 0
+        tag:
+          type: string
+          description: Tag for a particular order
+        instrument_token:
+          type: string
+          description: Key of the instrument
+          example: NSE_EQ|INE848E01016
+        order_type:
+          type: string
+          description: 'Type of order. It can be one of the following
+
+            MARKET refers to market order
+
+            LIMIT refers to Limit Order
+
+            SL refers to Stop Loss Limit
+
+            SL-M refers to Stop Loss Market'
+          enum:
+          - MARKET
+          - LIMIT
+          - SL
+          - SL-M
+          example: MARKET
+        transaction_type:
+          type: string
+          description: Indicates whether its a buy or sell order
+          enum:
+          - BUY
+          - SELL
+          example: BUY
+        disclosed_quantity:
+          type: integer
+          format: int32
+          description: The quantity that should be disclosed in the market depth
+          example: 0
+        trigger_price:
+          type: number
+          format: float
+          description: If the order is a stop loss order then the trigger price to be set is mentioned here
+          example: 0
+        is_amo:
+          type: boolean
+          description: Signifies if the order is an After Market Order
+          example: false
+      required:
+      - disclosed_quantity
+      - instrument_token
+      - is_amo
+      - order_type
+      - price
+      - product
+      - quantity
+      - transaction_type
+      - trigger_price
+      - validity
     ModifyOrderRequest:
       type: object
       properties:
@@ -2473,42 +2501,109 @@ components:
       - price
       - trigger_price
       - validity
-    MultiOrderError:
+    ModifyOrderV3Response:
       type: object
       properties:
-        errorCode:
+        status:
           type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-        correlation_id:
-          type: string
-          description: A unique identifier for tracking individual orders within the batch
-          example: 213fsf2324
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/ModifyOrderData'
+        metadata:
+          $ref: '#/components/schemas/OrderMetadata'
+    CancelOrExitMultiOrderData:
+      type: object
+      properties:
+        order_ids:
+          type: array
+          description: Reference order IDs
+          example: '[''1644490272000'']'
+          items:
+            type: string
           readOnly: true
-    CancelOrderData:
+    ApiGatewayErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Problem'
+    PlaceOrderData:
       type: object
       properties:
         order_id:
           type: string
-          description: Reference order ID
+          description: An order ID for the order request placed
           example: 1644490272000
           readOnly: true
-    GetOrderResponse:
+    PlaceOrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+          - partial_success
+        data:
+          $ref: '#/components/schemas/PlaceOrderData'
+          description: Response data for place order request
+    GttRule:
+      type: object
+      properties:
+        strategy:
+          type: string
+          description: 'Defines the strategy for the GTT order leg:
+
+            ENTRY - First leg order
+
+            STOPLOSS - Stop-loss order
+
+            TARGET - Target order'
+          enum:
+          - ENTRY
+          - STOPLOSS
+          - TARGET
+          example: ENTRY
+        trigger_type:
+          type: string
+          description: Trigger type for each leg of the order
+          enum:
+          - ABOVE
+          - BELOW
+          - IMMEDIATE
+          example: ABOVE
+        trigger_price:
+          type: number
+          format: double
+          description: Trigger price for the GTT order leg
+          example: 1500.5
+        trailing_gap:
+          type: number
+          format: double
+          description: Optional parameter defining the trailing gap for the GTT order
+          example: 0.5
+        market_protection:
+          type: number
+          format: double
+          description: Optional parameter defining the market protection percentage for the GTT order
+          example: 3
+          maximum: 25
+          minimum: -1
+      required:
+      - strategy
+      - trigger_price
+      - trigger_type
+    GetOrderBookResponse:
       type: object
       properties:
         status:
@@ -2519,104 +2614,9 @@ components:
           - partial_success
         data:
           type: array
-          description: Response data for order details
+          description: Response data for order Book
           items:
-            $ref: '#/components/schemas/OrderData'
-    OrderMetadata:
-      type: object
-      properties:
-        latency:
-          type: integer
-          format: int64
-    CancelOrExitOrderErrorData:
-      type: object
-      properties:
-        errorCode:
-          type: string
-          deprecated: true
-          description: Unique code for the error state
-        message:
-          type: string
-          description: Verbose message for the error state
-        propertyPath:
-          type: string
-          deprecated: true
-          description: Path to property failing validation
-        invalidValue:
-          deprecated: true
-          description: Invalid value for the property failing validation
-        error_code:
-          type: string
-        property_path:
-          type: string
-        invalid_value: {}
-        instrument_key:
-          type: string
-          description: Key of instrument
-          example: NSE_EQ|INE002A01018
-          readOnly: true
-        order_id:
-          type: string
-          description: Reference order ID
-          example: 1644490272000
-          readOnly: true
-    PlaceOrderV3Response:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - error
-          - partial_success
-        data:
-          $ref: '#/components/schemas/MultiOrderV3Data'
-        metadata:
-          $ref: '#/components/schemas/OrderMetadata'
-    BatchExecutionSummary:
-      type: object
-      properties:
-        total:
-          type: integer
-          format: int32
-          description: The total number of order lines present in the payload.
-          example: 3
-          readOnly: true
-        success:
-          type: integer
-          format: int32
-          description: The number of order lines that were successfully placed without any errors.
-          example: 2
-          readOnly: true
-        error:
-          type: integer
-          format: int32
-          description: The number of order lines that encountered errors during processing, despite their payloads being valid.
-          example: 1
-          readOnly: true
-    MultiOrderData:
-      type: object
-      properties:
-        correlation_id:
-          type: string
-          description: A unique identifier for tracking individual orders within the batch
-          example: 213fsf2324
-          readOnly: true
-        order_id:
-          type: string
-          description: An order ID for the order request placed
-          example: 1644490272000
-          readOnly: true
-    GttCancelOrderRequest:
-      type: object
-      properties:
-        gtt_order_id:
-          type: string
-          description: Unique identifier of the GTT order to be cancelled
-          example: GTT-12345678
-          pattern: ^GTT-.+$
-      required:
-      - gtt_order_id
+            $ref: '#/components/schemas/OrderBookData'
   securitySchemes:
     OAUTH2:
       type: oauth2
