@@ -207,3 +207,9 @@ components:
           scopes:
             read: Read access
             write: Write access
+x-provenance:
+  method: harvested
+  publisher: Upstox
+  source: https://api-v2.upstox.com/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
