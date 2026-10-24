@@ -27,67 +27,13 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  integrations/_index.yml:
     method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+    evidence: carries an API Evangelist house phrase
+  integrations/upstox-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -171,6 +117,21 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/upstox-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
@@ -185,8 +146,8 @@ artifacts:
     evidence: declared in the artifact
   openapi/_original/upstox-api-docs.json:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://api-v2.upstox.com/api-docs (sha256 bc2ec542d143, fetched
+      2026-10-04)
   openapi/upstox-charge-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -253,7 +214,73 @@ artifacts:
   openapi/upstox-websocket-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  overlays/upstox-charge-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
   overlays/upstox-developer-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-events-controller-v-2-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-expired-instrument-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-fundamentals-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-history-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-history-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-instruments-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-ipo-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-login-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-market-holidays-and-timings-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-market-quote-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-market-quote-v3-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-mutual-fund-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-news-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-options-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-order-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-payments-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-portfolio-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-post-trade-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-trade-profit-and-loss-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-user-api-phrasing-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/upstox-websocket-api-phrasing-overlay.yaml:
     method: generated
     evidence: declared in the artifact
   packages/upstox-packages.yml:
